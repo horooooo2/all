@@ -1,0 +1,267 @@
+@import '@/styles/variables.less';
+
+/* 咪牌弹层（teleport body，由页面scoped 引入；与 GameRoom 视觉一致） */
+
+.mipai-fade-enter-active,
+.mipai-fade-leave-active {
+  transition: opacity 140ms ease;
+}
+
+.mipai-fade-enter-from,
+.mipai-fade-leave-to {
+  opacity: 0;
+}
+
+.mipai-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.mipai-panel {
+  width: 345px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+.mipai-panel__head {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #1f78ff 0%, #00a1ff 100%);
+  color: #fff;
+}
+
+.mipai-qiu {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+
+.mipai-qiu--left {
+  margin-right: -5px;
+}
+
+.mipai-qiu--right {
+  margin-left: -5px;
+}
+
+.mipai-head-pill {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mipai-head-text {
+  font-size: @font-size-xl;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mipai-head-text .issue {
+  color: #ffe55a;
+  font-variant-numeric: tabular-nums;
+}
+
+.mipai-panel__body {
+  background: #fff;
+}
+
+.mipai-scratch-wrap {
+  position: relative;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mipai-result-row {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.mipai-result-row .op {
+  font-size: @font-size-xl;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+.mipai-result-row .ball {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @font-size-3xl;
+  font-weight: 700;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.mipai-result-row .ball.red {
+  border: 2px solid #ff3b30;
+  color: #1d1d1f;
+}
+
+.mipai-result-row .ball.blue {
+  border: 2px solid #1f78ff;
+  color: #1d1d1f;
+}
+
+.mipai-result-row .ball.sum {
+  background: #1f78ff;
+  color: #fff;
+  border: none;
+}
+
+/* 排列五：五位号码，略小以适配宽度 */
+.mipai-result-row--pl5 {
+  gap: 6px;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.mipai-result-row--pl5 .ball.pl5 {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(145deg, #c4956a 0%, #8b5a2b 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* 六合彩：6 正码 + 特码 */
+.mipai-result-row--lhc {
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+
+.mipai-result-row--lhc .ball.lhc {
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+  border: 2px solid #1f78ff;
+  color: #1d1d1f;
+}
+
+.mipai-result-row--lhc .ball.lhc--special {
+  border-color: #ff3b30;
+  background: linear-gradient(145deg, #fff5f5 0%, #ffe0e0 100%);
+}
+
+.mipai-result-row--lhc .op--txt {
+  font-size: @font-size-md;
+  padding: 0 2px;
+}
+
+.mipai-scratch-canvas {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+
+.mipai-panel__foot {
+  height: 64px;
+  background: linear-gradient(90deg, #1f78ff 0%, #00a1ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  gap: 10px;
+}
+
+.mipai-foot-pill {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 44px;
+  padding: 0 8px 0 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mipai-countdown {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: #fff;
+  font-size: @font-size-md;
+  line-height: 1.35;
+}
+
+.mipai-countdown .line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mipai-countdown .issue {
+  color: #ffe55a;
+  font-variant-numeric: tabular-nums;
+}
+
+.mipai-countdown .sec {
+  color: #ffe55a;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.mipai-refresh {
+  width: 88px;
+  height: 32px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f78ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @font-size-md;
+  font-weight: 700;
+  flex: 0 0 auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mipai-close {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mipai-close-img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+}

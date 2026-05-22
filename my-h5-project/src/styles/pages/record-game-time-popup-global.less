@@ -1,0 +1,129 @@
+/**
+ * 游戏记录同款「下单时间」弹层样式。
+ * 单独全局文件：van-popup 挂载到 body 时 scoped 选择器无法命中。
+ */
+@import '@/styles/variables.less';
+
+.lottery-game-time-popup.van-popup {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.lottery-game-time-popup .time-panel {
+  padding: @spacing-md @spacing-md @spacing-xl;
+
+  h3 {
+    margin: @spacing-sm @spacing-md @spacing-xl @spacing-md;
+    text-align: center;
+    color: var(--text-color);
+    font-size: @font-size-lg;
+    font-weight: 700;
+  }
+}
+
+.lottery-game-time-popup .quick-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: @spacing-sm;
+}
+
+.lottery-game-time-popup .quick-item {
+  height: 44px;
+  border: 1px solid var(--border-color);
+  border-radius: @border-radius-md;
+  background: var(--bg-module);
+  padding: 0 @spacing-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: @spacing-xs;
+  color: var(--text-color-secondary);
+  font-size: @font-size-md;
+  font-weight: 400;
+  line-height: 1;
+
+  .selected-icon,
+  .circle-icon {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  &.active {
+    color: var(--text-color);
+    background: var(--button-selected);
+    border-color: var(--primary-color);
+    font-weight: 400;
+  }
+}
+
+.lottery-game-time-popup .selected-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.lottery-game-time-popup .circle-icon {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--border-avatar);
+  border-radius: 50%;
+}
+
+.lottery-game-time-popup .range-row {
+  margin-top: @spacing-sm;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: @spacing-sm;
+  align-items: center;
+}
+
+.lottery-game-time-popup .date-cell {
+  .control-base(44px; @border-radius-md);
+  border: none;
+  background: var(--button-selected);
+  color: var(--text-color);
+  font-size: @font-size-md;
+}
+
+.lottery-game-time-popup .action-row {
+  margin-top: @spacing-sm;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: @spacing-sm;
+}
+
+.lottery-game-time-popup .btn-reset,
+.lottery-game-time-popup .btn-confirm {
+  .control-base(44px; @border-radius-md);
+  border: none;
+  font-size: @font-size-md;
+}
+
+.lottery-game-time-popup .btn-reset {
+  background: var(--button-selected);
+  color: var(--text-color-secondary);
+}
+
+.lottery-game-time-popup .btn-confirm {
+  .btn-primary(44px; @border-radius-md);
+}
+
+.lottery-game-time-popup .popup-title-row {
+  height: 52px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.lottery-game-time-popup .picker-confirm {
+  width: 64px;
+  height: 32px;
+  border: none;
+  border-radius: 48px;
+  background: var(--input-secondary);
+  color: var(--primary-color);
+  font-size: @font-size-lg;
+}

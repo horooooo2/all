@@ -1,0 +1,125 @@
+@import '@/styles/variables.less';
+
+.skeleton-block {
+  background: var(--bg-nav-bottom);
+  border-radius: @border-radius-sm;
+}
+
+.banner-skeleton {
+  height: 146px;
+  border-radius: @border-radius-md;
+  background: var(--bg-nav-bottom);
+}
+
+.game-card-skeleton {
+  width: 170px;
+  height: 87px;
+  border-radius: @border-radius-md;
+  background: var(--bg-nav-bottom);
+}
+
+.category-item-skeleton {
+  width: 111px;
+  height: 78px;
+  border-radius: @border-radius-md;
+  background: var(--bg-nav-bottom);
+}
+
+.title-skeleton {
+  width: 100px;
+  height: 24px;
+  border-radius: @border-radius-sm;
+  background: var(--bg-nav-bottom);
+}
+
+.bonus-header-skeleton {
+  height: 54px;
+  border-radius: @border-radius-md @border-radius-md 0 0;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-nav-bottom);
+}
+
+.list-item-skeleton {
+  height: 40px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-nav-bottom);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--text-white) 40%, transparent) 50%,
+      transparent 100%
+    );
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-bar {
+  width: 100%;
+  border-radius: @border-radius-md;
+  background: var(--bg-nav-bottom);
+}
+
+.skeleton-bar--pay {
+  height: 64px;
+}
+
+.skeleton-bar--channel {
+  height: 40px;
+}
+
+.skeleton-bar--amount {
+  height: 100px;
+}
+
+.skeleton-bar--tip {
+  height: 44px;
+}
+
+.skeleton-bar--btn {
+  height: 48px;
+}
+
+.skeleton-bar--method {
+  height: 96px;
+}
+
+.skeleton-bar--row {
+  height: 45px;
+}
+
+.skeleton-bar--accounts {
+  height: 160px;
+}
+
+.skeleton-card {
+  width: 100%;
+  border-radius: @border-radius-lg;
+  background: var(--bg-nav-bottom);
+}
+
+.skeleton-card--balance {
+  height: 140px;
+}

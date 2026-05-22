@@ -1,0 +1,207 @@
+@import '@/styles/variables.less';
+
+@label-blue: #6a8fc4;
+@code-blue: #1f78ff;
+
+.agent-promotion-page .promo-card {
+  margin: @spacing-md;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #eef2f8;
+  overflow: hidden;
+}
+
+.agent-promotion-page .promo-row {
+  display: flex;
+  align-items: center;
+  padding: 8px @spacing-md;
+  gap: 10px;
+
+  & + & {
+    border-top: 1px solid #eef2f8;
+  }
+}
+
+/* 与首页帮助区 / 资金区按钮一致：原图展示，无渐变）*/
+.agent-promotion-page .promo-row-icon--home {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+.agent-promotion-page .promo-row-label {
+  flex: 1;
+  min-width: 0;
+  font-size: @font-size-md;
+  color: var(--text-color);
+}
+
+.agent-promotion-page .promo-link-btn {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: @font-size-sm;
+  font-weight: 600;
+  color: #fff;
+  background: var(--J5-2, linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%));
+}
+
+.agent-promotion-page .promo-row--code .promo-row-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  span{
+    font-size: @font-size-md;
+  }
+}
+
+.agent-promotion-page .promo-code {
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: @code-blue;
+  letter-spacing: 0.05em;
+}
+
+.agent-promotion-page .promo-copy {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 4px;
+  line-height: 0;
+
+  img {
+    width: 20px;
+    height: 20px;
+    display: block;
+  }
+}
+
+.agent-promotion-page .promo-section-title {
+  margin: 4px @spacing-md 10px;
+  font-size: @font-size-md;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.agent-promotion-page .promo-grid {
+  margin: 0 @spacing-md @spacing-sm;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: @spacing-sm;
+}
+
+.agent-promotion-page .promo-hint {
+  margin: 0 @spacing-md @spacing-lg;
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
+  line-height: 1.45;
+}
+
+.agent-promotion-page .promo-stat {
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #eef2f8;
+  padding: 14px @spacing-md;
+}
+
+.agent-promotion-page .promo-stat-label {
+  margin: 0 0 8px;
+  font-size: @font-size-sm;
+  color: @label-blue;
+  line-height: 1.35;
+}
+
+.agent-promotion-page .promo-stat-value {
+  margin: 0;
+  font-size: @font-size-xxl;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.agent-promotion-page {
+  --J5-2: linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%);
+}
+
+.agent-promotion-page .promo-link-popup {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.agent-promotion-page .promo-popup-inner {
+  padding: 16px @spacing-md 20px;
+}
+
+.agent-promotion-page .promo-popup-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.agent-promotion-page .promo-popup-title {
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.agent-promotion-page .promo-popup-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: #e8f2ff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+
+  img {
+    width: @icon-x-size;
+    height: @icon-x-size;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+.agent-promotion-page .promo-popup-desc {
+  margin: 0 0 12px;
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+  line-height: 1.4;
+}
+
+.agent-promotion-page .promo-popup-url {
+  padding: 12px @spacing-md;
+  border-radius: 8px;
+  background: #f0f4fb;
+  font-size: @font-size-sm;
+  color: var(--text-color);
+  word-break: break-all;
+  line-height: 1.45;
+  margin-bottom: 16px;
+}
+
+.agent-promotion-page .promo-popup-copy-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: #fff;
+  background: var(--J5-2, linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%));
+}

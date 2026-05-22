@@ -1,0 +1,55 @@
+@import '@/styles/variables.less';
+
+.activity-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-color);
+}
+
+.activity-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  padding: 0 @spacing-md;
+  z-index: @z-index-tabbar;
+  background: var(--bg-module);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+}
+
+.activity-title {
+  font-size: @font-size-xl;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: left;
+}
+
+.activity-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: @spacing-md;
+  padding-top: 45px + @spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: @spacing-md;
+}
+
+.activity-card {
+  border-radius: @border-radius-lg;
+  overflow: hidden;
+  background: var(--bg-module);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card-default);
+}
+
+.activity-card-placeholder {
+  width: 100%;
+  padding-bottom: 56.25%;
+  background: var(--bg-color-secondary);
+}

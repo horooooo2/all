@@ -1,0 +1,78 @@
+@font-family: 'ProjectCustomFont', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@spacing-xs: 4px;
+@spacing-sm: 8px;
+@spacing-md: 12px;
+@spacing-lg: 16px;
+@spacing-xl: 20px;
+@font-size-xs: 10px;
+@font-size-sm: 12px;
+@font-size-md: 14px;
+@font-size-lg: 16px;
+@font-size-xl: 18px;
+@font-size-xxl: 20px;
+@font-size-3xl: 22px;
+@font-size-4xl: 24px;
+@font-size-5xl: 28px;
+@border-radius: 4px;
+@border-radius-sm: 4px;
+@border-radius-md: 8px;
+@border-radius-lg: 12px;
+@border-radius-xl: 16px;
+@border-radius-circle: 50%;
+@header-height: 60px;
+@avatar-size: 40px;
+@badge-bg: #ee0a24;
+@badge-color: #ffffff;
+@animation-duration: 0.3s;
+@animation-timing: ease;
+@z-index-tabbar: 100;
+@z-index-popup: 1000;
+
+@icon-sel-size: 18px;
+@icon-x-size: 20px;
+@icon-dack-size: 20px;
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-base(@height: 44px; @radius: @border-radius-md) {
+  height: @height;
+  border-radius: @radius;
+}
+
+.input-like(@height: 44px; @paddingX: @spacing-md) {
+  .control-base(@height; @border-radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--input-secondary);
+  padding: 0 @paddingX;
+}
+
+.btn-primary(@height: 44px; @radius: @border-radius-md) {
+  .control-base(@height; @radius);
+  border: none;
+  color: var(--text-white);
+  background: var(--gradient-primary);
+}
+
+.bg-cover(@image; @position: center; @repeat: no-repeat) {
+  background-image: @image;
+  background-size: cover;
+  background-position: @position;
+  background-repeat: @repeat;
+}
+
+.img-contain(@w; @h) {
+  width: @w;
+  height: @h;
+  display: block;
+  object-fit: contain;
+}

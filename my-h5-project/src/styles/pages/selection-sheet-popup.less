@@ -1,0 +1,144 @@
+@import '@/styles/variables.less';
+
+// 底部选择弹层字体规范：标题 16px 加粗，列表项 14px 常规
+.selection-popup-title-style() {
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.selection-popup-list-text-style() {
+  font-size: @font-size-md;
+  font-weight: 400;
+}
+
+// EditProfile / WithdrawalAccountEdit 等底部选择弹层（van-popup + 列表 + 生日选择器）
+
+::deep(.selection-popup.van-popup) {
+  background: transparent;
+}
+
+.selection-sheet {
+  background: var(--bg-module);
+  border-radius: 16px 16px 0 0;
+  padding: @spacing-md @spacing-md calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+  box-shadow: 0 -10px 30px rgba(18, 41, 85, 0.14);
+}
+
+.selection-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: @spacing-md;
+}
+
+.selection-sheet-title {
+  .selection-popup-title-style();
+}
+
+.selection-confirm-btn {
+  height: 32px;
+  min-width: 48px;
+  border: none;
+  border-radius: @border-radius-md;
+  background: var(--button-selected);
+  color: var(--primary-color);
+  font-size: @font-size-md;
+  font-weight: 400;
+}
+
+.selection-close-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--primary-color);
+  font-size: @font-size-md;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  img {
+    width: @icon-x-size;
+    height: @icon-x-size;
+    display: block;
+    object-fit: contain;
+  }
+}
+
+.selection-option {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: @border-radius-md;
+  background: transparent;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-color);
+  .selection-popup-list-text-style();
+
+  & + .selection-option {
+    margin-top: @spacing-sm;
+  }
+
+  &.active {
+    background: var(--button-selected);
+    font-weight: 400;
+  }
+}
+
+.selection-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #8aa2d6;
+  box-sizing: border-box;
+
+  &.active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 4px;
+      height: 8px;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+.birthday-picker-wrap {
+  margin-top: @spacing-sm;
+}
+
+::deep(.birthday-picker-wrap .van-picker-column__item) {
+  color: #8aa2d6;
+  font-size: @font-size-xl;
+}
+
+::deep(.birthday-picker-wrap .van-picker-column__item--selected) {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+::deep(.birthday-picker-wrap .van-picker__mask) {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.55)),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.55));
+}
+
+::deep(.birthday-picker-wrap .van-picker__frame) {
+  left: 0;
+  right: 0;
+  background: transparent;
+}

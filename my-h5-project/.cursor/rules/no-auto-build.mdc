@@ -1,0 +1,10 @@
+---
+description: Avoid running build commands unless explicitly requested
+alwaysApply: true
+---
+
+# 不要自动运行打包/构建命令
+
+- 默认**不要**在修改代码后自动运行任何打包/构建命令（如 `npm run build`、`vite build`、`pnpm build`、`yarn build`）。
+- 只有当用户明确要求“运行 build/打包/构建/发版前检查”等时，才可以执行上述命令。
+- 若需要验证改动，优先选择更轻量的方式（例如阅读代码、类型/静态检查、最小化复现），并在执行任何耗时命令前等待用户明确指示。

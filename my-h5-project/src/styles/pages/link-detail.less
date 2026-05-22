@@ -1,0 +1,117 @@
+@import '@/styles/variables.less';
+
+.link-detail-page {
+  background: #f5f7fa;
+}
+
+.link-detail-page .ld-head {
+  margin: @spacing-md;
+}
+
+.link-detail-page .ld-name {
+  font-size: @font-size-sm;
+  color: #8ea1c7;
+  font-weight: 600;
+  margin-bottom: @spacing-sm;
+}
+
+.link-detail-page .ld-url-row {
+  height: 44px;
+  padding: 0 @spacing-md;
+  border: 1px solid #dce4f0;
+  border-radius: 10px;
+  background: #fff;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: @spacing-md;
+  align-items: center;
+}
+
+.link-detail-page .ld-url {
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.link-detail-page .ld-copy {
+  width: 72px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: #0a84ff;
+  color: #fff;
+  font-size: @font-size-sm;
+  font-weight: 700;
+}
+
+.link-detail-page .ld-section {
+  margin: 0 @spacing-md @spacing-md;
+  border: 1px solid #eef2f8;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.link-detail-page .ld-table-head {
+  height: 36px;
+  padding: 0 @spacing-md;
+  background: #B8C8E3;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 0.8fr;
+  gap: @spacing-sm;
+  font-size: @font-size-sm;
+  font-weight: 700;
+  color: var(--text-color);
+  align-items: center;
+  text-align: center;
+}
+
+.link-detail-page .ld-tr {
+  height: 40px;
+  padding: 0 @spacing-md;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 0.8fr;
+  gap: @spacing-sm;
+  border-top: 1px solid #f0f4fb;
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+  align-items: center;
+  text-align: center;
+}
+
+.link-detail-page .ld-th--right,
+.link-detail-page .ld-td--right {
+  text-align: center;
+  font-weight: 600;
+}
+
+.link-detail-page .ld-divider {
+  height: 10px;
+  background: #f5f7fa;
+}
+
+.link-detail-page .ld-subtitle {
+  height: 40px;
+  padding: 0 @spacing-md;
+  background: #B8C8E3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @font-size-md;
+  font-weight: 700;
+  color: var(--text-color);
+  position: relative;
+}
+
+.link-detail-page .ld-collapse-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #8ea1c7;
+  position: absolute;
+  right: @spacing-md;
+}
+

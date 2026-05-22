@@ -1,0 +1,361 @@
+@import '@/styles/variables.less';
+
+@agent-pending-btn-bg: #b8d9ff;
+@agent-green: #27ca6c;
+
+.agent-center-page {
+  /* 设计稿主按钮渐变：0deg 底深顶浅 */
+  --J5-2: linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%);
+
+  min-height: 100vh;
+  padding-top: 44px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+  background: #f5f7fa;
+  box-sizing: border-box;
+}
+
+/* 与 transaction-record 页头部一致 */
+.agent-center-page .record-header {
+  height: 44px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  background: var(--bg-module);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  h1 {
+    margin: 0;
+    font-size: @font-size-lg;
+    font-weight: 700;
+    color: var(--text-color);
+  }
+}
+
+.agent-center-page .back-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: block;
+  object-fit: contain;
+}
+
+/* —— 未申请 / 申请中 顶部状态卡 —— */
+.agent-center-page .status-card {
+  margin: @spacing-md;
+  padding: @spacing-lg @spacing-md;
+  border-radius: @border-radius-lg;
+  background: #fff;
+  border: 1px solid #eef2f8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @spacing-md;
+}
+
+.agent-center-page .status-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-center-page .status-card-label {
+  margin: 0 0 6px;
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
+  line-height: 1.3;
+}
+
+.agent-center-page .status-card-title {
+  margin: 0;
+  font-size: @font-size-md;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.45;
+}
+
+.agent-center-page .status-card-btn {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: @font-size-sm;
+  font-weight: 600;
+  color: var(--text-white);
+  background: var(--J5-2, linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%));
+  white-space: nowrap;
+}
+
+.agent-center-page .status-card-btn:disabled {
+  background: @agent-pending-btn-bg;
+  color: rgba(255, 255, 255, 0.95);
+  opacity: 0.95;
+}
+
+/* 申请中（绿字 + 主文案 + 联系客服） */
+.agent-center-page .status-card--pending-alt .status-card-label {
+  color: @agent-green;
+  font-weight: 600;
+}
+
+.agent-center-page .status-card--pending-alt .status-card-title {
+  font-weight: 600;
+  font-size: @font-size-sm;
+}
+
+/* —— 已是代理：第一行与第二行分卡 + 间距 —— */
+.agent-center-page .agent-dash-wrap {
+  margin: @spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.agent-center-page .agent-dash-card {
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #eef2f8;
+  overflow: hidden;
+}
+
+.agent-center-page .agent-dash-account {
+  display: flex;
+  align-items: stretch;
+  min-height: 64px;
+}
+
+.agent-center-page .agent-dash-cell {
+  flex: 1;
+  padding: 14px @spacing-md;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.agent-center-page .agent-dash-label {
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
+  line-height: 1.2;
+}
+
+.agent-center-page .agent-dash-value {
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: var(--text-color);
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+.agent-center-page .agent-dash-vline {
+  width: 1px;
+  align-self: stretch;
+  margin: 12px 0;
+  background: var(--border-color);
+  flex-shrink: 0;
+}
+
+.agent-center-page .agent-dash-shortcuts {
+  display: flex;
+}
+
+.agent-center-page .agent-dash-shortcut {
+  flex: 1;
+  padding: 14px 4px 16px;
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color);
+  font-size: @font-size-sm;
+  position: relative;
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 18px;
+    bottom: 18px;
+    width: 1px;
+    background: #eef2f8;
+  }
+}
+
+.agent-center-page .agent-dash-shortcut-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  display: block;
+}
+
+.agent-center-page .agent-dash-shortcut-text {
+  text-align: center;
+  line-height: 1.25;
+}
+
+/* —— 功能列表：分组独立白卡，组与组上边距 —— */
+.agent-center-page .agent-sections {
+  margin: 12px @spacing-md @spacing-md;
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-center-page .agent-panel-card {
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #eef2f8;
+  overflow: hidden;
+}
+
+.agent-center-page .agent-panel-card + .agent-panel-card {
+  margin-top: 16px;
+}
+
+.agent-center-page .agent-panel-block .agent-panel-row {
+  position: relative;
+  width: 100%;
+  min-height: 52px;
+  padding: 12px @spacing-md;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @spacing-sm;
+  font-size: @font-size-md;
+  color: var(--text-color);
+  text-align: left;
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: @spacing-md;
+    right: @spacing-md;
+    bottom: 0;
+    height: 1px;
+    background: var(--border-color);
+  }
+
+  .van-icon {
+    color: var(--text-color-tertiary);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+}
+
+.agent-center-page .agent-panel-row-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.agent-center-page .agent-panel-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.agent-center-page .agent-panel-row--invite-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.agent-center-page .agent-panel-invite-tap {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: @font-size-md;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+}
+
+.agent-center-page .agent-panel-code {
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: #1f78ff;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agent-center-page .agent-panel-copy-btn {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 6px;
+  margin: -6px -4px -6px 0;
+  line-height: 0;
+  cursor: pointer;
+
+  img {
+    width: 20px;
+    height: 20px;
+    display: block;
+    object-fit: contain;
+  }
+
+  &:active {
+    opacity: 0.65;
+  }
+}
+
+.agent-center-page .agent-panel-card.agent-share {
+  padding: 14px @spacing-md 18px;
+}
+
+.agent-center-page .agent-share-title {
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 12px;
+}
+
+.agent-center-page .agent-share-btns {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.agent-center-page .agent-share-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: #f0f4fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+

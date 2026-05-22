@@ -1,0 +1,70 @@
+@import '@/styles/variables.less';
+
+.settings-page {
+  min-height: 100vh;
+  background: var(--bg-color);
+}
+
+.settings-page .record-header {
+  height: 44px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  background: var(--bg-module);
+
+  h1 {
+    margin: 0;
+    font-size: @font-size-lg;
+    color: var(--text-color);
+  }
+}
+
+.settings-page .back-btn {
+  width: @icon-dack-size;
+  height: @icon-dack-size;
+  border-radius: 4px;
+  padding: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.settings-menu {
+  margin: @spacing-md;
+  border-radius: @border-radius-md;
+  background: var(--bg-module);
+  overflow: hidden;
+}
+
+.settings-menu--logout {
+  margin-top: 10px;
+}
+
+.settings-row {
+  position: relative;
+  width: 100%;
+  border: none;
+  background: transparent;
+  height: 48px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: @font-size-md;
+  color: var(--text-color);
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: @spacing-md;
+    right: @spacing-md;
+    bottom: 0;
+    height: 1px;
+    background: #DAE4F6;
+  }
+}
+
+.settings-row--logout {
+  color: #f43f3f;
+  justify-content: center;
+}

@@ -1,0 +1,140 @@
+@import '@/styles/variables.less';
+
+.transaction-record-detail-page {
+  min-height: 100vh;
+  background: #f0f4ff;
+  padding-top: 44px;
+}
+
+.transaction-record-detail-page .record-header {
+  height: 44px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  background: var(--bg-module);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  h1 {
+    margin: 0;
+    font-size: @font-size-md;
+    font-weight: 700;
+    color: var(--text-color);
+  }
+}
+
+.transaction-record-detail-page .back-btn {
+  width: @icon-dack-size;
+  height: @icon-dack-size;
+  border-radius: 4px;
+  display: block;
+  object-fit: contain;
+}
+
+.detail-main {
+  padding: @spacing-md;
+  border-radius: 8px;
+}
+
+.detail-card {
+  border-radius: 8px;
+  background: var(--bg-module);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(47, 113, 234, 0.08);
+}
+
+.detail-amount {
+  padding: @spacing-lg @spacing-md;
+  text-align: center;
+  font-size: @font-size-4xl;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+
+  &.positive {
+    color: var(--success-color);
+  }
+
+  &.negative {
+    height: 44px;
+    padding: 0 @spacing-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: @font-size-lg;
+    color: var(--danger-color);
+  }
+}
+
+.detail-rows {
+  border-top: 1px solid var(--border-color);
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  height: 44px;
+  padding: 0 @spacing-md;
+  font-size: @font-size-sm;
+
+  &:nth-child(odd) {
+    background: #dbe5f5;
+  }
+
+  &:nth-child(even) {
+    background: var(--bg-module);
+  }
+}
+
+.detail-label {
+  flex-shrink: 0;
+  min-width: 60px;
+  color: var(--text-color-secondary);
+  font-weight: 500;
+}
+
+.detail-value {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  color: var(--text-color);
+  word-break: break-all;
+}
+
+.detail-value-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: @spacing-sm;
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-value--order {
+  flex: 1;
+  min-width: 0;
+  font-size: @font-size-md;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary-color);
+  color: var(--text-white);
+  font-size: @font-size-xs;
+  font-weight: 600;
+}
+
+.detail-empty {
+  padding: @spacing-xl @spacing-md;
+  text-align: center;
+  color: var(--text-color-tertiary);
+  font-size: @font-size-sm;
+}

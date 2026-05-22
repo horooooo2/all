@@ -1,0 +1,254 @@
+@import '@/styles/variables.less';
+
+.agent-direct-team-page .team-tabs {
+  margin: @spacing-md;
+  display: flex;
+  padding: 4px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #eef2f8;
+  gap: 4px;
+}
+
+.agent-direct-team-page .team-tab {
+  flex: 1;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  background: transparent;
+
+  &--active {
+    color: #fff;
+    background: var(--J5-2, linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%));
+  }
+}
+
+.agent-direct-team-page .team-filters {
+  margin: 0 @spacing-md @spacing-sm;
+  display: flex;
+  flex-direction: column;
+  gap: @spacing-sm;
+}
+
+.agent-direct-team-page .team-filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: @spacing-sm;
+}
+
+.agent-direct-team-page .team-filter-btn {
+  height: 40px;
+  padding: 0 @spacing-md;
+  border: 1px solid #dce4f0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: @font-size-sm;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    opacity: 0.88;
+  }
+}
+
+.agent-direct-team-page .team-search {
+  margin: 0 @spacing-md @spacing-sm;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 8px 0 10px;
+  border: 1px solid #dce4f0;
+  border-radius: 8px;
+  background: #fff;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.agent-direct-team-page .team-search__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.agent-direct-team-page .team-search__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: var(--text-color);
+  background: transparent;
+
+  &::placeholder {
+    color: var(--text-color-secondary);
+  }
+}
+
+.agent-direct-team-page .team-search__btn {
+  flex-shrink: 0;
+  width: 58px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: var(---J5-2, linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%));
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.agent-direct-team-page .team-toolbar {
+  margin: 0 @spacing-md @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+}
+
+.agent-direct-team-page .team-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.agent-direct-team-page .team-empty {
+  padding: 32px @spacing-xl 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.agent-direct-team-page .team-empty-img {
+  width: 200px;
+  max-width: 70%;
+  height: auto;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.agent-direct-team-page .team-empty-text {
+  margin: 0;
+  font-size: @font-size-md;
+  color: var(--text-color-tertiary);
+}
+
+.agent-direct-team-page {
+  --J5-2: linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%);
+}
+
+/* 筛选底部弹层 */
+.agent-direct-team-page :deep(.team-picker-popup.van-popup) {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.agent-direct-team-page .team-picker-head {
+  height: 48px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eef2f8;
+}
+
+.agent-direct-team-page .team-picker-title {
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.agent-direct-team-page .team-picker-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: #e8f2ff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+
+  img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    object-fit: contain;
+  }
+}
+
+.agent-direct-team-page .team-picker-list {
+  padding: @spacing-sm @spacing-md calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.agent-direct-team-page .team-picker-row {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: @spacing-xs;
+  padding: 0 @spacing-md;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @spacing-md;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &--active {
+    background: #e8f4ff;
+  }
+}
+
+.agent-direct-team-page .team-picker-label {
+  font-size: @font-size-md;
+  font-weight: 400;
+  color: var(--text-color-secondary);
+  text-align: left;
+}
+
+.agent-direct-team-page .team-picker-row--active .team-picker-label {
+  color: var(--text-color);
+  font-weight: 400;
+}
+
+.agent-direct-team-page .team-picker-check {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.agent-direct-team-page .team-picker-radio {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2px solid #b8c8e8;
+  border-radius: 50%;
+  box-sizing: border-box;
+}

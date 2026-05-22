@@ -1,0 +1,68 @@
+@import '@/styles/variables.less';
+
+.legal-doc-page {
+  min-height: 100vh;
+  background: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.legal-doc-page .record-header {
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  background: var(--bg-module);
+
+  h1 {
+    margin: 0;
+    font-size: @font-size-lg;
+    color: var(--text-color);
+  }
+}
+
+.legal-doc-page .back-btn {
+  width: @icon-dack-size;
+  height: @icon-dack-size;
+  border-radius: 4px;
+  padding: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.legal-body {
+  flex: 1;
+  padding: @spacing-md;
+  overflow-y: auto;
+}
+
+.legal-rich {
+  font-size: @font-size-sm;
+  color: var(--text-color);
+  line-height: 1.6;
+  word-break: break-word;
+
+  :deep(p) {
+    margin: 0 0 0.75em;
+  }
+
+  :deep(img) {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.legal-empty {
+  padding: @spacing-xl;
+  text-align: center;
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
+}
+
+.legal-loading {
+  padding: @spacing-xl;
+  display: flex;
+  justify-content: center;
+}

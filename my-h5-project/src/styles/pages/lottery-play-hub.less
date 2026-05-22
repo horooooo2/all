@@ -1,0 +1,77 @@
+@import '../variables.less';
+
+/** 投注区左侧玩法侧边栏（六合彩 / 排列五等共用*/
+.lhc-hub {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+  background: #f3f6fc;
+}
+
+.lhc-hub__tabs {
+  width: 55px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-right: 0.5px solid #dae4f6;
+  border-radius: 0 20px 20px 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+.lhc-hub__tab {
+  width: 100%;
+  min-height: 60px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #1d1d1f;
+  font-size: @font-size-sm;
+  font-weight: 400;
+  padding: 0;
+  text-align: center;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.lhc-hub__tab.active {
+  background: linear-gradient(90deg, #1f78ff 0%, #00a1ff 100%);
+  color: #ffffff;
+}
+
+.lhc-hub__tab-text {
+  display: block;
+  max-width: 3em;
+  margin: 0 auto;
+  line-height: 1.15;
+  font-weight: 700;
+  white-space: normal;
+  word-break: break-all;
+  text-align: center;
+}
+
+.lhc-hub__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 10px 10px 0;
+  box-sizing: border-box;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}

@@ -1,0 +1,64 @@
+@import './variables.less';
+@import './themes/light.less';
+@import './themes/dark.less';
+@import './pages/profile-shared.less';
+
+@font-face {
+  font-family: 'ProjectCustomFont';
+  src: url('../assets/fonts/project-custom.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: @font-family;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: @border-radius;
+  padding: 15px;
+}
+
+#app {
+  height: 100%;
+  overflow-y: auto;
+}
+
+img[src*='icon_sel'] {
+  width: @icon-sel-size;
+  height: @icon-sel-size;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+img[src*='icon_x.svg'] {
+  width: @icon-x-size;
+  height: @icon-x-size;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+img[src*='icon_dack.svg'] {
+  width: @icon-dack-size;
+  height: @icon-dack-size;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.record-header h1 {
+  .record-header-title-base();
+}

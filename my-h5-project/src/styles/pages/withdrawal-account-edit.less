@@ -1,0 +1,211 @@
+@import '@/styles/variables.less';
+@import './selection-sheet-popup.less';
+
+.withdrawal-account-edit-page {
+  min-height: 100vh;
+  background: #f4f7ff;
+}
+
+.withdrawal-account-edit-page .record-header {
+  height: 44px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  background: var(--bg-module);
+
+  h1 {
+    margin: 0;
+    font-size: @font-size-md;
+    color: var(--text-color);
+    font-weight: 400;
+    flex: 1;
+  }
+}
+
+.withdrawal-account-edit-page .header-spacer {
+  width: 32px;
+  height: 32px;
+}
+
+.withdrawal-account-edit-page .back-btn {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
+.withdrawal-account-edit-page .content {
+  padding: @spacing-md;
+}
+
+// 与充值页 DepositPage「支付方式」一致的选中样式（pay-grid / pay-card）
+.state-active-pay() {
+  border-color: var(--primary-color);
+  background: var(--button-selected);
+  color: var(--primary-color);
+}
+
+.withdrawal-account-edit-page .method-pay-section.section {
+  margin-bottom: @spacing-md;
+}
+
+.withdrawal-account-edit-page .method-pay-section .section-title {
+  font-size: @font-size-md;
+  color: var(--text-color);
+  margin-bottom: @spacing-sm;
+}
+
+.withdrawal-account-edit-page .pay-grid--cols3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: @spacing-sm;
+}
+
+.withdrawal-account-edit-page .pay-card {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: @border-radius-md;
+  background: var(--bg-module);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &.active {
+    .state-active-pay();
+
+    .pay-name {
+      color: var(--primary-color);
+    }
+  }
+
+  .pay-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-bottom: 2px;
+  }
+
+  .pay-name {
+    font-size: @font-size-xs;
+    color: var(--text-color);
+  }
+
+  .check-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: @spacing-xl;
+    height: @spacing-xl;
+    object-fit: contain;
+  }
+}
+
+.withdrawal-account-edit-page .label {
+  margin: 14px 0 @spacing-sm;
+  font-size: @font-size-sm;
+  color: #8aa2d6;
+}
+
+.withdrawal-account-edit-page .segmented {
+  display: flex;
+  gap: @spacing-sm;
+}
+
+.withdrawal-account-edit-page .seg-btn {
+  height: 38px;
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-module);
+  color: var(--text-color-secondary);
+  font-weight: 400;
+  font-size: @font-size-md;
+}
+
+.withdrawal-account-edit-page .seg-btn.active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: var(--button-selected);
+}
+
+.withdrawal-account-edit-page .input {
+  width: 100%;
+  height: 44px;
+  border-radius: @border-radius-md;
+  border: 1px solid var(--border-color);
+  padding: 0 @spacing-md;
+  box-sizing: border-box;
+  background: var(--bg-module);
+  outline: none;
+  font-size: @font-size-sm;
+  color: var(--text-color);
+}
+
+.withdrawal-account-edit-page .input::placeholder {
+  color: var(--text-color-tertiary);
+}
+
+.withdrawal-account-edit-page .select {
+  width: 100%;
+  height: 44px;
+  border-radius: @border-radius-md;
+  border: 1px solid var(--border-color);
+  padding: 0 @spacing-md;
+  box-sizing: border-box;
+  background: var(--bg-module);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-color);
+  font-size: @font-size-sm;
+}
+
+.withdrawal-account-edit-page .select .placeholder {
+  color: var(--text-color-tertiary);
+}
+
+.withdrawal-account-edit-page .hint-box {
+  margin-top: @spacing-md;
+  border: 1px solid var(--primary-color);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(47, 113, 234, 0.06);
+  color: var(--text-color-secondary);
+}
+
+.withdrawal-account-edit-page .hint-title {
+  font-weight: 400;
+  color: var(--text-color);
+  margin-bottom: @spacing-sm;
+  font-size: @font-size-xl;
+}
+
+.withdrawal-account-edit-page .hint-text {
+  font-size: @font-size-sm;
+  line-height: 1.6;
+}
+
+.withdrawal-account-edit-page .save-btn {
+  margin-top: @spacing-lg;
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: @border-radius-md;
+  background: var(--gradient-primary);
+  color: var(--text-white);
+  font-size: @font-size-md;
+  font-weight: 400;
+  box-shadow: 0 10px 24px rgba(47, 113, 234, 0.18);
+}
+
+.withdrawal-account-edit-page .save-btn:disabled {
+  background: linear-gradient(180deg, #8ecdfb 0%, #72aef5 100%);
+  box-shadow: none;
+}

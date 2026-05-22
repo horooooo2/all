@@ -1,0 +1,101 @@
+/**
+ * 团队彩票注单：玩家/平台/状态底部弹层（van-popup 可能 teleport 到 body）
+ */
+@import '@/styles/variables.less';
+
+@lottery-border: #eef2f8;
+
+.lottery-picker-popup.van-popup {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.lottery-picker-popup .lottery-picker-head {
+  height: 48px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid @lottery-border;
+}
+
+.lottery-picker-popup .lottery-picker-title {
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.lottery-picker-popup .lottery-picker-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: #e8f2ff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+
+  img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    object-fit: contain;
+  }
+}
+
+.lottery-picker-popup .lottery-picker-list {
+  padding: @spacing-sm @spacing-md calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.lottery-picker-popup .lottery-picker-row {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: @spacing-xs;
+  padding: 0 @spacing-md;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @spacing-md;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &--active {
+    background: #e8f4ff;
+  }
+}
+
+.lottery-picker-popup .lottery-picker-label {
+  font-size: @font-size-md;
+  font-weight: 400;
+  color: var(--text-color-secondary);
+  text-align: left;
+}
+
+.lottery-picker-popup .lottery-picker-row--active .lottery-picker-label {
+  color: var(--text-color);
+  font-weight: 400;
+}
+
+.lottery-picker-popup .lottery-picker-check {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.lottery-picker-popup .lottery-picker-radio {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2px solid #b8c8e8;
+  border-radius: 50%;
+  box-sizing: border-box;
+}

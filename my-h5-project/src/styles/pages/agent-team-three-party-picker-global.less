@@ -1,0 +1,102 @@
+/**
+ * 团队三方游戏记录：平台选择底部弹层（van-popup 可能 teleport 到 body）
+ */
+@import '@/styles/variables.less';
+
+@tp-border: #eef2f8;
+
+.tp-picker-popup.van-popup {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.tp-picker-popup .tp-picker-head {
+  height: 48px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid @tp-border;
+}
+
+.tp-picker-popup .tp-picker-title {
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.tp-picker-popup .tp-picker-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: #e8f2ff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+
+  img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    object-fit: contain;
+  }
+}
+
+.tp-picker-popup .tp-picker-list {
+  padding: @spacing-sm @spacing-md calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.tp-picker-popup .tp-picker-row {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: @spacing-xs;
+  padding: 0 @spacing-md;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @spacing-md;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &--active {
+    background: #e8f4ff;
+  }
+}
+
+.tp-picker-popup .tp-picker-label {
+  font-size: @font-size-md;
+  font-weight: 400;
+  color: var(--text-color-secondary);
+  text-align: left;
+}
+
+.tp-picker-popup .tp-picker-row--active .tp-picker-label {
+  color: var(--text-color);
+  font-weight: 400;
+}
+
+.tp-picker-popup .tp-picker-check {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.tp-picker-popup .tp-picker-radio {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2px solid #b8c8e8;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+

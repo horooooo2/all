@@ -1,0 +1,113 @@
+@import '@/styles/variables.less';
+
+.service-page {
+  background-color: var(--bg-color);
+}
+
+.bg-wrapper {
+  height: 218px;
+  .bg-cover(url('@/assets/user_top_back.jpg'));
+  padding: @spacing-xl;
+}
+
+.user-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.left-info {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+
+  .default-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: @border-radius-circle;
+    object-fit: cover;
+  }
+
+  .text-group {
+    .login-text {
+      font-size: @font-size-lg;
+      color: var(--text-white);
+      font-weight: 500;
+      margin-bottom: @spacing-xs;
+    }
+
+    .sub-text {
+      font-size: @font-size-sm;
+      color: var(--text-white-80);
+    }
+  }
+}
+
+.right-avatar {
+  .img-contain(150px; 150px);
+  margin-bottom: -15px;
+}
+
+.service-card {
+  background: var(--bg-module);
+  border-radius: @border-radius-xl;
+  margin: 0 @spacing-md;
+  padding: @spacing-sm 0;
+  box-shadow: var(--shadow-card-default);
+  margin-top: -30px;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: @spacing-lg @spacing-xl;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-left {
+    display: flex;
+    align-items: center;
+    gap: @spacing-md;
+
+    .item-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: @border-radius-circle;
+      flex-shrink: 0;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      &--placeholder {
+        background-color: #F1F5FF; /* S1 页面背景（日间） */
+      }
+    }
+
+    .item-name {
+      font-size: @font-size-lg;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+  }
+
+  .item-arrow {
+    width: @icon-dack-size;
+    height: @icon-dack-size;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+}
+
+.bottom-placeholder {
+  height: 80px;
+}

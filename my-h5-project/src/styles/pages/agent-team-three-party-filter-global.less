@@ -1,0 +1,123 @@
+/**
+ * 团队三方游戏记录：筛选弹层（参考稿图）
+ */
+@import '@/styles/variables.less';
+
+@tp-border: #eef2f8;
+
+.tp-filter-popup.van-popup {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.tp-filter-popup .tp-filter-sheet {
+  padding: @spacing-lg @spacing-md calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+  background: #fff;
+}
+
+.tp-filter-popup .tp-filter-title {
+  margin: 0 0 @spacing-md 0;
+  text-align: center;
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.tp-filter-popup .tp-filter-quick {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: @spacing-sm;
+}
+
+.tp-filter-popup .tp-filter-quick-btn {
+  height: 44px;
+  border: 1px solid @tp-border;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-color-secondary);
+  font-size: @font-size-md;
+  font-weight: 400;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &--active {
+    border-color: var(--primary-color);
+    background: #e8f4ff;
+    color: var(--primary-color);
+    font-weight: 400;
+  }
+}
+
+.tp-filter-popup .tp-filter-quick-indicator {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #b8c8e8;
+  box-sizing: border-box;
+}
+
+.tp-filter-popup .tp-filter-quick-btn--active .tp-filter-quick-indicator {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 4px;
+    height: 8px;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+  }
+}
+
+.tp-filter-popup .tp-filter-range {
+  margin-top: @spacing-sm;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: @spacing-sm;
+  align-items: center;
+}
+
+.tp-filter-popup .tp-filter-date {
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: var(--button-selected);
+  color: var(--text-color);
+  font-size: @font-size-md;
+}
+
+.tp-filter-popup .tp-filter-actions {
+  margin-top: @spacing-md;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: @spacing-sm;
+}
+
+.tp-filter-popup .tp-filter-reset,
+.tp-filter-popup .tp-filter-search {
+  .control-base(44px; @border-radius-md);
+  border: none;
+  font-size: @font-size-md;
+  font-weight: 600;
+}
+
+.tp-filter-popup .tp-filter-reset {
+  background: var(--input-secondary);
+  color: #8d9fc7;
+}
+
+.tp-filter-popup .tp-filter-search {
+  background: var(--gradient-primary);
+  color: var(--text-white);
+}
+

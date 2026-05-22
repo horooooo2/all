@@ -1,0 +1,101 @@
+/**
+ * 团队账变记录：玩家/类型底部弹层（van-popup 可能 teleport 到 body）
+ */
+@import '@/styles/variables.less';
+
+@billing-border: #eef2f8;
+
+.billing-picker-popup.van-popup {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.billing-picker-popup .billing-picker-head {
+  height: 48px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid @billing-border;
+}
+
+.billing-picker-popup .billing-picker-title {
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.billing-picker-popup .billing-picker-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: #e8f2ff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+
+  img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    object-fit: contain;
+  }
+}
+
+.billing-picker-popup .billing-picker-list {
+  padding: @spacing-sm @spacing-md calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.billing-picker-popup .billing-picker-row {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: @spacing-xs;
+  padding: 0 @spacing-md;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @spacing-md;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &--active {
+    background: #e8f4ff;
+  }
+}
+
+.billing-picker-popup .billing-picker-label {
+  font-size: @font-size-md;
+  font-weight: 400;
+  color: var(--text-color-secondary);
+  text-align: left;
+}
+
+.billing-picker-popup .billing-picker-row--active .billing-picker-label {
+  color: var(--text-color);
+  font-weight: 400;
+}
+
+.billing-picker-popup .billing-picker-check {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.billing-picker-popup .billing-picker-radio {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2px solid #b8c8e8;
+  border-radius: 50%;
+  box-sizing: border-box;
+}

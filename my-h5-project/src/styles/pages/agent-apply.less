@@ -1,0 +1,155 @@
+@import '@/styles/variables.less';
+
+/* 与稿一致：偏白灰底、扁平信息卡与表单 */
+@apply-page-bg: #f5f7fa;
+@apply-card-blue: #3d94ff;
+@apply-label: #8d9eb8;
+@apply-input-border: #dce4f0;
+@apply-placeholder: #b8c4d9;
+@agent-blue-soft: #e8f2ff;
+
+.agent-apply-page {
+  min-height: 100vh;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
+  background: @apply-page-bg;
+  box-sizing: border-box;
+}
+
+.agent-apply-page .agent-header {
+  position: relative;
+  height: 48px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-bottom: 1px solid #eef2f8;
+}
+
+.agent-apply-page .agent-header-back {
+  position: absolute;
+  left: @spacing-md;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: @agent-blue-soft;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 18px;
+    height: 18px;
+    display: block;
+    object-fit: contain;
+  }
+}
+
+.agent-apply-page .agent-header-title {
+  margin: 0;
+  font-size: @font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+/* 代理账户信息条：纯色蓝 + 行间浅线分隔 */
+.agent-apply-page .agent-account-bar {
+  margin: @spacing-md;
+  padding: 16px @spacing-md;
+  border-radius: @border-radius-lg;
+  background: @apply-card-blue;
+  color: #fff;
+}
+
+.agent-apply-page .agent-account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: @font-size-md;
+  line-height: 22px;
+
+  span:first-child {
+    opacity: 0.95;
+    font-weight: 400;
+  }
+
+  span:last-child {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+}
+
+.agent-apply-page .agent-account-row + .agent-account-row {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+/* 表单 */
+.agent-apply-page .agent-form {
+  margin: 0 @spacing-md;
+}
+
+.agent-apply-page .agent-field {
+  margin-bottom: 18px;
+}
+
+.agent-apply-page .agent-field-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: @font-size-md;
+  color: @apply-label;
+  font-weight: 400;
+}
+
+.agent-apply-page .agent-field-label .req {
+  color: #ee1b18;
+  margin-right: 2px;
+}
+
+.agent-apply-page .agent-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 @spacing-md;
+  border: 1px solid @apply-input-border;
+  border-radius: @border-radius-md;
+  background: #fff;
+  font-size: @font-size-md;
+  color: var(--text-color);
+  box-sizing: border-box;
+  outline: none;
+  box-shadow: none;
+
+  &::placeholder {
+    color: @apply-placeholder;
+  }
+
+  &:focus {
+    border-color: #a8c4f0;
+  }
+}
+
+.agent-apply-page .agent-submit-wrap {
+  margin: 28px 0 0;
+  padding-bottom: 4px;
+}
+
+/* 稿：浅蓝、轻微纵向渐变 */
+.agent-apply-page .agent-submit-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: @border-radius-md;
+  font-size: @font-size-lg;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(180deg, #62aeff 0%, #3d94ff 55%, #2d86f5 100%);
+}
+
+.agent-apply-page .agent-submit-btn:active {
+  opacity: 0.92;
+}

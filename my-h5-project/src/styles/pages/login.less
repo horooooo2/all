@@ -1,0 +1,281 @@
+@import '@/styles/variables.less';
+
+.login-page,
+.register-page {
+  min-height: 100vh;
+  background: #F1F5FF;
+  padding: 0 20px @spacing-xl;
+}
+
+.login-top {
+  margin: 0 -20px @spacing-xl;
+}
+
+.login-header {
+  background: #fff;
+  border-radius: 0;
+  padding: @spacing-lg 20px @spacing-md;
+  margin-bottom: 0;
+}
+
+.login-header-row {
+  .flex-between;
+  align-items: center;
+
+  &:first-child {
+    margin-top: 15px;
+  }
+}
+
+.login-header-row + .login-header-row {
+  margin-top: @spacing-sm;
+}
+
+.login-header-row .logo {
+  width: 139px;
+  height: 34px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+.login-header-row .title {
+  font-size: @font-size-md;
+  color: var(--text-color-secondary);
+}
+
+.login-header .icon-btn {
+  width: @icon-x-size;
+  height: @icon-x-size;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: @icon-x-size;
+    height: @icon-x-size;
+    object-fit: contain;
+  }
+}
+
+.login-header-right .icon-placeholder {
+  width: 24px;
+  height: 24px;
+  border-radius: @border-radius-circle;
+  background: var(--text-color-tertiary);
+  opacity: 0.6;
+}
+
+.login-form {
+  background: #F1F5FF;
+  padding: @spacing-xl 20px @spacing-xl;
+  margin-bottom: 0;
+}
+
+.login-field-wrap {
+  display: flex;
+  align-items: center;
+  .control-base(48px; @border-radius-lg);
+  padding: 0 @spacing-md;
+  margin-bottom: @spacing-md;
+  background: #fff;
+  border: 1px solid var(--border-color);
+}
+
+.login-field-wrap .icon-placeholder {
+  width: 20px;
+  height: 20px;
+  margin-right: @spacing-sm;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-field-wrap .icon-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.login-field-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: @font-size-md;
+  color: var(--text-color);
+  background: transparent;
+}
+
+.login-field-wrap input::placeholder {
+  color: var(--text-color-tertiary);
+}
+
+.login-field-wrap .toggle-pwd {
+  width: 24px;
+  height: 24px;
+  margin-left: @spacing-sm;
+  border: none;
+  cursor: pointer;
+}
+
+.login-field-wrap .toggle-pwd .icon-placeholder {
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+}
+
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  margin-bottom: @spacing-lg;
+  cursor: pointer;
+}
+
+.login-remember span {
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+}
+
+.login-btn {
+  width: 100%;
+  .btn-primary(44px; @border-radius-lg);
+  background: var(--gradient-login-primary);
+  font-size: @font-size-md;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity @animation-duration;
+}
+
+.login-btn.disabled,
+.login-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: @spacing-md;
+  margin: @spacing-xl 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.login-divider span {
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
+}
+
+.login-quick-wrap {
+  .flex-center;
+  margin-bottom: @spacing-xl;
+}
+
+.login-quick-wrap .quick-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: @border-radius-circle;
+  .flex-center;
+}
+
+.login-quick-wrap .quick-icon img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.login-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: @spacing-md;
+  margin-bottom: @spacing-xl;
+}
+
+.login-actions button,
+.login-actions div[role='button'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: @spacing-sm;
+  .control-base(44px; @border-radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--bg-module);
+  color: var(--text-color);
+  font-size: @font-size-sm;
+  cursor: pointer;
+}
+
+.login-actions button .icon-placeholder,
+.login-actions div[role='button'] .icon-placeholder {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-actions button .icon-placeholder img,
+.login-actions div[role='button'] .icon-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.login-agree {
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  cursor: pointer;
+}
+
+.login-agree input,
+.login-remember input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.login-agree .agree-check,
+.login-remember .agree-check {
+  width: @icon-sel-size;
+  height: @icon-sel-size;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+
+  img {
+    width: @icon-sel-size;
+    height: @icon-sel-size;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+.login-agree .text {
+  flex: 1;
+  min-width: 0;
+  align-self: center;
+  font-size: @font-size-xs;
+  color: var(--text-color-secondary);
+  line-height: 1.4;
+}
+
+.login-agree .link {
+  display: inline;
+  vertical-align: middle;
+  color: var(--primary-color);
+  cursor: pointer;
+}

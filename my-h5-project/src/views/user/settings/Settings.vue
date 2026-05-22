@@ -1,0 +1,66 @@
+<template>
+  <div class="settings-page">
+    <header class="record-header">
+      <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
+      <h1>设置</h1>
+    </header>
+
+    <section class="settings-menu">
+      <button type="button" class="settings-row" @click="goAboutUs">
+        <span>关于我们</span>
+        <van-icon name="arrow" />
+      </button>
+      <button type="button" class="settings-row" @click="goUserAgreement">
+        <span>用户协议</span>
+        <van-icon name="arrow" />
+      </button>
+      <button type="button" class="settings-row" @click="goPrivacyPolicy">
+        <span>隐私政策</span>
+        <van-icon name="arrow" />
+      </button>
+      <button type="button" class="settings-row" @click="goUserAgreement">
+        <span>当前版本</span>
+        v{{ appVersion }}
+      </button>
+    </section>
+
+    <section class="settings-menu settings-menu--logout">
+      <button type="button" class="settings-row settings-row--logout" @click="onLogout">
+        <span>退出登录</span>
+      </button>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { useRouter } from 'vue-router'
+import { showConfirmDialog } from 'vant'
+import iconBack from '@/assets/icon_dack.svg'
+import { useUserStore } from '@/stores/user'
+
+const router = useRouter()
+const userStore = useUserStore()
+
+const appVersion = __APP_VERSION__
+
+const goBack = () => router.back()
+const goAboutUs = () => router.push({ name: 'aboutUs' })
+const goUserAgreement = () => router.push({ name: 'userAgreement' })
+const goPrivacyPolicy = () => router.push({ name: 'privacyPolicy' })
+
+const onLogout = () => {
+  showConfirmDialog({
+    title: '温馨提示',
+    message: '退出后，您需要重新登录才能继续访问账户与相关功能。'
+  })
+    .then(() => {
+      userStore.logout()
+      router.replace({ name: 'user' })
+    })
+    .catch(() => {})
+}
+</script>
+
+<style lang="less" scoped>
+@import '@/styles/pages/settings.less';
+</style>

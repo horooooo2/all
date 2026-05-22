@@ -1,0 +1,326 @@
+@import '@/styles/variables.less';
+
+@lottery-border: #eef2f8;
+
+.agent-team-lottery-page.agent-subpage {
+  background: var(--bg-color);
+}
+
+.agent-team-lottery-page .lottery-toolbar {
+  margin: 0;
+  padding: @spacing-md @spacing-md 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.agent-team-lottery-page .lottery-toolbar-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.agent-team-lottery-page .lottery-toolbar-row.lottery-search-row {
+  margin-top: 12px;
+}
+
+.agent-team-lottery-page .lottery-toolbar-row.lottery-drops {
+  margin-top: 12px;
+}
+
+.agent-team-lottery-page .lottery-segments {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  padding: 3px;
+  border: 1px solid @lottery-border;
+  border-radius: 8px;
+  background: #fff;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.agent-team-lottery-page .lottery-seg {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &--active {
+    color: #fff;
+    background: linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%);
+  }
+}
+
+.agent-team-lottery-page .lottery-sieve {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+  border: none;
+  background: transparent;
+  font-size: @font-size-md;
+  color: #8d9fc7;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.agent-team-lottery-page .lottery-sieve-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.agent-team-lottery-page .lottery-drops {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: @spacing-sm;
+
+  &--two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.agent-team-lottery-page .lottery-player-search {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 8px 0 10px;
+  border: 1px solid @lottery-border;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.agent-team-lottery-page .lottery-player-search__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.agent-team-lottery-page .lottery-player-search__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+  color: var(--text-color);
+}
+
+.agent-team-lottery-page .lottery-player-search__input::placeholder {
+  color: var(--text-color-secondary);
+}
+
+.agent-team-lottery-page .lottery-player-search__btn {
+  flex-shrink: 0;
+  width: 58px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: var(---J5-2, linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%));
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.agent-team-lottery-page .lottery-drop {
+  min-width: 0;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid @lottery-border;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  .lottery-drop-text {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &--chevron {
+    justify-content: space-between;
+    padding-left: 6px;
+    padding-right: 6px;
+
+    .lottery-drop-text {
+      text-align: left;
+    }
+  }
+}
+
+.agent-team-lottery-page .lottery-drop-chev {
+  flex-shrink: 0;
+  color: var(--text-color-tertiary);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.agent-team-lottery-page .lottery-body {
+  margin-top: @spacing-md;
+  padding: 0 @spacing-md calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+}
+
+.agent-team-lottery-page .lottery-list {
+  display: flex;
+  flex-direction: column;
+  gap: @spacing-sm;
+}
+
+.agent-team-lottery-page .lottery-card {
+  padding: @spacing-md;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid @lottery-border;
+  display: flex;
+  justify-content: space-between;
+  gap: @spacing-md;
+  box-sizing: border-box;
+}
+
+.agent-team-lottery-page .lottery-card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-team-lottery-page .lottery-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.agent-team-lottery-page .lottery-card-game {
+  margin: 0;
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.agent-team-lottery-page .lottery-card-tag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+
+  &--pending {
+    color: var(--primary-color);
+    background: #e8f4ff;
+  }
+
+  &--won {
+    color: #0a9150;
+    background: #e8f8ef;
+  }
+
+  &--lost {
+    color: var(--text-color-secondary);
+    background: #f2f4f7;
+  }
+}
+
+.agent-team-lottery-page .lottery-card-row {
+  margin: 0;
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.agent-team-lottery-page .lottery-card-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.agent-team-lottery-page .lottery-card-amt {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  &--pos {
+    color: var(--success-color);
+  }
+
+  &--neg {
+    color: var(--danger-color);
+  }
+
+  &--zero {
+    color: var(--text-color-secondary);
+  }
+}
+
+.agent-team-lottery-page .lottery-card-copy {
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+.agent-team-lottery-page .lottery-empty {
+  padding: 48px @spacing-md 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  img {
+    width: 200px;
+    max-width: 72%;
+    height: auto;
+  }
+
+  p {
+    margin: @spacing-md 0 0;
+    font-size: @font-size-md;
+    color: var(--text-color-tertiary);
+  }
+}

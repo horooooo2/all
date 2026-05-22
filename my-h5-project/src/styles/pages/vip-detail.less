@@ -1,0 +1,197 @@
+@import '@/styles/variables.less';
+
+.vip-detail-page {
+  min-height: 100vh;
+  padding-top: 44px;
+  padding-bottom: calc(@spacing-lg + env(safe-area-inset-bottom, 0));
+  background: #f4f7ff;
+  overflow-x: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 居中标题 + 左侧返回（与返水顶栏按钮一致） */
+.vip-detail-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 44px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-module);
+
+  h1 {
+    margin: 0;
+    font-size: @font-size-lg;
+    font-weight: 600;
+    color: #1d2433;
+  }
+}
+
+.vip-detail-nav .back-btn {
+  position: absolute;
+  left: @spacing-md;
+  top: 50%;
+  transform: translateY(-50%);
+  width: @icon-dack-size;
+  height: @icon-dack-size;
+  border-radius: 4px;
+  padding: 0;
+  display: block;
+  object-fit: contain;
+}
+
+/* VIP等级说明：标题与 VIP 图同一行垂直居中；下方说明多行换行 */
+.vip-explain-card {
+  margin: @spacing-md @spacing-md @spacing-lg;
+  padding: 16px 14px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #2d4570 0%, #1a2333 55%, #152030 100%);
+  color: var(--text-white);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(16, 40, 90, 0.18);
+  max-width: 100%;
+  box-sizing: border-box;
+  height: 165px;
+}
+
+.vip-explain-head-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.vip-explain-title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-size: @font-size-md;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.vip-explain-text {
+  margin: 20px 0 0;
+  font-size: @font-size-sm;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.vip-explain-deco {
+  flex-shrink: 0;
+  width: auto;
+  height: 56px;
+  max-width: 120px;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+/* VIP升级条件 标题装饰 */
+.vip-detail-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 @spacing-md @spacing-sm;
+}
+
+.vip-detail-section-line {
+  flex: 1;
+  max-width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c5d4e8);
+}
+
+.vip-detail-section-line.is-right {
+  background: linear-gradient(90deg, #c5d4e8, transparent);
+}
+
+.vip-detail-section-diamonds {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.vip-detail-mini-diamond {
+  width: 4px;
+  height: 4px;
+  background: #6ba3ff;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.vip-detail-section-title {
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: #1d2433;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+
+/* 升级条件表格 */
+.vip-condition-table-wrap {
+  margin: 0 @spacing-md @spacing-lg;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: @border-radius-md;
+  background: var(--bg-module);
+  box-shadow: 0 2px 12px rgba(16, 64, 145, 0.06);
+}
+
+.vip-condition-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 11px;
+  color: #2b2f3a;
+  table-layout: fixed;
+
+  th,
+  td {
+    border: 1px solid #dae4f6;
+    padding: 8px 6px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.35;
+  }
+
+  thead th {
+    background: #eef3fb;
+    font-weight: 600;
+    color: #1d2433;
+    font-size: 10px;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #f7faff;
+  }
+
+  .vip-level-cell {
+    font-weight: 700;
+    color: #1d2433;
+  }
+}
+
+.vip-condition-subhead {
+  font-size: 9px;
+  font-weight: 600;
+  color: #5a6578;
+  line-height: 1.25;
+}
