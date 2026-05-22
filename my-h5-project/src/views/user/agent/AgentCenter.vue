@@ -126,7 +126,7 @@
                   <img class="agent-panel-icon" :src="item.icon" alt="">
                   <span>{{ item.label }}</span>
                 </span>
-                <van-icon name="arrow" />
+                <img class="agent-panel-arrow" :src="iconArrow" alt="">
               </div>
             </template>
           </div>
@@ -175,21 +175,22 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
-import iconPromotion from '@/assets/icon_promotion.png'
-import iconCommission from '@/assets/icon_commission.png'
-import iconTreatment from '@/assets/icon_treatment.png'
-import iconTeamMembers from '@/assets/icon_team_members.png'
-import iconPerformance from '@/assets/icon_performance.png'
-import iconLotteryRecords from '@/assets/icon_lottery_records.png'
-import iconThreePartyRecords from '@/assets/icon_three_party_records.png'
-import iconBillingRecords from '@/assets/icon_billing_records.png'
-import iconAccount from '@/assets/icon_account.png'
-import iconInvitationLink from '@/assets/icon_invitation_link.png'
-import iconInvitationCode from '@/assets/icon_invitation_code.png'
-import iconCopy from '@/assets/icon_copy.png'
-import imgTelegram from '@/assets/telegram.png'
-import imgWhatsapp from '@/assets/whatsapp.png'
-import imgFacebook from '@/assets/facebook.png'
+import iconArrow from '@/assets/icon_dack_line.svg'
+import iconPromotion from '@/assets/icon_promotion.svg'
+import iconCommission from '@/assets/icon_commission.svg'
+import iconTreatment from '@/assets/icon_treatment.svg'
+import iconTeamMembers from '@/assets/icon_team_members.svg'
+import iconPerformance from '@/assets/icon_performance.svg'
+import iconLotteryRecords from '@/assets/icon_lottery_records.svg'
+import iconThreePartyRecords from '@/assets/icon_three_party_records.svg'
+import iconBillingRecords from '@/assets/icon_billing_records.svg'
+import iconAgentFuchi from '@/assets/icon_agent_fuchi.svg'
+import iconInvitationLink from '@/assets/icon_invitation_link.svg'
+import iconInvitationCode from '@/assets/icon_invitation_code.svg'
+import iconCopy from '@/assets/icon_copy.svg'
+import imgTelegram from '@/assets/telegram.svg'
+import imgWhatsapp from '@/assets/whatsapp.svg'
+import imgFacebook from '@/assets/facebook.svg'
 import toast from '@/components/Toast'
 
 const router = useRouter()
@@ -225,7 +226,7 @@ const listSections = [
   ],
   [
     { label: '团队账变记录', icon: iconBillingRecords, action: 'billingRecords' },
-    { label: '代理扶持', icon: iconAccount, action: 'agentSupport' }
+    { label: '代理扶持', icon: iconAgentFuchi, action: 'agentSupport' }
   ],
   [
     { label: '邀请链接', icon: iconInvitationLink, action: 'inviteLink' },

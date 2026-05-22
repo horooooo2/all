@@ -1,81 +1,116 @@
 @import '@/styles/variables.less';
 
-.agent-treatment-page .treat-card {
-  margin: @spacing-md;
-  border-radius: 12px;
-  background: #e8f1fc;
-  border: 1px solid #d4e4f7;
+.agent-treatment-page {
+  padding-left: @spacing-md;
+  padding-right: @spacing-md;
+}
+
+.agent-treatment-page .record-table-card {
+  margin-top: @spacing-sm;
+  border-radius: @border-radius-md;
   overflow: hidden;
+  background: #D7E2F5;
 }
 
-.agent-treatment-page .treat-card-head {
-  padding: 12px @spacing-md;
+.agent-treatment-page .treat-section-head {
+  height: 44px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
   font-size: @font-size-md;
-  font-weight: 700;
-  color: var(--text-color);
-  background: #dceaf8;
-}
-
-.agent-treatment-page .treat-table-head {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr auto;
-  gap: 4px;
-  align-items: center;
-  padding: 10px @spacing-md;
-  font-size: @font-size-sm;
   font-weight: 600;
-  color: var(--text-color-secondary);
-  background: #e3eef9;
-  border-bottom: 1px solid #d4e4f7;
+  color: #2d3b57;
+  background: #B8C8E3;
+  border-bottom: 1px solid #d7e0ef;
 }
 
-.agent-treatment-page .treat-head-placeholder {
-  width: 16px;
-}
-
-.agent-treatment-page .treat-cat-row {
+.agent-treatment-page .table-head,
+.agent-treatment-page .detail-row {
+  min-height: 42px;
+  padding: 0 @spacing-md;
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr auto;
-  gap: 4px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  padding: 12px @spacing-md;
-  font-size: @font-size-sm;
-  background: #e8f1fc;
+
+  span {
+    min-width: 0;
+    text-align: center;
+    font-size: 12px;
+  }
+}
+
+.agent-treatment-page .table-head {
+  height: 44px;
+  min-height: 44px;
+  color: #2d3b57;
+  font-weight: 400;
+
+  span:nth-child(3) {
+    color: #0065FF;
+  }
+}
+
+.agent-treatment-page .group-row,
+.agent-treatment-page .detail-row {
+  color: #8a9dc2;
+  border-bottom: 1px solid #d7e0ef;
+}
+
+.agent-treatment-page .record-table-card .group-row {
   border: none;
-  border-bottom: 1px solid #d4e4f7;
   cursor: pointer;
-  width: 100%;
-  text-align: left;
-  color: var(--text-color);
-
-  .treat-rate {
-    color: #1f78ff;
-    font-weight: 600;
-  }
-}
-
-.agent-treatment-page .treat-arrow {
-  width: 16px;
-  text-align: center;
-  color: var(--text-color-tertiary);
-  font-size: 12px;
-}
-
-.agent-treatment-page .treat-sub-row {
+  font: inherit;
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr;
-  gap: 4px;
-  padding: 10px @spacing-md 10px 28px;
-  font-size: @font-size-sm;
-  background: #fff;
-  border-bottom: 1px solid #eef2f8;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  background: #D7E2F5;
+  width: 100%;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 @spacing-md;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  box-sizing: border-box;
 
-  .treat-type-sub {
-    color: var(--text-color-tertiary);
+  > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 12px;
+
+    &:nth-child(3) {
+      color: #0065FF;
+    }
   }
+}
 
-  .treat-rate {
-    color: #1f78ff;
-    font-weight: 600;
+.agent-treatment-page .detail-row span:nth-child(3) {
+  color: #0065FF;
+}
+
+.agent-treatment-page .record-table-card .detail-row {
+  background: #fff;
+}
+
+.agent-treatment-page .record-table-card .group-row__arrow {
+  position: absolute;
+  right: @spacing-md;
+  top: 50%;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translateY(-50%);
+
+  &.is-up {
+    transform: translateY(-50%) rotate(180deg);
   }
 }

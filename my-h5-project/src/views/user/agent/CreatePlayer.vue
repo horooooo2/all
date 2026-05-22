@@ -161,7 +161,7 @@
         <div v-for="item in links" :key="item.id" class="cp-link-card">
           <button type="button" class="cp-link-head" @click="goLinkDetail(item)">
             <span class="cp-link-title">链接名称： {{ item.title }}</span>
-            <van-icon name="arrow" />
+            <img class="cp-link-arrow" :src="iconArrow" alt="">
           </button>
           <div class="cp-link-body">
             <div class="cp-link-url">{{ item.url }}</div>
@@ -214,7 +214,8 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import iconBack from '@/assets/icon_dack.png'
+import iconBack from '@/assets/icon_dack.svg'
+import iconArrow from '@/assets/icon_dack_line.svg'
 import iconLoginAccount from '@/assets/icon_login_account.png'
 import iconLoginPassword from '@/assets/icon_login_password.png'
 import iconLoginVisible from '@/assets/icon_login_visible.png'

@@ -15,7 +15,7 @@
       </div>
       <div class="promo-row promo-row--code">
         <div class="promo-row-icon promo-row-icon--home">
-          <img :src="iconYqm" alt="">
+          <img :src="iconInvitationCode" alt="">
         </div>
         <div class="promo-row-text">
           <span>邀请代码</span>
@@ -61,15 +61,15 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
-import iconPromotionLink from '@/assets/icon_invitation_link.png'
-import iconYqm from '@/assets/icon_yqm.svg'
+import iconPromotionLink from '@/assets/icon_invitation_link.svg'
+import iconInvitationCode from '@/assets/icon_invitation_code.svg'
 import iconCopy from '@/assets/icon_copy.svg'
 import iconClose from '@/assets/icon_x.svg'
 import toast from '@/components/Toast'
 
 const router = useRouter()
 
-/** 与首页帮助区「邀请码」同源图标：icon_yqm.svg；链接：icon_invitation_link.png */
+/** 邀请代码：icon_invitation_code.svg；链接：icon_invitation_link.svg */
 const inviteCode = ref('afz2z')
 const showLinkPopup = ref(false)
 
