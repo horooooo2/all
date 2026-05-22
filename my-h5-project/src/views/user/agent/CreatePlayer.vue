@@ -151,7 +151,7 @@
       </div>
 
       <div class="cp-bottom">
-        <button type="button" class="cp-primary-btn" @click="onCreateAccount">创建账户</button>
+        <button type="button" class="cp-create-btn" @click="onCreateAccount">创建账户</button>
       </div>
     </template>
 
@@ -176,7 +176,7 @@
               >
               <span>设为默认</span>
             </button>
-            <button type="button" class="cp-link-qr" @click="toast.success('分享二维码（待对接）')">分享二维码</button>
+            <button type="button" class="cp-link-qr" @click="openQrShare(item)">分享二维码</button>
           </div>
         </div>
       </div>
@@ -185,6 +185,33 @@
         <button type="button" class="cp-primary-btn" @click="onGenerateLink">生成链接</button>
       </div>
     </template>
+
+    <van-popup
+      v-model:show="qrShareVisible"
+      position="center"
+      teleport="body"
+      class="cp-qr-share-popup"
+      :overlay-style="{ background: 'rgba(0, 0, 0, 0.55)' }"
+      :close-on-click-overlay="true"
+    >
+      <div class="cp-qr-share" role="dialog" aria-modal="true" aria-label="分享二维码">
+        <div class="cp-qr-share__card">
+          <div class="cp-qr-share__img">
+            <img
+              v-if="qrShareImage"
+              class="cp-qr-share__img-el"
+              :src="qrShareImage"
+              alt="分享二维码"
+            >
+            <span v-else class="cp-qr-share__placeholder">分享图</span>
+          </div>
+        </div>
+        <button type="button" class="cp-qr-share__save" @click="onSaveQr">保存二维码</button>
+        <button type="button" class="cp-qr-share__close" aria-label="关闭" @click="qrShareVisible = false">
+          <img :src="iconXCircle" alt="">
+        </button>
+      </div>
+    </van-popup>
 
     <van-popup
       v-model:show="pickerVisible"
@@ -212,23 +239,37 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import iconArrow from '@/assets/icon_dack_line.svg'
-import iconLoginAccount from '@/assets/icon_login_account.png'
-import iconLoginPassword from '@/assets/icon_login_password.png'
-import iconLoginVisible from '@/assets/icon_login_visible.png'
-import iconLoginInvisible from '@/assets/icon_login_invisible_dark.png'
+import iconLoginAccount from '@/assets/icon_login_account.svg'
+import iconLoginPassword from '@/assets/icon_login_password.svg'
+import iconLoginVisible from '@/assets/icon_login_visible.svg'
+import iconLoginInvisible from '@/assets/icon_login_invisible_dark.svg'
 import iconDetailsDown from '@/assets/icon_details_down.png'
 import iconDetailsTop from '@/assets/icon_details_top.png'
-import iconYes from '@/assets/icon_yes.png'
+import iconYes from '@/assets/icon_yes.svg'
+import iconXCircle from '@/assets/icon_x_circle.svg'
 import toast from '@/components/Toast'
 
+const route = useRoute()
 const router = useRouter()
 const goBack = () => router.back()
 
-const topTab = ref('account') // account | link
+const resolveTopTab = (tab) => {
+  const v = Array.isArray(tab) ? tab[0] : tab
+  return v === 'link' ? 'link' : 'account'
+}
+
+const topTab = ref(resolveTopTab(route.query.tab))
+
+watch(
+  () => route.query.tab,
+  (tab) => {
+    topTab.value = resolveTopTab(tab)
+  }
+)
 const midTab = ref('rebate') // rebate | treatment
 
 const account = ref('')
@@ -337,6 +378,35 @@ const goLinkDetail = (item) => {
 
 const onGenerateLink = () => {
   toast.success('生成链接（待对接）')
+}
+
+const qrShareVisible = ref(false)
+const qrShareImage = ref('')
+
+const openQrShare = (_item) => {
+  // 接口返回二维码图片地址后赋值 qrShareImage
+  qrShareImage.value = ''
+  qrShareVisible.value = true
+}
+
+const onSaveQr = async () => {
+  if (!qrShareImage.value) {
+    toast.success('保存二维码（待对接）')
+    return
+  }
+  try {
+    const res = await fetch(qrShareImage.value)
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'qrcode.png'
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success('已保存')
+  } catch {
+    toast.error('保存失败')
+  }
 }
 </script>
 

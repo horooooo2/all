@@ -1,26 +1,28 @@
 <template>
-  <div v-if="show" class="lang-popup-mask" @click="close"></div>
-  <transition name="slide-up">
-    <div v-if="show" class="lang-popup">
-      <div class="popup-header">
-        <span class="header-title">{{ $t('语言设置') }}</span>
-        <img class="close-btn" src="@/assets/icon_x.svg" alt="关闭" @click="close" />
-      </div>
-      <div class="lang-list">
-        <div
+  <Teleport to="body">
+    <div v-if="show" class="lang-popup-mask" @click="close"></div>
+    <transition name="slide-up">
+      <div v-if="show" class="lang-popup">
+        <div class="popup-header">
+          <span class="header-title">{{ $t('语言设置') }}</span>
+          <img class="close-btn" src="@/assets/icon_x.svg" alt="关闭" @click="close" />
+        </div>
+        <div class="lang-list">
+          <div
             class="lang-item"
             v-for="lang in languages"
             :key="lang.code"
             :class="{ active: currentLang === lang.code }"
             @click="selectLang(lang.code)"
-        >
-          <span>{{ lang.name }}</span>
-          <img v-if="currentLang === lang.code" src="@/assets/icon_sel.svg" alt="">
-          <img v-else src="@/assets/icon_usel.png" alt="">
+          >
+            <span>{{ lang.name }}</span>
+            <img v-if="currentLang === lang.code" src="@/assets/icon_sel.svg" alt="">
+            <img v-else src="@/assets/icon_usel.png" alt="">
+          </div>
         </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </Teleport>
 </template>
 
 <script setup>
@@ -64,7 +66,7 @@ const selectLang = async (code) => {
   right: 0;
   bottom: 0;
   background: var(--overlay-mask);
-  z-index: @z-index-popup;
+  z-index: @z-index-popup-above-tabbar;
 }
 
 .lang-popup {
@@ -74,8 +76,10 @@ const selectLang = async (code) => {
   bottom: 0;
   background: var(--bg-module);
   border-radius: @border-radius-xl @border-radius-xl 0 0;
-  z-index: (@z-index-popup + 1);
+  z-index: (@z-index-popup-above-tabbar + 1);
   padding: @spacing-md;
+  padding-bottom: calc(@spacing-md + env(safe-area-inset-bottom, 0));
+  box-sizing: border-box;
 }
 
 .popup-header {

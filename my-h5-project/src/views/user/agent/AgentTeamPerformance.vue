@@ -28,7 +28,7 @@
       <div class="perf-row">
         <div v-for="c in summaryRows[2]" :key="c.key" class="perf-cell">
           <span class="perf-label">{{ c.label }}</span>
-          <p class="perf-value" :class="{ 'perf-value--plain': !c.money }">
+          <p class="perf-value">
             {{ c.money ? fmtMoney(summary[c.key]) : summary[c.key] }}
           </p>
         </div>
@@ -36,7 +36,7 @@
       <div class="perf-row">
         <div v-for="c in summaryRows[3]" :key="c.key" class="perf-cell">
           <span class="perf-label">{{ c.label }}</span>
-          <p class="perf-value" :class="{ 'perf-value--plain': !c.money }">
+          <p class="perf-value">
             {{ c.money ? fmtMoney(summary[c.key]) : summary[c.key] }}
           </p>
         </div>
@@ -44,7 +44,7 @@
       <div class="perf-row">
         <div v-for="c in summaryRows[4]" :key="c.key" class="perf-cell">
           <span class="perf-label">{{ c.label }}</span>
-          <p class="perf-value" :class="{ 'perf-value--plain': !c.money }">
+          <p class="perf-value">
             {{ c.money ? fmtMoney(summary[c.key]) : summary[c.key] }}
           </p>
         </div>
@@ -52,7 +52,7 @@
       <div class="perf-row perf-row--full">
         <div class="perf-cell">
           <span class="perf-label">{{ summaryFullRow.label }}</span>
-          <p class="perf-value perf-value--plain">{{ summary[summaryFullRow.key] }}</p>
+          <p class="perf-value">{{ summary[summaryFullRow.key] }}</p>
         </div>
       </div>
     </div>

@@ -65,10 +65,10 @@ const onTabChange = (index) => {
 @import '@/styles/variables.less';
 
 .tab-bar {
-  z-index: 9999;
+  z-index: @z-index-tabbar-fixed;
 
   :deep(.van-tabbar) {
-    z-index: 9999;
+    z-index: @z-index-tabbar-fixed;
     background-color: var(--tabbar-bg);
     border-top: 1px solid var(--tabbar-border);
   }

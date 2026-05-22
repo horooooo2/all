@@ -48,7 +48,7 @@
             <div class="left-info">
               <div class="vip-row">
                 <span>{{ userStore.userInfo?.name || $t('ACYOM VIPO') }}</span>
-                <img src="@/assets/icon_vip_00.png" alt="VIP" />
+                <img src="@/assets/icon_vip_00.svg" alt="VIP" />
               </div>
               <div class="balance-row">
                 <img src="@/assets/icon_usdt.svg" alt="USDT" />

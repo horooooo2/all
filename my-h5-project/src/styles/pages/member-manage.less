@@ -1,7 +1,7 @@
 @import '@/styles/variables.less';
 
 .member-manage-page {
-  background: #f5f7fa;
+  background: #f1f5ff;
 }
 
 .member-manage-page .record-header {
@@ -27,6 +27,9 @@
 
 .member-manage-page .mm-stats {
   margin: @spacing-md @spacing-md @spacing-sm;
+  padding: 12px @spacing-md;
+  border-radius: 10px;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -62,13 +65,22 @@
 
 .member-manage-page .mm-search {
   height: 44px;
-  padding: 0 @spacing-md;
+  padding: 0 10px;
   border: 1px solid #dce4f0;
   border-radius: 10px;
   background: #fff;
   display: flex;
   align-items: center;
   gap: 8px;
+  box-sizing: border-box;
+}
+
+.member-manage-page .mm-search__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
 }
 
 .member-manage-page .mm-search-input {
@@ -85,18 +97,6 @@
   }
 }
 
-.member-manage-page .mm-search-btn {
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .member-manage-page .mm-filter {
   height: 44px;
   padding: 0 12px;
@@ -107,6 +107,8 @@
   align-items: center;
   gap: 6px;
   font-size: @font-size-md;
+  font-weight: 400;
+  color: #8d9fc7;
   white-space: nowrap;
 }
 
@@ -188,7 +190,7 @@
 
 .member-manage-page .mm-card-balance {
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 400;
   color: #263041;
   letter-spacing: 0.2px;
 }
@@ -201,12 +203,18 @@
 }
 
 .member-manage-page .mm-card-btn {
-  width: 64px;
-  height: 28px;
+  display: flex;
+  width: 52px;
+  height: 22px;
+  padding: 2px 14px;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: @font-size-xs;
-  font-weight: 700;
+  font-weight: 400;
+  line-height: 1;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 
@@ -221,18 +229,22 @@
 }
 
 .member-manage-page .mm-card-btn--primary {
-  background: #0a84ff;
+  background: var(---J5-2, linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%));
   color: #fff;
 
   &:disabled {
-    background: #d9e6ff;
-    color: #7f9bd2;
+    background: #d9e8ff;
+    color: #8d9fc7;
   }
 }
 
 .member-manage-page .mm-card-btn--ghost {
-  background: #d9e6ff;
-  color: #7f9bd2;
+  background: var(--b-2-d-9-e-8-ff, #d9e8ff);
+  color: #1f78ff;
+
+  &:disabled {
+    color: #8d9fc7;
+  }
 }
 
 /* 筛选弹层（占位，后续对接接口再细化） */
@@ -257,7 +269,7 @@
 
 .member-manage-page .mm-filter-title {
   font-size: @font-size-lg;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--text-color);
 }
 
@@ -390,7 +402,7 @@
   border: none;
   border-radius: 10px;
   font-size: @font-size-md;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .member-manage-page .mm-filter-reset {
@@ -405,6 +417,8 @@
 
 .member-manage-page {
   --J5-2: linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%);
+  ---J5-2: linear-gradient(0deg, #1f78ff 0%, #00a1ff 100%);
+  --b-2-d-9-e-8-ff: #d9e8ff;
 }
 
 /* 日历（van-calendar）圆角 */

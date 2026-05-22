@@ -20,12 +20,12 @@
             @keydown.enter.prevent="goRecharge"
             @keydown.space.prevent="goRecharge"
           >
-            <img src="@/assets/icon_add_to.png" alt="" />
+            <img src="@/assets/icon_add_to.svg" alt="" />
           </div>
         </div>
       </div>
       <div class="game-hall-header__avatar" @click="goUser">
-        <img v-if="avatarUrl" :src="avatarUrl" alt="" />
+        <img :src="displayAvatar" alt="" />
       </div>
     </header>
 
@@ -56,7 +56,7 @@
           :placeholder="$t('请输入游戏名称')"
           enterkeyhint="search"
         />
-        <img class="search-icon" src="@/assets/icon_search.png" alt="" />
+        <img class="search-icon" src="@/assets/icon_search.svg" alt="" />
       </div>
 
       <div class="game-hall-scroll">
@@ -87,6 +87,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { toast } from '@/components/Toast'
 import iconBack from '@/assets/icon_dack.svg'
+import avatarDefault from '@/assets/touxiang2.png'
 import iconTy from '@/assets/icon_ty.png'
 import iconSx from '@/assets/icon_sx.png'
 import iconDz from '@/assets/icon_dz.png'
@@ -184,7 +185,7 @@ const displayBalance = computed(() => {
   return Number(b).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 })
 
-const avatarUrl = computed(() => userStore.userInfo?.avatar || '')
+const displayAvatar = computed(() => userStore.userInfo?.avatar || avatarDefault)
 
 const filteredGames = computed(() => {
   const list = gamesByCategory[activeKey.value] || []

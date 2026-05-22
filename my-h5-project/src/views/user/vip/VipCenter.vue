@@ -10,7 +10,7 @@
       <div class="vip-user-row">
         <div class="vip-avatar">
           <img v-if="avatarUrl" :src="avatarUrl" alt="">
-          <span v-else class="vip-avatar-fallback">U</span>
+          <img v-else class="vip-avatar-fallback" :src="avatarDefault" alt="">
         </div>
         <div class="vip-user-meta">
           <div class="vip-nickname">{{ nickname }}</div>
@@ -28,24 +28,26 @@
         ref="swipeRef"
         class="vip-card-swipe"
         :width="vipSwipeSlideWidth"
-        :height="173"
+        :height="vipSwipeHeight"
         :loop="false"
         :show-indicators="true"
         @change="onSwipeChange"
       >
         <van-swipe-item v-for="lvl in vipLevels" :key="lvl">
-          <div class="vip-level-card">
-            <img class="vip-level-badge-img" :src="vipLevelIcon(lvl)" alt="">
-            <div class="vip-level-card-body">
-              <div class="vip-level-card-head">
-                <p class="vip-level-status">{{ levelStatusText }}</p>
-                <div class="vip-level-name">VIP{{ lvl }}</div>
+          <div class="vip-slide-inner">
+            <div class="vip-level-card">
+              <img class="vip-level-badge-img" :src="vipLevelIcon(lvl)" alt="">
+              <div class="vip-level-card-body">
+                <div class="vip-level-card-head">
+                  <p class="vip-level-status">{{ levelStatusText }}</p>
+                  <div class="vip-level-name">VIP{{ lvl }}</div>
+                </div>
+                <p class="vip-level-progress-label">{{ progressLabel }}</p>
+                <div class="vip-level-progress-track">
+                  <div class="vip-level-progress-inner" :style="{ width: progressPercent + '%' }" />
+                </div>
+                <p class="vip-level-desc">{{ upgradeHint }}</p>
               </div>
-              <p class="vip-level-progress-label">{{ progressLabel }}</p>
-              <div class="vip-level-progress-track">
-                <div class="vip-level-progress-inner" :style="{ width: progressPercent + '%' }" />
-              </div>
-              <p class="vip-level-desc">{{ upgradeHint }}</p>
             </div>
           </div>
         </van-swipe-item>
@@ -61,7 +63,7 @@
           :class="{ active: n - 1 === activeSwipeIndex }"
         />
       </div>
-      <div class="vip-level-tabs">
+      <div ref="levelTabsRef" class="vip-level-tabs">
         <button
           v-for="lv in levelTabs"
           :key="lv"
@@ -107,14 +109,15 @@
 <script setup>
 import { computed, nextTick, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import avatarDefault from '@/assets/touxiang2.png'
 import iconBack from '@/assets/icon_dack.svg'
 import iconDack from '@/assets/icon_dack2.png'
-import iconVipFallback from '@/assets/icon_vip_00.png'
-import iconZsLeft from '@/assets/icon_zs_left.png'
-import iconZsRight from '@/assets/icon_zs_right.png'
-import iconMrtx from '@/assets/icon_mrtx.png'
-import iconTxk from '@/assets/icon_txk.png'
-import iconJspl from '@/assets/icon_jspl.png'
+import iconVipFallback from '@/assets/icon_vip_00.svg'
+import iconZsLeft from '@/assets/icon_zs_left.svg'
+import iconZsRight from '@/assets/icon_zs_right.svg'
+import iconMrtx from '@/assets/icon_mrtx.svg'
+import iconTxk from '@/assets/icon_txk.svg'
+import iconJspl from '@/assets/icon_jspl.svg'
 import { useUserStore } from '@/stores/user'
 
 const vipLevelIconModules = {
@@ -145,14 +148,32 @@ const avatarUrl = computed(() => (userStore.isLogin && userStore.userInfo?.avata
 /** 单页宽度 = 卡片宽 339 + 与右侧下一张的间距 12 */
 const VIP_CARD_W = 339
 const VIP_CARD_GAP = 24
+const VIP_CARD_H = 173
+const VIP_BADGE_FLOAT_H = 28
 const vipSwipeSlideWidth = VIP_CARD_W + VIP_CARD_GAP
+const vipSwipeHeight = VIP_CARD_H + VIP_BADGE_FLOAT_H
 
 const vipLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 const levelTabs = vipLevels.map((n) => `VIP${n}`)
 
 const swipeRef = ref()
+const levelTabsRef = ref(null)
 const activeSwipeIndex = ref(0)
 const selectedTab = ref('VIP1')
+
+const scrollLevelTabIntoView = (index) => {
+  nextTick(() => {
+    const container = levelTabsRef.value
+    if (!container) return
+    const tab = container.children[index]
+    if (!tab) return
+    const targetLeft = tab.offsetLeft - (container.clientWidth - tab.offsetWidth) / 2
+    container.scrollTo({
+      left: Math.max(0, targetLeft),
+      behavior: 'smooth'
+    })
+  })
+}
 
 /** 框架占位文案，后续接接口 */
 const levelStatusText = ref('你不是VIP用户')
@@ -163,6 +184,7 @@ const upgradeHint = ref('有效投注 10000 CNY，或累计充值 CNY，将升�
 function onSwipeChange(index) {
   activeSwipeIndex.value = index
   selectedTab.value = `VIP${index + 1}`
+  scrollLevelTabIntoView(index)
 }
 
 function selectLevelTab(lv) {
@@ -170,6 +192,7 @@ function selectLevelTab(lv) {
   const n = parseInt(String(lv).replace(/^VIP/i, ''), 10)
   const idx = Math.max(0, Math.min(vipLevels.length - 1, n - 1))
   activeSwipeIndex.value = idx
+  scrollLevelTabIntoView(idx)
   nextTick(() => {
     swipeRef.value?.swipeTo?.(idx)
   })

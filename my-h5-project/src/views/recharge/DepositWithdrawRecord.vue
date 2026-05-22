@@ -18,16 +18,34 @@
       </section>
 
       <section v-if="filteredList.length" class="list">
-        <article v-for="item in filteredList" :key="item.id" class="cell">
+        <article
+          v-for="item in filteredList"
+          :key="item.id"
+          class="cell"
+          role="button"
+          tabindex="0"
+          @click="goDetail(item.id)"
+          @keydown.enter.prevent="goDetail(item.id)"
+        >
           <div class="cell-left">
             <div class="cell-title">
               <span class="cell-title-text">{{ item.categoryLabel }}</span>
-              <span class="tag" :class="item.channel">{{ item.channelLabel }}</span>
+              <img
+                v-if="item.channel === 'cny'"
+                class="tag-cny"
+                :src="iconCny"
+                alt="CNY"
+              >
+              <span v-else class="tag" :class="item.channel">{{ item.channelLabel }}</span>
             </div>
-            <div class="cell-sub">时间：{{ item.time }}</div>
+            <div class="cell-sub">
+              <span class="cell-sub__label">时间：</span>
+              <span class="cell-sub__value">{{ item.time }}</span>
+            </div>
             <div class="cell-sub cell-sub--order">
-              <span>订单号：{{ item.orderNo }}</span>
-              <button type="button" class="copy-icon" @click="copy(item.orderNo)">
+              <span class="cell-sub__label">订单号：</span>
+              <span class="cell-sub__value">{{ item.orderNo }}</span>
+              <button type="button" class="copy-icon" @click.stop="copy(item.orderNo)">
                 <img :src="iconCopy" alt="copy">
               </button>
             </div>
@@ -101,7 +119,9 @@ import toast from '@/components/Toast'
 import iconBack from '@/assets/icon_dack.svg'
 import iconClose from '@/assets/icon_x.svg'
 import iconCopy from '@/assets/icon_copy.svg'
+import iconCny from '@/assets/icon_cny.svg'
 import noDataImage from '@/assets/no_data.svg'
+import { depositWithdrawRecords } from '@/views/recharge/deposit-withdraw-record.mock'
 
 const router = useRouter()
 
@@ -128,68 +148,7 @@ const categoryOptions = [
 const selectedTime = ref('all')
 const selectedCategory = ref('all')
 
-const list = ref([
-  {
-    id: 1,
-    kind: 'deposit',
-    categoryLabel: '存款',
-    channel: 'cny',
-    channelLabel: '￥',
-    time: '2026-03-13 20:08:31',
-    orderNo: '202603130080r849636',
-    amount: '142284.74',
-    status: 'processing',
-    statusLabel: '处理中'
-  },
-  {
-    id: 2,
-    kind: 'deposit',
-    categoryLabel: '存款',
-    channel: 't',
-    channelLabel: 'T',
-    time: '2026-03-13 20:08:31',
-    orderNo: '202603130080r849637',
-    amount: '142284.74',
-    status: 'processing',
-    statusLabel: '处理中'
-  },
-  {
-    id: 3,
-    kind: 'deposit',
-    categoryLabel: '存款',
-    channel: 'cny',
-    channelLabel: '￥',
-    time: '2026-03-13 20:08:31',
-    orderNo: '202603130080r849638',
-    amount: '142284.74',
-    status: 'success',
-    statusLabel: '存款成功'
-  },
-  {
-    id: 4,
-    kind: 'deposit',
-    categoryLabel: '存款',
-    channel: 'cny',
-    channelLabel: '￥',
-    time: '2026-03-13 20:08:31',
-    orderNo: '202603130080r849639',
-    amount: '142284.74',
-    status: 'canceled',
-    statusLabel: '取消存款'
-  },
-  {
-    id: 5,
-    kind: 'deposit',
-    categoryLabel: '存款',
-    channel: 'cny',
-    channelLabel: '￥',
-    time: '2026-03-13 20:08:31',
-    orderNo: '202603130080r849640',
-    amount: '142284.74',
-    status: 'failed',
-    statusLabel: '取消失败'
-  }
-])
+const list = ref(depositWithdrawRecords)
 
 const timeText = computed(() => timeOptions.find(x => x.value === selectedTime.value)?.label || '所有')
 const categoryText = computed(() => categoryOptions.find(x => x.value === selectedCategory.value)?.label || '所有')
@@ -222,6 +181,10 @@ const filteredList = computed(() => {
 })
 
 const goBack = () => router.back()
+
+const goDetail = (id) => {
+  router.push({ name: 'depositWithdrawRecordDetail', query: { id } })
+}
 
 const selectTime = (value) => {
   selectedTime.value = value

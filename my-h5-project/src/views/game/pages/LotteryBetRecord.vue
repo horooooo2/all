@@ -188,7 +188,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getDemoBetRecordsBundle } from './lottery-bet-records.mock'
 import iconBack from '@/assets/icon_dack.svg'
-import iconFilter from '@/assets/icon_filter.png'
+import iconFilter from '@/assets/icon_filter.svg'
 import iconSelected from '@/assets/icon_sel.svg'
 import noDataImage from '@/assets/no_data.svg'
 
@@ -383,8 +383,8 @@ function onCard(row) {
 }
 
 .back-btn {
-  width: 24px;
-  height: 24px;
+  width: @icon-dack-size;
+  height: @icon-dack-size;
   border-radius: 4px;
   padding: 0;
   display: block;

@@ -43,44 +43,36 @@ export const TYPE_TABS = [
 
 export const threePartyRecordsMock = [
   {
-    id: 'TP-20260401-0001',
-    memberAccount: 'test001',
-    platform: 'cq9',
-    platformLabel: 'CQ9电子',
-    type: 'deposit',
-    typeLabel: '充值',
-    amount: 100,
-    time: fmtDateTime(daysAgo(0, 10))
-  },
-  {
-    id: 'TP-20260401-0002',
-    memberAccount: 'test002',
+    id: 'TP-20260523-0001',
+    memberAccount: 'mol123',
     platform: 'pg',
-    platformLabel: 'PG电子',
-    type: 'withdraw',
-    typeLabel: '提现',
-    amount: 50,
-    time: fmtDateTime(daysAgo(0, 14))
-  },
-  {
-    id: 'TP-20260331-0003',
-    memberAccount: 'user888',
-    platform: 'cq9',
-    platformLabel: 'CQ9电子',
+    gameName: 'PG电子-麻将胡了',
     type: 'deposit',
     typeLabel: '充值',
-    amount: 20,
-    time: fmtDateTime(daysAgo(1, 9))
+    betAmount: 1.8,
+    winLoss: 14.4,
+    time: fmtDateTime(daysAgo(0, 20))
   },
   {
-    id: 'TP-20260329-0004',
-    memberAccount: 'test001',
-    platform: 'jdb',
-    platformLabel: 'JDB电子',
+    id: 'TP-20260523-0002',
+    memberAccount: 'mol123',
+    platform: 'pg',
+    gameName: 'PG电子-麻将胡了',
+    type: 'deposit',
+    typeLabel: '充值',
+    betAmount: 1.8,
+    winLoss: 0,
+    time: fmtDateTime(daysAgo(0, 18))
+  },
+  {
+    id: 'TP-20260523-0003',
+    memberAccount: 'player_02',
+    platform: 'cq9',
+    gameName: 'CQ9电子-跳高高',
     type: 'withdraw',
     typeLabel: '提现',
-    amount: 10,
-    time: fmtDateTime(daysAgo(3, 16))
+    betAmount: 2,
+    winLoss: 8.6,
+    time: fmtDateTime(daysAgo(0, 14))
   }
 ]
-

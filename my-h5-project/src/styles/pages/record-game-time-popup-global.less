@@ -17,7 +17,7 @@
     text-align: center;
     color: var(--text-color);
     font-size: @font-size-lg;
-    font-weight: 700;
+    font-weight: 400;
   }
 }
 
@@ -76,6 +76,24 @@
   align-items: center;
 }
 
+.lottery-game-time-popup .time-panel-issue-input {
+  margin-top: @spacing-sm;
+  width: 100%;
+  height: 44px;
+  padding: 0 @spacing-md;
+  border: 1px solid #eef2f8;
+  border-radius: 8px;
+  background: #fff;
+  font-size: @font-size-md;
+  color: var(--text-color);
+  box-sizing: border-box;
+  outline: none;
+
+  &::placeholder {
+    color: #b8c8e8;
+  }
+}
+
 .lottery-game-time-popup .date-cell {
   .control-base(44px; @border-radius-md);
   border: none;
@@ -114,7 +132,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: @font-size-lg;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--text-color);
 }
 

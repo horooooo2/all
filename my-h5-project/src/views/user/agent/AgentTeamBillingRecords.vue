@@ -25,11 +25,24 @@
         </button>
       </div>
 
+      <div class="billing-toolbar-row billing-search-row">
+        <div class="billing-player-search">
+          <img class="billing-player-search__icon" :src="iconSearch" alt="">
+          <input
+            ref="playerSearchInputRef"
+            v-model.trim="playerKeyword"
+            class="billing-player-search__input"
+            type="text"
+            placeholder="全部玩家"
+            autocomplete="off"
+          >
+          <button type="button" class="billing-player-search__btn" @click="onPlayerSearchClick">
+            搜索
+          </button>
+        </div>
+      </div>
       <div class="billing-toolbar-row billing-drops">
-        <button type="button" class="billing-drop" @click="openPicker('player')">
-          <span class="billing-drop-text">{{ playerLabel }}</span>
-        </button>
-        <button type="button" class="billing-drop billing-drop--chevron" @click="openPicker('type')">
+        <button type="button" class="billing-drop billing-drop--chevron" @click="openPicker">
           <span class="billing-drop-text">{{ typeLabel }}</span>
           <van-icon class="billing-drop-chev" name="arrow-down" />
         </button>
@@ -91,13 +104,6 @@
           <span>-</span>
           <button type="button" class="billing-filter-date" @click="openDatePicker('end')">{{ formatSlashDate(popupEndDate) }}</button>
         </div>
-
-        <input
-          v-model="orderNoKeyword"
-          class="billing-filter-input"
-          type="text"
-          placeholder="请输入投注期号"
-        >
 
         <div class="billing-filter-actions">
           <button type="button" class="billing-filter-reset" @click="resetFilter">重置</button>
@@ -163,10 +169,11 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
-import iconFilter from '@/assets/icon_filter.png'
+import iconFilter from '@/assets/icon_filter.svg'
 import iconSelected from '@/assets/icon_sel.svg'
 import iconClose from '@/assets/icon_x.svg'
 import noDataImage from '@/assets/no_data.svg'
+import iconSearch from '@/assets/icon_search.svg'
 import { teamBillingRecords } from './agent-team-billing-records.mock'
 
 const router = useRouter()
@@ -225,12 +232,15 @@ applyPeriodTab('today')
 
 const isPeriodTabActive = (tab) => timeMode.value === 'tab' && periodTab.value === tab
 
-/** 下拉筛选：玩家 / 类型 */
-const playerValue = ref('all')
+const playerKeyword = ref('')
+const playerSearchInputRef = ref(null)
+
+const onPlayerSearchClick = () => {
+  playerSearchInputRef.value?.blur()
+}
+
 const typeValue = ref('all')
 
-const uniqueMembers = [...new Set(teamBillingRecords.map((r) => r.memberAccount))]
-const PLAYER_OPTIONS = [{ value: 'all', label: '全部玩家' }, ...uniqueMembers.map((m) => ({ value: m, label: m }))]
 const TYPE_OPTIONS = [
   { value: 'all', label: '全部类型' },
   { value: 'deposit', label: '充值' },
@@ -238,7 +248,6 @@ const TYPE_OPTIONS = [
   { value: 'bonus', label: '活动' }
 ]
 
-const playerLabel = computed(() => PLAYER_OPTIONS.find((o) => o.value === playerValue.value)?.label ?? '全部玩家')
 const typeLabel = computed(() => TYPE_OPTIONS.find((o) => o.value === typeValue.value)?.label ?? '全部类型')
 
 /** 筛选弹层 */
@@ -253,13 +262,10 @@ const filterQuick = ref('today')
 
 const popupStartDate = ref(new Date())
 const popupEndDate = ref(new Date())
-const orderNoKeyword = ref('')
-
 const openFilterPopup = () => {
   popupStartDate.value = new Date(listFilterStart.value.getTime())
   popupEndDate.value = new Date(listFilterEnd.value.getTime())
   filterQuick.value = 'today'
-  orderNoKeyword.value = ''
   syncPickerFromDate(popupStartDate.value)
   filterVisible.value = true
 }
@@ -290,7 +296,6 @@ const selectFilterQuick = (value) => {
 
 const resetFilter = () => {
   selectFilterQuick('today')
-  orderNoKeyword.value = ''
 }
 
 const applyFilter = () => {
@@ -346,18 +351,14 @@ const formatSlashDate = (date) => {
 
 /** 底部选择弹层 */
 const pickerVisible = ref(false)
-const pickerKind = ref('player') // player | type
-const pickerTitle = computed(() => (pickerKind.value === 'player' ? '玩家选择' : '类型选择'))
-const pickerOptions = computed(() => (pickerKind.value === 'player' ? PLAYER_OPTIONS : TYPE_OPTIONS))
-const currentPickerValue = computed(() => (pickerKind.value === 'player' ? playerValue.value : typeValue.value))
-const openPicker = (kind) => {
-  pickerKind.value = kind
+const pickerTitle = computed(() => '类型选择')
+const pickerOptions = computed(() => TYPE_OPTIONS)
+const openPicker = () => {
   pickerVisible.value = true
 }
-const isPickerSelected = (opt) => opt.value === currentPickerValue.value
+const isPickerSelected = (opt) => opt.value === typeValue.value
 const applyPicker = (opt) => {
-  if (pickerKind.value === 'player') playerValue.value = opt.value
-  else typeValue.value = opt.value
+  typeValue.value = opt.value
   pickerVisible.value = false
 }
 
@@ -371,9 +372,8 @@ const inRange = (timeText, start, end) => {
 const filteredRecords = computed(() =>
   teamBillingRecords.filter((item) => {
     if (!inRange(item.time, listFilterStart.value, listFilterEnd.value)) return false
-    if (playerValue.value !== 'all' && item.memberAccount !== playerValue.value) return false
+    if (playerKeyword.value && !String(item.memberAccount || '').includes(playerKeyword.value)) return false
     if (typeValue.value !== 'all' && item.type !== typeValue.value) return false
-    if (orderNoKeyword.value && !item.id.includes(orderNoKeyword.value)) return false
     return true
   })
 )

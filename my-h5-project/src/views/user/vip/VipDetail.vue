@@ -15,29 +15,37 @@
       </p>
     </section>
 
-    <div class="vip-detail-section-head">
-      <span class="vip-detail-section-line" />
-      <span class="vip-detail-section-diamonds" aria-hidden="true">
-        <span class="vip-detail-mini-diamond" />
-        <span class="vip-detail-mini-diamond" />
-        <span class="vip-detail-mini-diamond" />
-      </span>
-      <span class="vip-detail-section-title">VIP升级条件</span>
-      <span class="vip-detail-section-diamonds" aria-hidden="true">
-        <span class="vip-detail-mini-diamond" />
-        <span class="vip-detail-mini-diamond" />
-        <span class="vip-detail-mini-diamond" />
-      </span>
-      <span class="vip-detail-section-line is-right" />
+    <div class="vip-priv-title vip-detail-section-head">
+      <img class="vip-priv-title-side" :src="iconZsLeft" alt="">
+      <span class="vip-priv-title-text">VIP升级条件</span>
+      <img class="vip-priv-title-side" :src="iconZsRight" alt="">
     </div>
 
     <div class="vip-condition-table-wrap">
       <table class="vip-condition-table">
+        <colgroup>
+          <col class="col-level">
+          <col class="col-up-bet">
+          <col class="col-up-recharge">
+          <col class="col-down-bet">
+          <col class="col-down-recharge">
+          <col class="col-bonus">
+        </colgroup>
         <thead>
           <tr>
             <th rowspan="2">VIP等级</th>
-            <th colspan="2">升级条件 近30天</th>
-            <th colspan="2">降级条件 近30天</th>
+            <th colspan="2">
+              <div class="vip-condition-group-head">
+                <span>升级条件</span>
+                <span class="vip-condition-group-time">近30天</span>
+              </div>
+            </th>
+            <th colspan="2">
+              <div class="vip-condition-group-head">
+                <span>降级条件</span>
+                <span class="vip-condition-group-time">近30天</span>
+              </div>
+            </th>
             <th rowspan="2">等级彩金</th>
           </tr>
           <tr>
@@ -74,6 +82,8 @@
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import iconVipxq from '@/assets/icon_vipxq.png'
+import iconZsLeft from '@/assets/icon_zs_left.svg'
+import iconZsRight from '@/assets/icon_zs_right.svg'
 
 const router = useRouter()
 const goBack = () => router.back()

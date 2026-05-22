@@ -52,15 +52,23 @@
     <div class="tp-body">
       <section v-if="filteredRecords.length" class="tp-list">
         <article v-for="item in filteredRecords" :key="item.id" class="tp-card">
-          <div class="tp-card-main">
-            <div class="tp-card-title-row">
-              <h2 class="tp-card-title">{{ item.platformLabel }}</h2>
-              <span class="tp-card-tag" :class="item.type">{{ item.typeLabel }}</span>
-            </div>
-            <p class="tp-card-row">会员：{{ item.memberAccount }}</p>
-            <p class="tp-card-row">金额：¥{{ fmtMoney(item.amount) }}</p>
-            <p class="tp-card-row">时间：{{ item.time }}</p>
-            <p class="tp-card-row">单号：{{ item.id }}</p>
+          <div class="tp-card-row tp-card-row--top">
+            <span class="tp-card-game">{{ item.gameName }}</span>
+            <span class="tp-card-user">{{ item.memberAccount }}</span>
+          </div>
+          <div class="tp-card-row tp-card-row--mid">
+            <p class="tp-card-bet">
+              投注：<span class="tp-card-bet-val">¥{{ fmtMoney(item.betAmount) }}</span>
+            </p>
+          </div>
+          <div class="tp-card-row tp-card-row--foot">
+            <span class="tp-card-time">{{ item.time }}</span>
+            <span
+              class="tp-card-pnl"
+              :class="item.winLoss > 0 ? 'tp-card-pnl--pos' : 'tp-card-pnl--zero'"
+            >
+              ¥{{ fmtMoney(Math.abs(item.winLoss)) }}
+            </span>
           </div>
         </article>
       </section>
@@ -169,11 +177,11 @@ import { useRouter } from 'vue-router'
 import { threePartyRecordsMock, PLATFORM_OPTIONS, TYPE_TABS } from './agent-team-three-party-records.mock'
 
 import iconBack from '@/assets/icon_dack.svg'
-import iconFilter from '@/assets/icon_filter.png'
+import iconFilter from '@/assets/icon_filter.svg'
 import iconClose from '@/assets/icon_x.svg'
 import iconSelected from '@/assets/icon_sel.svg'
 import noDataImage from '@/assets/no_data.svg'
-import iconSearch from '@/assets/icon_search.png'
+import iconSearch from '@/assets/icon_search.svg'
 
 const router = useRouter()
 const goBack = () => router.back()
@@ -378,56 +386,79 @@ onMounted(() => {
 .tp-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: @spacing-sm;
 }
 
 .tp-card {
-  border-radius: 12px;
+  border-radius: 10px;
   background: #fff;
-  padding: 12px 14px;
+  border: 1px solid #eef2f8;
+  padding: 12px @spacing-md;
   box-sizing: border-box;
 }
 
-.tp-card-title-row {
+.tp-card-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 6px;
+  gap: 8px;
+
+  &--top {
+    margin-bottom: 10px;
+  }
+
+  &--mid {
+    margin-bottom: 8px;
+  }
 }
 
-.tp-card-title {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-color);
-}
-
-.tp-card-tag {
-  height: 22px;
-  padding: 0 10px;
-  border-radius: 999px;
-  font-size: 12px;
+.tp-card-game {
+  flex: 1;
+  min-width: 0;
+  font-size: @font-size-md;
   font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--text-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  &.deposit {
-    background: #e8f4ff;
-    color: #1f78ff;
+.tp-card-user {
+  flex-shrink: 0;
+  font-size: @font-size-sm;
+  color: #8d9fc7;
+}
+
+.tp-card-bet {
+  margin: 0;
+  font-size: @font-size-sm;
+  color: #8d9fc7;
+}
+
+.tp-card-bet-val {
+  color: #1f78ff;
+}
+
+.tp-card-pnl {
+  flex-shrink: 0;
+  font-size: @font-size-md;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  &--pos {
+    color: var(--success-color);
   }
 
-  &.withdraw {
-    background: #fff2f2;
-    color: #ff4d4f;
+  &--zero {
+    color: var(--danger-color);
   }
 }
 
-.tp-card-row {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: var(--text-color-secondary);
+.tp-card-time {
+  font-size: @font-size-sm;
+  color: #8d9fc7;
+  line-height: 1.3;
 }
 </style>
 

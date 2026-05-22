@@ -112,7 +112,8 @@
 }
 
 .agent-direct-team-page .team-toolbar {
-  margin: 0 @spacing-md @spacing-md;
+  margin: 0 @spacing-md @spacing-sm;
+  padding: 10px @spacing-md;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -130,6 +131,133 @@
   font-size: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+.agent-direct-team-page .team-list {
+  margin: 0 @spacing-md @spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: @spacing-sm;
+}
+
+.agent-direct-team-page .team-item {
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #eef2f8;
+  overflow: hidden;
+}
+
+.agent-direct-team-page .team-item-head {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px @spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+
+  &:active {
+    opacity: 0.92;
+  }
+}
+
+.agent-direct-team-page .team-item-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+  display: block;
+  background: #eef2f8;
+}
+
+.agent-direct-team-page .team-item-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.agent-direct-team-page .team-item-name {
+  min-width: 0;
+  flex: 1;
+  font-size: @font-size-md;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-direct-team-page .team-item-tag {
+  flex-shrink: 0;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: #e8f8ee;
+  color: var(--success-color);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.agent-direct-team-page .team-item-pnl {
+  flex-shrink: 0;
+  font-size: @font-size-md;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &--pos {
+    color: var(--success-color);
+  }
+
+  &--neg {
+    color: var(--danger-color);
+  }
+}
+
+.agent-direct-team-page .question-arrow {
+  width: 20px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.agent-direct-team-page .team-item-body {
+  border-top: 1px solid #eef2f8;
+}
+
+.agent-direct-team-page .team-detail-row {
+  min-height: 40px;
+  padding: 0 @spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @spacing-md;
+  background: #fff;
+  box-sizing: border-box;
+
+  &--alt {
+    background: #f0f6ff;
+  }
+}
+
+.agent-direct-team-page .team-detail-label {
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+  flex-shrink: 0;
+}
+
+.agent-direct-team-page .team-detail-value {
+  font-size: @font-size-sm;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: right;
+  word-break: break-all;
 }
 
 .agent-direct-team-page .team-empty {

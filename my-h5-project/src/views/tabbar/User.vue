@@ -8,7 +8,12 @@
             :src="viewUserInfo.avatar"
             alt="avatar"
           >
-          <div v-else class="avatar-placeholder">U</div>
+          <img
+            v-else
+            class="avatar-placeholder"
+            :src="avatarDefault"
+            alt="avatar"
+          >
         </div>
         <div class="user-text">
           <div class="user-name">{{ isLogin ? (viewUserInfo?.name || '昵称') : '未登录' }}</div>
@@ -258,22 +263,23 @@ import { useRouter } from 'vue-router'
 import LangPopup from '@/components/LangPopup.vue'
 import { useUserStore } from '@/stores/user'
 import toast from '@/components/Toast'
-import iconBj from '@/assets/icon_bj.png'
+import avatarDefault from '@/assets/touxiang2.png'
+import iconBj from '@/assets/icon_bj.svg'
 import iconDack from '@/assets/icon_dack2.png'
-import iconVip00 from '@/assets/icon_vip_00.png'
+import iconVip00 from '@/assets/icon_vip_00.svg'
 import iconCny from '@/assets/icon_cny.svg'
 import iconDeposit2 from '@/assets/icon_deposit.svg'
 import iconWithdrawal from '@/assets/icon_withdrawal.png'
 import iconActing from '@/assets/icon_acting.png'
-import iconHuiyuan from '@/assets/icon_huiyuan.png'
-import iconJyjl from '@/assets/icon_jyjl.png'
-import iconYxjl from '@/assets/icon_yxjl.png'
-import iconJryk from '@/assets/icon_jryk.png'
-import iconFs from '@/assets/icon_fs.png'
-import iconApp from '@/assets/icon_app.png'
-import iconHlepc from '@/assets/icon_hlepc.png'
+import iconHuiyuan from '@/assets/icon_huiyuan.svg'
+import iconJyjl from '@/assets/icon_jyjl.svg'
+import iconYxjl from '@/assets/icon_yxjl.svg'
+import iconJryk from '@/assets/icon_jryk.svg'
+import iconFs from '@/assets/icon_fs.svg'
+import iconApp from '@/assets/icon_app.svg'
+import iconHlepc from '@/assets/icon_hlepc.svg'
 import iconZxkf from '@/assets/icon_zxkf.svg'
-import iconSetting from '@/assets/icon_setting.png'
+import iconSetting from '@/assets/icon_setting.svg'
 import iconEn from '@/assets/icon_en.svg'
 
 const router = useRouter()

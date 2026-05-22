@@ -3,9 +3,9 @@
     <div v-if="show" class="top-toast" :class="type">
       <div class="toast-content">
         <div class="toast-icon">
-          <img v-if="type === 'success'" src="@/assets/icon_yes.png" alt="success" />
-          <img v-else-if="type === 'error'" src="@/assets/icon_cw.png" alt="error" />
-          <img v-else-if="type === 'warning'" src="@/assets/icon_tip.png" alt="warning" />
+          <img v-if="type === 'success'" src="@/assets/icon_yes.svg" alt="success" />
+          <img v-else-if="type === 'error'" src="@/assets/icon_cw.svg" alt="error" />
+          <img v-else-if="type === 'warning'" src="@/assets/icon_tip.svg" alt="warning" />
           <div v-else-if="type === 'loading'" class="loading-spinner"></div>
         </div>
         <span class="toast-message">{{ message }}</span>

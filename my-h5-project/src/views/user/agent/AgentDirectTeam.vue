@@ -58,17 +58,50 @@
     </div>
 
     <div class="team-toolbar">
-      <span>账户 {{ list.length }}</span>
+      <span>账户 {{ displayList.length }}</span>
       <button type="button" class="team-sort" @click="cycleSort">
         <span>{{ sortDisplay }}</span>
-        <span class="team-sort-icon" aria-hidden="true">{{ sortIcon }}</span>
+        <img class="team-sort-icon" :src="iconSortAdjustment" alt="" aria-hidden="true">
       </button>
     </div>
 
-    <div v-if="!list.length" class="team-empty">
+    <div v-if="!displayList.length" class="team-empty">
       <img class="team-empty-img" :src="noDataImage" alt="">
       <p class="team-empty-text">暂无数据</p>
     </div>
+    <section v-else class="team-list">
+      <article v-for="item in displayList" :key="item.id" class="team-item">
+        <button type="button" class="team-item-head" @click="toggleItem(item.id)">
+          <img class="team-item-avatar" :src="item.avatar || avatarDefault" alt="">
+          <div class="team-item-main">
+            <span class="team-item-name">{{ item.nickname || item.account }}</span>
+            <span v-if="item.isNew" class="team-item-tag">NEW</span>
+          </div>
+          <span
+            class="team-item-pnl"
+            :class="item.profitLoss >= 0 ? 'team-item-pnl--pos' : 'team-item-pnl--neg'"
+          >
+            {{ formatPnL(item.profitLoss) }}
+          </span>
+          <img
+            class="question-arrow"
+            :src="isExpanded(item.id) ? iconDetailsTop : iconDetailsDown"
+            alt="arrow"
+          >
+        </button>
+        <div v-show="isExpanded(item.id)" class="team-item-body">
+          <div
+            v-for="(row, index) in detailRows"
+            :key="row.key"
+            class="team-detail-row"
+            :class="{ 'team-detail-row--alt': index % 2 === 1 }"
+          >
+            <span class="team-detail-label">{{ row.label }}</span>
+            <span class="team-detail-value">{{ formatDetailValue(item, row) }}</span>
+          </div>
+        </div>
+      </article>
+    </section>
 
     <van-popup
       v-model:show="pickerVisible"
@@ -107,23 +140,102 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import iconClose from '@/assets/icon_x.svg'
 import iconSelected from '@/assets/icon_sel.svg'
 import noDataImage from '@/assets/no_data.svg'
-import iconSearch from '@/assets/icon_search.png'
+import iconSearch from '@/assets/icon_search.svg'
+import iconSortAdjustment from '@/assets/icon_sort_adjustment.svg'
+import iconDetailsDown from '@/assets/icon_details_down2.svg'
+import iconDetailsTop from '@/assets/icon_details_top.svg'
+import avatarDefault from '@/assets/touxiang2.png'
+import { directTeamAgents, directTeamMembers } from './agent-direct-team.mock'
+
+const MEMBER_DETAIL_ROWS = [
+  { key: 'validBet', label: '有效投注金额', money: true },
+  { key: 'payout', label: '派彩金额', money: true },
+  { key: 'deposit', label: '充值金额', money: true },
+  { key: 'withdraw', label: '提现金额', money: true },
+  { key: 'registerTime', label: '注册时间', money: false }
+]
+
+const AGENT_DETAIL_ROWS = [
+  { key: 'teamCount', label: '团队人数', money: false },
+  { key: 'validBet', label: '有效投注金额', money: true },
+  { key: 'payout', label: '派彩金额', money: true },
+  { key: 'registerTime', label: '注册时间', money: false }
+]
 
 const router = useRouter()
 
 const activeTab = ref('member')
 const keyword = ref('')
+const searchKeyword = ref('')
 const searchInputRef = ref(null)
-const list = ref([])
 
 const onSearchClick = () => {
   searchInputRef.value?.blur()
+  searchKeyword.value = keyword.value.trim()
+}
+
+const fmtMoney = (n) => {
+  const num = Number(n || 0)
+  return num.toFixed(2)
+}
+
+const formatPnL = (n) => {
+  const num = Number(n || 0)
+  const prefix = num >= 0 ? '+' : '-'
+  return `${prefix}¥${fmtMoney(Math.abs(num))}`
+}
+
+const displayList = computed(() => {
+  const source = activeTab.value === 'member' ? directTeamMembers : directTeamAgents
+  let items = [...source]
+  const kw = searchKeyword.value.toLowerCase()
+  if (kw) {
+    items = items.filter((item) => {
+      const name = (item.nickname || item.account).toLowerCase()
+      return name.includes(kw) || item.account.toLowerCase().includes(kw)
+    })
+  }
+  if (sortMode.value === 'desc') {
+    items.sort((a, b) => b.profitLoss - a.profitLoss)
+  } else if (sortMode.value === 'asc') {
+    items.sort((a, b) => a.profitLoss - b.profitLoss)
+  }
+  return items
+})
+
+const expandedIds = ref([directTeamMembers[0]?.id].filter(Boolean))
+
+watch(activeTab, () => {
+  const source = activeTab.value === 'member' ? directTeamMembers : directTeamAgents
+  const first = source[0]?.id
+  expandedIds.value = first ? [first] : []
+})
+
+const isExpanded = (id) => expandedIds.value.includes(id)
+
+const toggleItem = (id) => {
+  if (expandedIds.value.includes(id)) {
+    expandedIds.value = expandedIds.value.filter((item) => item !== id)
+    return
+  }
+  expandedIds.value.push(id)
+}
+
+const detailRows = computed(() =>
+  activeTab.value === 'member' ? MEMBER_DETAIL_ROWS : AGENT_DETAIL_ROWS
+)
+
+const formatDetailValue = (item, row) => {
+  const val = item[row.key]
+  if (row.money) return fmtMoney(val)
+  if (row.key === 'teamCount') return String(val ?? 0)
+  return val ?? '-'
 }
 
 /** 时间：对应「时间选择」 */
@@ -160,13 +272,7 @@ const typeLabel = computed(() => TYPE_OPTIONS.find((o) => o.value === typeValue.
 const sortMode = ref('none')
 const SORT_CYCLE = ['none', 'desc', 'asc']
 
-const sortDisplay = computed(() => '盈亏')
-
-const sortIcon = computed(() => {
-  if (sortMode.value === 'desc') return '↓'
-  if (sortMode.value === 'asc') return '↑'
-  return '⇅'
-})
+const sortDisplay = computed(() => '赢亏')
 
 const cycleSort = () => {
   const i = SORT_CYCLE.indexOf(sortMode.value)
@@ -228,10 +334,11 @@ const goBack = () => router.back()
 }
 
 .team-sort-icon {
-  font-size: 12px;
-  line-height: 1;
-  color: var(--text-color-secondary);
+  width: 12px;
+  height: 12px;
   margin-left: 2px;
-  font-family: system-ui, sans-serif;
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
 }
 </style>

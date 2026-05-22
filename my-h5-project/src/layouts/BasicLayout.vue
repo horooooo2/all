@@ -47,11 +47,16 @@ const showTabBar = computed(() => {
     '/agent-promotion',
     '/agent-commission',
     '/agent-treatment',
+    '/agent-support',
     '/agent-direct-team',
     '/agent-team-performance',
+    '/agent-team-lottery-records',
+    '/agent-team-lottery-order-detail',
     '/lottery-bet-record',
     '/lottery-bet-order-detail',
-    '/service/detail'
+    '/service/detail',
+    '/help-center',
+    '/help-center/questions'
   ]
   return !hidePages.includes(route.path)
 })

@@ -20,6 +20,7 @@
 
     <div class="mm-tools">
       <div class="mm-search">
+        <img class="mm-search__icon" :src="iconSearch" alt="">
         <input
           v-model.trim="keyword"
           class="mm-search-input"
@@ -28,9 +29,6 @@
           placeholder="请输入ID或昵称"
           @keyup.enter="onSearch"
         >
-        <button type="button" class="mm-search-btn" aria-label="搜索" @click="onSearch">
-          <van-icon name="search" color="#1f78ff" size="18" />
-        </button>
       </div>
 
       <button type="button" class="mm-filter" @click="openFilter">
@@ -149,9 +147,10 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
-import iconFilter from '@/assets/icon_filter.png'
+import iconSearch from '@/assets/icon_search.svg'
+import iconFilter from '@/assets/icon_filter.svg'
 import iconClose from '@/assets/icon_x.svg'
-import iconYes from '@/assets/icon_yes.png'
+import iconYes from '@/assets/icon_yes.svg'
 import noDataImage from '@/assets/no_data.svg'
 import toast from '@/components/Toast'
 

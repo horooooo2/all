@@ -192,6 +192,26 @@ const routes = [
         }
     },
     {
+        path: '/deposit-withdraw-record-detail',
+        name: 'depositWithdrawRecordDetail',
+        component: () => import('@/views/recharge/DepositWithdrawRecordDetail.vue'),
+        meta: {
+            title: '存款信息',
+            keepAlive: false,
+            requireAuth: false
+        }
+    },
+    {
+        path: '/deposit-upload-proof',
+        name: 'depositUploadProof',
+        component: () => import('@/views/recharge/DepositUploadProof.vue'),
+        meta: {
+            title: '上传凭证',
+            keepAlive: false,
+            requireAuth: false
+        }
+    },
+    {
         path: '/game-record',
         name: 'gameRecord',
         component: () => import('@/views/user/records/GameRecord.vue'),
@@ -435,6 +455,16 @@ const routes = [
         }
     },
     {
+        path: '/agent-support',
+        name: 'agentSupport',
+        component: () => import('@/views/user/agent/AgentSupport.vue'),
+        meta: {
+            title: '代理扶持',
+            keepAlive: false,
+            requireAuth: false
+        }
+    },
+    {
         path: '/agent-direct-team',
         name: 'agentDirectTeam',
         component: () => import('@/views/user/agent/AgentDirectTeam.vue'),
@@ -460,6 +490,16 @@ const routes = [
         component: () => import('@/views/user/agent/AgentTeamLotteryRecords.vue'),
         meta: {
             title: '团队彩票注单记录',
+            keepAlive: false,
+            requireAuth: false
+        }
+    },
+    {
+        path: '/agent-team-lottery-order-detail',
+        name: 'agentTeamLotteryOrderDetail',
+        component: () => import('@/views/user/agent/AgentTeamLotteryOrderDetail.vue'),
+        meta: {
+            title: '订单详情',
             keepAlive: false,
             requireAuth: false
         }

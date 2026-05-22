@@ -55,32 +55,23 @@
     <div class="lottery-body">
       <section v-if="filteredRecords.length" class="lottery-list">
         <article v-for="item in filteredRecords" :key="item.id" class="lottery-card">
-          <div class="lottery-card-main">
-            <div class="lottery-card-title-row">
-              <h2 class="lottery-card-game">{{ item.gameName }}</h2>
+          <div class="lottery-card-head">
+            <div class="lottery-card-head-left">
               <span class="lottery-card-tag" :class="resultTagClass(item.betResult)">{{ resultLabel(item.betResult) }}</span>
+              <h2 class="lottery-card-game">{{ item.gameName }}</h2>
             </div>
-            <p class="lottery-card-row">会员：{{ item.memberAccount }}</p>
-            <p class="lottery-card-row">
-              期号：{{ item.id }}
-              <button type="button" class="lottery-card-copy" aria-label="复制期号" @click="copyIssue(item.id)">
-                <img :src="iconCopy" alt="">
-              </button>
-            </p>
-            <p class="lottery-card-row">投注金额：¥{{ item.amount }}</p>
-            <p class="lottery-card-row">下单时间：{{ item.orderTime }}</p>
+            <span class="lottery-card-issue">{{ item.issueNo }}期</span>
           </div>
-          <div class="lottery-card-side">
-            <p
-              class="lottery-card-amt"
-              :class="{
-                'lottery-card-amt--pos': item.winLoss > 0,
-                'lottery-card-amt--neg': item.winLoss < 0,
-                'lottery-card-amt--zero': item.winLoss === 0
-              }"
-            >
-              {{ item.winLoss >= 0 ? '+' : '' }}¥{{ Math.abs(item.winLoss) }}
+          <div class="lottery-card-mid">
+            <p class="lottery-card-bet">
+              <span class="lottery-card-bet-label">投注：</span>
+              <span class="lottery-card-bet-val">{{ item.betContent }}</span>
             </p>
+            <button type="button" class="lottery-card-detail" @click="onViewDetail(item)">查看详情</button>
+          </div>
+          <div class="lottery-card-foot">
+            <span class="lottery-card-time">{{ item.orderTime }}</span>
+            <span class="lottery-card-amt">¥{{ formatWinAmount(item.winLoss) }}</span>
           </div>
         </article>
       </section>
@@ -119,6 +110,13 @@
           <span>-</span>
           <button type="button" class="date-cell" @click="openDatePicker('end')">{{ formatSlashDate(popupEndDate) }}</button>
         </div>
+
+        <input
+          v-model.trim="issueNoKeyword"
+          class="time-panel-issue-input"
+          type="text"
+          placeholder="请输入投注期号"
+        >
 
         <div class="action-row">
           <button type="button" class="btn-reset" @click="resetTimePopup">重置</button>
@@ -182,12 +180,11 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
-import iconFilter from '@/assets/icon_filter.png'
+import iconFilter from '@/assets/icon_filter.svg'
 import iconClose from '@/assets/icon_x.svg'
 import iconSelected from '@/assets/icon_sel.svg'
 import noDataImage from '@/assets/no_data.svg'
-import iconCopy from '@/assets/icon_copy.svg'
-import iconSearch from '@/assets/icon_search.png'
+import iconSearch from '@/assets/icon_search.svg'
 import toast from '@/components/Toast'
 import { teamLotteryRecords } from './agent-team-lottery-records.mock'
 
@@ -214,6 +211,7 @@ const pickerTarget = ref('start')
 const popupStartDate = ref(new Date())
 const popupEndDate = ref(new Date())
 const popupSelectedQuick = ref('')
+const issueNoKeyword = ref('')
 
 const quickOptions = [
   { label: '24小时内', value: '24h' },
@@ -241,7 +239,7 @@ const listPickerKind = ref('game')
 
 const GAME_OPTIONS = [
   { value: 'all', label: '全部游戏' },
-  { value: '加拿大28', label: '加拿大28' }
+  { value: '加拿大28', label: '加拿大PC28(4.2-4.6)特' }
 ]
 
 const STATUS_OPTIONS = [
@@ -354,6 +352,7 @@ const selectQuick = (value) => {
 
 const resetTimePopup = () => {
   popupSelectedQuick.value = '24h'
+  issueNoKeyword.value = ''
   const end = new Date()
   const { start } = applyQuickToRange('24h', end)
   popupStartDate.value = start
@@ -406,6 +405,7 @@ const filteredRecords = computed(() =>
     if (playerKeyword.value && !String(item.memberAccount || '').includes(playerKeyword.value)) return false
     if (gameValue.value !== 'all' && item.platform !== gameValue.value) return false
     if (statusValue.value !== 'all' && item.betResult !== statusValue.value) return false
+    if (issueNoKeyword.value && !String(item.issueNo || '').includes(issueNoKeyword.value)) return false
     return true
   })
 )
@@ -422,6 +422,17 @@ const resultTagClass = (r) => {
   return 'lottery-card-tag--lost'
 }
 
+const formatWinAmount = (n) => {
+  const v = Number(n)
+  if (Number.isNaN(v)) return '0'
+  const s = Math.abs(v).toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+  return s
+}
+
+const onViewDetail = (item) => {
+  router.push({ name: 'agentTeamLotteryOrderDetail', query: { id: item.id } })
+}
+
 const openListPicker = (kind) => {
   listPickerKind.value = kind
   listPickerVisible.value = true
@@ -435,24 +446,6 @@ const applyListPicker = (opt) => {
   listPickerVisible.value = false
 }
 
-const copyIssue = async (issueNo) => {
-  try {
-    const text = String(issueNo)
-    if (navigator?.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text)
-    } else {
-      const input = document.createElement('input')
-      input.value = text
-      document.body.appendChild(input)
-      input.select()
-      document.execCommand('copy')
-      document.body.removeChild(input)
-    }
-    toast.success('已复制期号')
-  } catch {
-    toast.error('复制失败')
-  }
-}
 </script>
 
 <style lang="less" scoped>

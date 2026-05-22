@@ -246,10 +246,15 @@ const AGENT_SUB_ROUTES = {
   performance: 'agentTeamPerformance',
   lotteryRecords: 'agentTeamLotteryRecords',
   billingRecords: 'agentTeamBillingRecords',
-  threePartyRecords: 'agentTeamThreePartyRecords'
+  threePartyRecords: 'agentTeamThreePartyRecords',
+  agentSupport: 'agentSupport'
 }
 
 const onMenu = (item) => {
+  if (item.action === 'inviteLink') {
+    router.push({ name: 'createPlayer', query: { tab: 'link' } })
+    return
+  }
   const name = AGENT_SUB_ROUTES[item.action]
   if (name) {
     router.push({ name })
