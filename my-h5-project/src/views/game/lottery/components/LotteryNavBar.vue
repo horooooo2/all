@@ -84,9 +84,9 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import iconBack from '@/assets/icon_dack.svg'
-import iconMenu from '@/assets/menu_icon.png'
-import iconYh from '@/assets/icon_yh.png'
-import iconDown from '@/assets/down_icon.png'
+import iconMenu from '@/assets/menu_icon.svg'
+import iconYh from '@/assets/icon_yh.svg'
+import iconDown from '@/assets/down_icon.svg'
 
 const props = defineProps({
   title: { type: String, default: '彩票' },

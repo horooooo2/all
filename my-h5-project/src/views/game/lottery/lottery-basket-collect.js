@@ -21,7 +21,7 @@ export function parseBetAmount(v) {
   return Number.isFinite(n) && n > 0 ? n : 0
 }
 
-/** @returns {Array<Array>} arr 中取 k 个的所有组*/
+/** @returns {Array<Array>} arr 中取 k 个的所有组合 */
 export function combinationsOf(arr, k) {
   const a = [...arr]
   if (k <= 0) return k === 0 ? [[]] : []
@@ -45,7 +45,7 @@ export function combinationsOf(arr, k) {
   return result
 }
 
-/** @returns {number[][]} 从号码数组中k 个组*/
+/** @returns {number[][]} 从号码数组中取 k 个组合 */
 export function combinations(arr, k) {
   const nums = [...arr].filter((x) => typeof x === 'number').sort((x, y) => x - y)
   return combinationsOf(nums, k)
@@ -128,7 +128,7 @@ function splitPl5Lht(draft) {
 function splitPl5Bzp(draft) {
   const raw = draft.raw ?? {}
   const selected = raw.selected ?? {}
-  const playLabel = raw.playLabel ?? '标准
+  const playLabel = raw.playLabel ?? '标准盘'
   const rowMap = Object.fromEntries(BZP_ZX120_ROWS.map((r) => [r.key, r.label]))
   const entries = []
 
@@ -152,7 +152,7 @@ function splitPl5Bzp(draft) {
 }
 
 /**
- * 按注数拆成多条购彩篮条目（每1 注）
+ * 按注数拆成多条购彩篮条目（每一注）
  * @param {{ betCount: number, leftLabel: string, raw?: Record<string, unknown>, splits?: Array<{ leftLabel: string, raw?: unknown }> }} draft
  * @returns {Array<{ leftLabel: string, raw: unknown }>}
  */
@@ -197,7 +197,7 @@ export function expandDraftSplits(draft) {
       entries = splitComboPicks(draft, '连肖', zodiacLabel)
       break
     case 'weishulian':
-      entries = splitComboPicks(draft, '尾数, tailLabel)
+      entries = splitComboPicks(draft, '尾数', tailLabel)
       break
     default:
       entries = [{ leftLabel: draft.leftLabel, raw: draft.raw }]
@@ -235,7 +235,7 @@ export function buildBasketItem(payload) {
 }
 
 /**
- * draft 按注数展开并生成购彩篮条目（每1 注）
+ * draft 按注数展开并生成购彩篮条目（每一注）
  */
 export function buildBasketItemsFromDraft(draft, meta) {
   const splits = expandDraftSplits(draft)

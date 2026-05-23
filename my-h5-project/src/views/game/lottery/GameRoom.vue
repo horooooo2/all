@@ -499,27 +499,28 @@ import GameNavBar from './components/GameNavBar.vue'
 import NextResultBar from './components/NextResultBar.vue'
 import BetPanel from './bet-panel/BetPanel.vue'
 import GroupVoteWorkspace from './GroupVoteWorkspace.vue'
-import iconTouzhu from '@/assets/touzhu_icon.png'
-import iconJieshao from '@/assets/jieshao_icon.png'
-import iconXianhong from '@/assets/xianhong_icon.png'
-import iconShezhi from '@/assets/shezhi_icon.png'
+import iconTouzhu from '@/assets/touzhu_icon.svg'
+import iconJieshao from '@/assets/jieshao_icon.svg'
+import iconXianhong from '@/assets/xianhong_icon.svg'
+import iconShezhi from '@/assets/shezhi_icon.svg'
 import LivePlayer from './components/LivePlayer.vue'
-import iconPlus from '@/assets/icon_add.png'
-import iconYw from '@/assets/icon_yw.png'
-import iconCaretDown from '@/assets/down_icon.png'
-import iconSend from '@/assets/icon_send.png'
-import iconFenxiang from '@/assets/silder_fenxiang.png'
-import iconZhuanye from '@/assets/silder_zhuanye.png'
-import iconQtms from '@/assets/icon_qtms.png'
-import iconDashang from '@/assets/silder_dashang.png'
-import iconHaolu from '@/assets/silder_haolu.png'
-import iconNiming from '@/assets/silder_niming.png'
-import iconYingkui from '@/assets/silder_yingkui.png'
-import iconTouzhuSide from '@/assets/silder_touzhu.png'
-import iconSideMenuShow from '@/assets/silder_caidan.png'
-import iconSideMenuHide from '@/assets/silder_yincang.png'
+import iconPlus from '@/assets/icon_add.svg'
+import iconYw from '@/assets/icon_yw.svg'
+import iconCaretDown from '@/assets/down_icon.svg'
+import iconSend from '@/assets/icon_send.svg'
+import iconFenxiang from '@/assets/silder_fenxiang.svg'
+import iconZhuanye from '@/assets/silder_zhuanye.svg'
+import iconQtms from '@/assets/icon_qtms.svg'
+import iconDashang from '@/assets/silder_dashang.svg'
+import iconHaolu from '@/assets/silder_haolu.svg'
+import iconNiming from '@/assets/silder_niming.svg'
+import iconYingkui from '@/assets/silder_yingkui.svg'
+import iconTouzhuSide from '@/assets/silder_touzhu.svg'
+import iconSideMenuShow from '@/assets/silder_caidan.svg'
+import iconSideMenuHide from '@/assets/silder_yincang.svg'
 import HaoluPopup from './haolu/HaoluPopup.vue'
 import DashangPopup from './components/DashangPopup.vue'
+import miCloseSrc from '@/assets/mipai_close.svg'
 
 const router = useRouter()
 const betPanelRef = ref(null)
@@ -890,7 +891,6 @@ const miLeft2 = ref(21)
 // 注意：资源文件若尚未加入项目，这里会在运行时 404，但不会阻塞编译
 const miQiu1Src = computed(() => '/src/assets/mipai_qiu1.png')
 const miQiu2Src = computed(() => '/src/assets/mipai_qiu2.png')
-const miCloseSrc = computed(() => '/src/assets/mipai_close.png')
 
 const miScratched = ref(false)
 const miCanvasRef = ref(null)

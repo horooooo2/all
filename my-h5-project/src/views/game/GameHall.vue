@@ -88,12 +88,12 @@ import { useI18n } from 'vue-i18n'
 import { toast } from '@/components/Toast'
 import iconBack from '@/assets/icon_dack.svg'
 import avatarDefault from '@/assets/touxiang2.png'
-import iconTy from '@/assets/icon_ty.png'
-import iconSx from '@/assets/icon_sx.png'
-import iconDz from '@/assets/icon_dz.png'
-import iconCp from '@/assets/icon_cp.png'
-import iconBy from '@/assets/icon_by.png'
-import iconQp from '@/assets/icon_qp.png'
+import iconTy from '@/assets/icon_ty.svg'
+import iconSx from '@/assets/icon_sx.svg'
+import iconDz from '@/assets/icon_dz.svg'
+import iconCp from '@/assets/icon_cp.svg'
+import iconBy from '@/assets/icon_by.svg'
+import iconQp from '@/assets/icon_qp.svg'
 import imgHomeSportSb from '@/assets/img_home_sport_sb.png'
 
 const route = useRoute()
@@ -127,8 +127,10 @@ const gamesByCategory = {
     { id: 'dz-2', name: '老虎机', image: imgHomeSportSb }
   ],
   cp: [
-    { id: 'cp-1', name: '彩票中心', image: imgHomeSportSb },
-    { id: 'cp-2', name: '快三', image: imgHomeSportSb }
+    { id: 'cp-pl5', name: '排列5', image: imgHomeSportSb, room: 'pl5' },
+    { id: 'cp-lhc', name: '六合彩', image: imgHomeSportSb, room: 'lhc' },
+    { id: 'cp-1', name: '彩票中心', image: imgHomeSportSb, room: 'live' },
+    { id: 'cp-2', name: '快三', image: imgHomeSportSb, room: 'live' }
   ],
   by: [
     { id: 'by-1', name: '捕鱼达人', image: imgHomeSportSb },
@@ -214,13 +216,16 @@ function goUser() {
 
 function onGameClick(item) {
   if (activeKey.value === 'cp') {
-    router.push({
-      path: '/game-room',
-      query: {
-        gameId: item.id,
-        gameName: item.name
-      }
-    })
+    const query = { gameId: item.id, gameName: item.name }
+    if (item.room === 'pl5') {
+      router.push({ name: 'pl5Room', query })
+      return
+    }
+    if (item.room === 'lhc') {
+      router.push({ name: 'lhcRoom', query })
+      return
+    }
+    router.push({ path: '/game-room', query })
     return
   }
   toast(t(item.name))

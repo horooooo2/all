@@ -57,7 +57,7 @@
 
 <script setup>
 import { computed, defineExpose, ref } from 'vue'
-import iconPlus from '@/assets/icon_add.png'
+import iconPlus from '@/assets/icon_add.svg'
 import iconDack from '@/assets/icon_dack.svg'
 
 const rootRef = ref(null)

@@ -112,6 +112,36 @@ const routes = [
                 }
             },
             {
+                path: 'lottery/pl5/room',
+                name: 'pl5Room',
+                component: () => import('@/views/game/lottery/index.vue'),
+                meta: {
+                    title: '排列5',
+                    keepAlive: false,
+                    requireAuth: false
+                }
+            },
+            {
+                path: 'lottery/lhc/room',
+                name: 'lhcRoom',
+                component: () => import('@/views/game/lottery/index.vue'),
+                meta: {
+                    title: '六合彩',
+                    keepAlive: false,
+                    requireAuth: false
+                }
+            },
+            {
+                path: 'lottery/pl5/trend',
+                name: 'pl5Trend',
+                component: () => import('@/views/game/lottery/pl5/Pl5Trend.vue'),
+                meta: {
+                    title: '排列5走势',
+                    keepAlive: false,
+                    requireAuth: false
+                }
+            },
+            {
                 path: 'game-trend',
                 name: 'gameTrend',
                 component: () => import('@/views/game/lottery/FullTrend.vue'),

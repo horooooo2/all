@@ -88,7 +88,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import iconBetRecordWhite from '@/assets/touzhu_icon_white.png'
+import iconBetRecordWhite from '@/assets/touzhu_icon_white.svg'
 import noDataImage from '@/assets/no_data.svg'
 
 const show = defineModel('show', { type: Boolean, default: false })

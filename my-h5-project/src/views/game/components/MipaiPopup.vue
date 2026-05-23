@@ -84,6 +84,7 @@
 
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
+import miCloseSrc from '@/assets/mipai_close.svg'
 
 const props = defineProps({
   show: { type: Boolean, default: false },
@@ -134,7 +135,6 @@ const lhcSpecialNum = computed(() => safeNums.value[6] ?? '1')
 // 注意：资源文件若尚未加入项目，这里会在运行时 404，但不会阻塞编译
 const miQiu1Src = computed(() => '/src/assets/mipai_qiu1.png')
 const miQiu2Src = computed(() => '/src/assets/mipai_qiu2.png')
-const miCloseSrc = computed(() => '/src/assets/mipai_close.png')
 
 function close() {
   emit('update:show', false)

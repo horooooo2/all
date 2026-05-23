@@ -69,12 +69,12 @@
 <script setup>
 import Hls from 'hls.js'
 import { computed, defineExpose, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import iconFullscreen from '@/assets/icon_quanping.png'
-import iconFullscreenExit from '@/assets/icon_quanping_s.png'
-import iconMuteOn from '@/assets/icon_m_s.png'
-import iconMuteOff from '@/assets/icon_m_n.png'
-import iconDanmakuOn from '@/assets/icon_d_s.png'
-import iconDanmakuOff from '@/assets/icon_d-n.png'
+import iconFullscreen from '@/assets/icon_quanping.svg'
+import iconFullscreenExit from '@/assets/icon_quanping_s.svg'
+import iconMuteOn from '@/assets/icon_m_s.svg'
+import iconMuteOff from '@/assets/icon_m_n.svg'
+import iconDanmakuOn from '@/assets/icon_d_s.svg'
+import iconDanmakuOff from '@/assets/icon_d-n.svg'
 
 const props = defineProps({
   src: { type: String, default: '' }, // m3u8

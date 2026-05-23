@@ -113,7 +113,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import QuickChipPicker from '@/views/game/components/QuickChipPicker.vue'
-import iconDel from '@/assets/icon_del.png'
+import iconDel from '@/assets/icon_del.svg'
 
 const props = defineProps({
   mode: { type: String, default: 'smp' },

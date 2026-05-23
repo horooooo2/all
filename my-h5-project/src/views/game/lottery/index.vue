@@ -30,7 +30,7 @@
       <div
         class="pl5-main-tabs"
         role="tablist"
-        :aria-label="isLhc ? '六合彩玩 : '排列5玩法'"
+        :aria-label="isLhc ? '六合彩玩法' : '排列5玩法'"
         :style="{ gridTemplateColumns: `repeat(${mainTabs.length}, minmax(0, 1fr))` }"
       >
         <button
@@ -55,7 +55,7 @@
         <template v-else>
           <LhcSmpPlay v-show="mainTab === 'smp'" ref="lhcSmpPlayRef" @update:bet-count="lhcSmpBetCount = $event" />
         </template>
-        <div v-show="!isLhc && mainTab === 'trend'" class="pl5-play-roadmap" aria-label="路子>
+        <div v-show="!isLhc && mainTab === 'trend'" class="pl5-play-roadmap" aria-label="路子图">
           <HaoluRoadmap />
         </div>
         <div v-show="mainTab === 'long'" class="pl5-play-long" aria-label="长龙">
@@ -98,10 +98,10 @@
       primary-text="查看完整走势"
       @primary="onViewFullTrend"
     >
-      <div class="lottery-prev-table" aria-label="往期开>
+      <div class="lottery-prev-table" aria-label="往期开奖">
         <div class="lottery-prev-row lottery-prev-row--head">
           <div class="lottery-prev-col lottery-prev-col--issue">期号</div>
-          <div class="lottery-prev-col lottery-prev-col--nums">开奖号/div>
+          <div class="lottery-prev-col lottery-prev-col--nums">开奖号码</div>
         </div>
 
         <div v-for="(row, rowIdx) in prevRows" :key="row.issue" class="lottery-prev-row">
@@ -163,7 +163,7 @@ import BetPanelFoot from './components/BetPanelFoot.vue'
 import MipaiPopup from '@/views/game/components/MipaiPopup.vue'
 import RecentBetsPopup from '@/views/game/components/RecentBetsPopup.vue'
 import NextResultPopup from '@/components/lottery/NextResultPopup.vue'
-import recentIconSrc from '@/assets/icon_tzjl.png'
+import recentIconSrc from '@/assets/icon_tzjl.svg'
 import basketIconSrc from '@/assets/icon_gcl.png'
 import addIconSrc from '@/assets/icon_add_white.png'
 import LotteryBetBasket from '@/components/lottery/LotteryBetBasket.vue'
@@ -181,13 +181,13 @@ const router = useRouter()
 const isLhc = computed(() => route.name === 'lhcRoom')
 
 const PL5_MAIN_TABS = Object.freeze([
-  { key: 'smp', label: '双面 },
-  { key: 'bzp', label: '标准 },
-  { key: 'trend', label: '路子 },
+  { key: 'smp', label: '双面盘' },
+  { key: 'bzp', label: '标准盘' },
+  { key: 'trend', label: '路子图' },
   { key: 'long', label: '长龙' }
 ])
 const LHC_MAIN_TABS = Object.freeze([
-  { key: 'smp', label: '双面 },
+  { key: 'smp', label: '双面盘' },
   { key: 'long', label: '长龙' }
 ])
 const mainTabs = computed(() => (isLhc.value ? LHC_MAIN_TABS : PL5_MAIN_TABS))
@@ -213,7 +213,7 @@ const prevIssue = ref('3123111109')
 const prevPnl = ref('188')
 const prevBalls = ref([9, 3, 8, 1, 1])
 const balance = ref(8888.5)
-const issueStatusText = ref('投注)
+const issueStatusText = ref('投注中')
 const recentIcon = recentIconSrc
 const basketIcon = basketIconSrc
 const addIcon = addIconSrc
@@ -221,11 +221,11 @@ const addIcon = addIconSrc
 const recentOpen = ref(false)
 const betBasketOpen = ref(false)
 const betBasketItems = ref([])
-/** 购彩篮归属彩种：仅在 pl5 / lhc 切换或离开页面时清*/
+/** 购彩篮归属彩种：仅在 pl5 / lhc 切换或离开页面时清空 */
 const basketOwnerGame = ref(null)
 
 const mainTab = ref('smp')
-/** 路子图、长龙不显示投注底栏；双面盘（及排列5标准盘）显示，六合彩与排规则一*/
+/** 路子图、长龙不显示投注底栏；双面盘（及排列5标准盘）显示，六合彩与排列五规则一致 */
 const showBetPanelFoot = computed(() => {
   if (mainTab.value === 'long' || mainTab.value === 'trend') return false
   return mainTab.value === 'smp' || (!isLhc.value && mainTab.value === 'bzp')
@@ -251,7 +251,7 @@ const countdownText = computed(() => {
   return `${h}:${m}:${sec}`
 })
 
-/** 长龙列表（演示数据）；betPopupRow 与自营彩「推荐好路」同一套下注弹窗数据结*/
+/** 长龙列表（演示数据）；betPopupRow 与自营彩「推荐好路」同一套下注弹窗数据结构 */
 const pl5LongDragonRows = computed(() => {
   const name = String(pageTitle.value || '排列5')
   const cd = countdownText.value
@@ -261,8 +261,8 @@ const pl5LongDragonRows = computed(() => {
       id: 'pl5-1',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '万位大小 ,
-      bottomRight: '连出4,
+      bottomLeft: '万位大小',
+      bottomRight: '连出4期',
       streak: 4,
       betPopupRow: {
         betTitle: '万位大小',
@@ -270,8 +270,8 @@ const pl5LongDragonRows = computed(() => {
         issue,
         countdown: cd,
         options: [
-          { playKey: 'pl5-wan-big', label: ', odds: 1.98, accent: 'red' },
-          { playKey: 'pl5-wan-small', label: ', odds: 1.98, accent: 'blue' }
+          { playKey: 'pl5-wan-big', label: '大', odds: 1.98, accent: 'red' },
+          { playKey: 'pl5-wan-small', label: '小', odds: 1.98, accent: 'blue' }
         ],
         defaultPlayKey: 'pl5-wan-big'
       }
@@ -280,8 +280,8 @@ const pl5LongDragonRows = computed(() => {
       id: 'pl5-2',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '千位单双 ,
-      bottomRight: '连出3,
+      bottomLeft: '千位单双',
+      bottomRight: '连出3期',
       streak: 3,
       betPopupRow: {
         betTitle: '千位单双',
@@ -289,8 +289,8 @@ const pl5LongDragonRows = computed(() => {
         issue,
         countdown: cd,
         options: [
-          { playKey: 'pl5-qian-even', label: ', odds: 1.98, accent: 'red' },
-          { playKey: 'pl5-qian-odd', label: ', odds: 1.98, accent: 'blue' }
+          { playKey: 'pl5-qian-even', label: '双', odds: 1.98, accent: 'red' },
+          { playKey: 'pl5-qian-odd', label: '单', odds: 1.98, accent: 'blue' }
         ],
         defaultPlayKey: 'pl5-qian-even'
       }
@@ -299,8 +299,8 @@ const pl5LongDragonRows = computed(() => {
       id: 'pl5-3',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '百位质合 ,
-      bottomRight: '连出6,
+      bottomLeft: '百位质合',
+      bottomRight: '连出6期',
       streak: 6,
       betPopupRow: {
         betTitle: '百位质合',
@@ -308,8 +308,8 @@ const pl5LongDragonRows = computed(() => {
         issue,
         countdown: cd,
         options: [
-          { playKey: 'pl5-bai-prime', label: ', odds: 1.98, accent: 'red' },
-          { playKey: 'pl5-bai-composite', label: ', odds: 1.98, accent: 'blue' }
+          { playKey: 'pl5-bai-prime', label: '质', odds: 1.98, accent: 'red' },
+          { playKey: 'pl5-bai-composite', label: '合', odds: 1.98, accent: 'blue' }
         ],
         defaultPlayKey: 'pl5-bai-prime'
       }
@@ -318,8 +318,8 @@ const pl5LongDragonRows = computed(() => {
       id: 'pl5-4',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '十位大小 ,
-      bottomRight: '连出5,
+      bottomLeft: '十位大小',
+      bottomRight: '连出5期',
       streak: 5,
       betPopupRow: {
         betTitle: '十位大小',
@@ -327,8 +327,8 @@ const pl5LongDragonRows = computed(() => {
         issue,
         countdown: cd,
         options: [
-          { playKey: 'pl5-shi-small', label: ', odds: 1.98, accent: 'red' },
-          { playKey: 'pl5-shi-big', label: ', odds: 1.98, accent: 'blue' }
+          { playKey: 'pl5-shi-small', label: '小', odds: 1.98, accent: 'red' },
+          { playKey: 'pl5-shi-big', label: '大', odds: 1.98, accent: 'blue' }
         ],
         defaultPlayKey: 'pl5-shi-small'
       }
@@ -337,18 +337,18 @@ const pl5LongDragonRows = computed(() => {
       id: 'pl5-5',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '个位0120,
-      bottomRight: '连出2,
+      bottomLeft: '个位012路',
+      bottomRight: '连出2期',
       streak: 2,
       betPopupRow: {
-        betTitle: '个位012,
+        betTitle: '个位012路',
         gameName: name,
         issue,
         countdown: cd,
         options: [
-          { playKey: 'pl5-ge-0', label: '0, odds: 1.97, accent: 'red' },
-          { playKey: 'pl5-ge-1', label: '1, odds: 1.97, accent: 'blue' },
-          { playKey: 'pl5-ge-2', label: '2, odds: 1.97, accent: 'blue' }
+          { playKey: 'pl5-ge-0', label: '0', odds: 1.97, accent: 'red' },
+          { playKey: 'pl5-ge-1', label: '1', odds: 1.97, accent: 'blue' },
+          { playKey: 'pl5-ge-2', label: '2', odds: 1.97, accent: 'blue' }
         ],
         defaultPlayKey: 'pl5-ge-0'
       }
@@ -357,7 +357,7 @@ const pl5LongDragonRows = computed(() => {
 })
 
 const lhcLongDragonRows = computed(() => {
-  const name = String(pageTitle.value || '六合)
+  const name = String(pageTitle.value || '六合彩')
   const cd = countdownText.value
   const issue = String(currentIssue.value || '')
   return [
@@ -365,8 +365,8 @@ const lhcLongDragonRows = computed(() => {
       id: 'lhc-1',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '特码大小 ,
-      bottomRight: '连出5,
+      bottomLeft: '特码大小',
+      bottomRight: '连出5期',
       streak: 5,
       betPopupRow: {
         betTitle: '特码大小',
@@ -374,8 +374,8 @@ const lhcLongDragonRows = computed(() => {
         issue,
         countdown: cd,
         options: [
-          { playKey: 'lhc-tm-big', label: ', odds: 1.98, accent: 'red' },
-          { playKey: 'lhc-tm-small', label: ', odds: 1.98, accent: 'blue' }
+          { playKey: 'lhc-tm-big', label: '大', odds: 1.98, accent: 'red' },
+          { playKey: 'lhc-tm-small', label: '小', odds: 1.98, accent: 'blue' }
         ],
         defaultPlayKey: 'lhc-tm-big'
       }
@@ -384,8 +384,8 @@ const lhcLongDragonRows = computed(() => {
       id: 'lhc-2',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '特码单双 ,
-      bottomRight: '连出3,
+      bottomLeft: '特码单双',
+      bottomRight: '连出3期',
       streak: 3,
       betPopupRow: {
         betTitle: '特码单双',
@@ -393,8 +393,8 @@ const lhcLongDragonRows = computed(() => {
         issue,
         countdown: cd,
         options: [
-          { playKey: 'lhc-tm-odd', label: ', odds: 1.98, accent: 'red' },
-          { playKey: 'lhc-tm-even', label: ', odds: 1.98, accent: 'blue' }
+          { playKey: 'lhc-tm-odd', label: '单', odds: 1.98, accent: 'red' },
+          { playKey: 'lhc-tm-even', label: '双', odds: 1.98, accent: 'blue' }
         ],
         defaultPlayKey: 'lhc-tm-odd'
       }
@@ -404,7 +404,7 @@ const lhcLongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '特码波色 红波',
-      bottomRight: '连出4,
+      bottomRight: '连出4期',
       streak: 4,
       betPopupRow: {
         betTitle: '特码波色',
@@ -423,8 +423,8 @@ const lhcLongDragonRows = computed(() => {
       id: 'lhc-4',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '总和大小 ,
-      bottomRight: '连出6,
+      bottomLeft: '总和大小',
+      bottomRight: '连出6期',
       streak: 6,
       betPopupRow: {
         betTitle: '总和大小',
@@ -442,8 +442,8 @@ const lhcLongDragonRows = computed(() => {
       id: 'lhc-5',
       topLeft: name,
       topRight: cd,
-      bottomLeft: '正肖 ,
-      bottomRight: '连出2,
+      bottomLeft: '正肖',
+      bottomRight: '连出2期',
       streak: 2,
       betPopupRow: {
         betTitle: '正肖',
@@ -451,8 +451,8 @@ const lhcLongDragonRows = computed(() => {
         issue,
         countdown: cd,
         options: [
-          { playKey: 'lhc-zx-rat', label: ', odds: 11.5, accent: 'red' },
-          { playKey: 'lhc-zx-ox', label: ', odds: 11.5, accent: 'blue' }
+          { playKey: 'lhc-zx-rat', label: '鼠', odds: 11.5, accent: 'red' },
+          { playKey: 'lhc-zx-ox', label: '牛', odds: 11.5, accent: 'blue' }
         ],
         defaultPlayKey: 'lhc-zx-rat'
       }
@@ -536,7 +536,7 @@ function onLongDragonRow(row) {
 function onLongDragonBetSubmit(payload) {
   const pk = payload.playKey ?? ''
   const amt = payload.amount
-  toast(pk ? `长龙投注{pk} × ¥${amt}（演示）` : `长龙投注 × ¥${amt}（演示）`)
+  toast(pk ? `长龙投注 ${pk} × ¥${amt}（演示）` : `长龙投注 × ¥${amt}（演示）`)
 }
 
 let timer = null
@@ -606,7 +606,7 @@ function goBack() {
 }
 
 function onMenu() {
-  toast('菜单（待接入)
+  toast('菜单（待接入）')
 }
 
 function onExpandPrev() {
@@ -618,7 +618,7 @@ function onExpandPrev() {
 }
 
 function onPlus() {
-  toast('加号（待接入)
+  toast('加号（待接入）')
 }
 
 function onMiCard() {
@@ -645,7 +645,7 @@ function onBetClear() {
   smpPlayRef.value?.resetPicks?.()
   bzpPlayRef.value?.resetPicks?.()
   lhcSmpPlayRef.value?.resetPicks?.()
-  toast('已清)
+  toast('已清空')
 }
 
 function onChipClick(v) {
@@ -668,12 +668,12 @@ function onAddPick() {
   }
   const draft = panel.getBasketDraft()
   if (!draft?.betCount) {
-    toast('请先选择投注)
+    toast('请先选择投注项')
     return
   }
   const unit = parseBetAmount(betAmount.value)
   if (unit <= 0) {
-    toast.warning('请输入投注金)
+    toast.warning('请输入投注金额')
     return
   }
   const items = buildBasketItemsFromDraft(draft, {
@@ -706,7 +706,7 @@ function onBetBasketSubmit({ items }) {
 }
 
 function onBet() {
-  toast('立即投注（待接入)
+  toast('立即投注（待接入）')
 }
 
 function onChase() {

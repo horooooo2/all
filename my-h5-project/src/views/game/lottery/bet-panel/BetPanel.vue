@@ -252,11 +252,11 @@ import { useRouter } from 'vue-router'
 import { toast } from '@/components/Toast'
 import { showConfirmDialog } from 'vant'
 import BetPanelCore from './BetPanelCore.vue'
-import iconDown from '@/assets/icon_down_01.png'
+import iconDown from '@/assets/icon_down_01.svg'
 import iconX from '@/assets/icon_x.svg'
 import iconSelected from '@/assets/icon_sel.svg'
 import noDataImage from '@/assets/no_data.svg'
-import iconBetRecordWhite from '@/assets/touzhu_icon_white.png'
+import iconBetRecordWhite from '@/assets/touzhu_icon_white.svg'
 
 const props = defineProps({
   show: { type: Boolean, default: false },

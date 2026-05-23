@@ -164,10 +164,10 @@ import {
   MULTI_SELECT_TAB_KEYS,
   PLAY_GROUPS_BY_TAB
 } from './bet-panel-constants'
-import iconDel from '@/assets/icon_del.png'
-import iconSwitch from '@/assets/icon_qh_sel.png'
+import iconDel from '@/assets/icon_del.svg'
+import iconSwitch from '@/assets/icon_qh_sel.svg'
 import iconX from '@/assets/icon_x.svg'
-import quickBgImg from '@/assets/kuaijie_money_back.png'
+import quickBgImg from '@/assets/kuaijie_money_back.svg'
 
 const props = defineProps({
   balance: { type: [String, Number], default: 0 }

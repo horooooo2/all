@@ -74,9 +74,9 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import iconSwitch from '@/assets/icon_qh_sel.png'
+import iconSwitch from '@/assets/icon_qh_sel.svg'
 import iconX from '@/assets/icon_x.svg'
-import quickBgImg from '@/assets/kuaijie_money_back.png'
+import quickBgImg from '@/assets/kuaijie_money_back.svg'
 
 const STORAGE_KEY = 'betpanel.customChips.v1'
 const DEFAULT_CHIPS = [1, 10, 100, 500, 1000]

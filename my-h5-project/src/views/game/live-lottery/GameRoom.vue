@@ -520,6 +520,7 @@ import iconSideMenuShow from '@/assets/silder_caidan.png'
 import iconSideMenuHide from '@/assets/silder_yincang.png'
 import HaoluPopup from './haolu/HaoluPopup.vue'
 import DashangPopup from './components/DashangPopup.vue'
+import miCloseSrc from '@/assets/mipai_close.svg'
 
 const router = useRouter()
 const betPanelRef = ref(null)
@@ -890,7 +891,6 @@ const miLeft2 = ref(21)
 // 注意：资源文件若尚未加入项目，这里会在运行时 404，但不会阻塞编译
 const miQiu1Src = computed(() => '/src/assets/mipai_qiu1.png')
 const miQiu2Src = computed(() => '/src/assets/mipai_qiu2.png')
-const miCloseSrc = computed(() => '/src/assets/mipai_close.png')
 
 const miScratched = ref(false)
 const miCanvasRef = ref(null)
