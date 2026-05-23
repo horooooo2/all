@@ -16,7 +16,7 @@ function attachDetail(row, overrides = {}) {
     ...row,
     multiplier: overrides.multiplier ?? '1',
     odds: overrides.odds ?? '2.8',
-    drawNumbers: overrides.drawNumbers ?? '1',
+    drawNumbers: overrides.drawNumbers ?? '1、4、3',
     drawTime: overrides.drawTime ?? row.time,
     orderTime: row.time,
     account: overrides.account ?? '2200159',
@@ -40,50 +40,50 @@ export function buildDemoRows() {
       id: 'n1',
       issue: `${issueBase}001`,
       statusKey: 'pending',
-      statusText: '未开,
+      statusText: '未开奖',
       betPrefix: '大小单双#',
-      betPick: ',
+      betPick: '大',
       betStake: '1',
       bonus: '0',
       rebate: '0.004',
       time: t(0, 24, 31)
-    }, { drawNumbers: '—、—、, odds: '2.8' }),
+    }, { drawNumbers: '—、—、—', odds: '2.8' }),
     attachDetail({
       id: 'n2',
       issue: `${issueBase}002`,
       statusKey: 'loss',
-      statusText: '未中,
+      statusText: '未中奖',
       betPrefix: '大小单双#',
-      betPick: ',
+      betPick: '小',
       betStake: '1',
       bonus: '1',
       rebate: '0.004',
       time: t(0, 25, 10)
-    }, { drawNumbers: '1' }),
+    }, { drawNumbers: '1、4、3' }),
     attachDetail({
       id: 'n3',
       issue: `${issueBase}003`,
       statusKey: 'win',
-      statusText: '已中,
+      statusText: '已中奖',
       betPrefix: '大小单双#',
-      betPick: ',
+      betPick: '大',
       betStake: '1',
       bonus: '9.8',
       rebate: '0.004',
       time: t(0, 26, 2)
-    }, { drawNumbers: '2' }),
+    }, { drawNumbers: '2、1、0' }),
     attachDetail({
       id: 'n4',
       issue: `${issueBase}004`,
       statusKey: 'canceled',
-      statusText: '已撤,
+      statusText: '已撤单',
       betPrefix: '大小单双#',
-      betPick: ',
+      betPick: '单',
       betStake: '1',
       bonus: '0',
       rebate: '0',
       time: t(0, 27, 0)
-    }, { drawNumbers: '—、—、 })
+    }, { drawNumbers: '—、—、—' })
   ]
 
   const chase = [
@@ -91,14 +91,14 @@ export function buildDemoRows() {
       id: 'c1',
       issue: `${issueBase}005`,
       statusKey: 'pending',
-      statusText: '未开,
+      statusText: '未开奖',
       betPrefix: '追号#',
-      betPick: ',
+      betPick: '大',
       betStake: '2',
       bonus: '0',
       rebate: '0',
       time: t(1, 0, 0)
-    }, { betTitle: '特码整合-追号#, betContent: '大@2', drawNumbers: '—、—、 })
+    }, { betTitle: '特码整合-追号#', betContent: '大@2', drawNumbers: '—、—、—' })
   ]
 
   return { normal, chase }

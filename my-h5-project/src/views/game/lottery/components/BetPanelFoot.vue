@@ -12,7 +12,7 @@
       </div>
 
       <template v-if="isBzp">
-        <div class="bzp-group" aria-label="标准盘投注参>
+        <div class="bzp-group" aria-label="标准盘投注参数">
           <div class="bzp-item bzp-item--prize">
             <div class="bzp-item__label">奖金:</div>
             <div class="bzp-prize-wrap">
@@ -86,7 +86,7 @@
       <div class="bottom-btn bottom-btn--stack bottom-btn--basket" role="button" tabindex="0" @click="emit('basket')">
         <span v-if="basketBadgeText" class="bottom-btn__badge" aria-label="购彩篮注单数">{{ basketBadgeText }}</span>
         <img v-if="basketIcon" class="bottom-btn__icon" :src="basketIcon" alt="" aria-hidden="true" />
-        <div>购彩/div>
+        <div>购彩篮</div>
       </div>
 
       <div class="bottom-btn bottom-btn--stack bottom-btn--add" role="button" tabindex="0" @click="emit('add-pick')">
@@ -534,9 +534,11 @@ function onChipPick(v) {
   top: 50%;
   width: 30px;
   height: 30px;
-  transform: translate(-50%, -50%);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  transform: translate3d(-50%, -50%, 0);
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .quick-single {

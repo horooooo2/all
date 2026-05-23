@@ -31,6 +31,10 @@ export default defineConfig({
     resolve: {
         alias: { '@': path.resolve(__dirname, './src') },
     },
+    server: {
+        host: true,
+        port: 5173,
+    },
     css: {
         postcss: {
             plugins: [(await import('postcss-pxtorem')).default({

@@ -24,7 +24,7 @@
         @keydown="(e) => keyActivate(e, onFilterClick)"
       >
         <img class="pl5-bzp__filter-icon" :src="iconSx" alt="" aria-hidden="true" />
-        <span class="pl5-bzp__filter-txt">筛/span>
+        <span class="pl5-bzp__filter-txt">筛选</span>
       </div>
     </div>
 
@@ -146,7 +146,7 @@
               {{ s.label }}
             </div>
           </div>
-          <aside class="pl5-bzp-filter__mains" aria-label="大玩>
+          <aside class="pl5-bzp-filter__mains" aria-label="大玩法">
             <div class="pl5-bzp-filter__mains-head">
               <img class="pl5-bzp-filter__mains-head-icon" :src="iconSx" alt="" aria-hidden="true" />
               <span>全部玩法</span>
@@ -194,12 +194,12 @@ const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 /** / / / / / */
 const QUICK_OPTS = [
-  { action: 'all', label: ' },
-  { action: 'big', label: ' },
-  { action: 'small', label: ' },
-  { action: 'odd', label: ' },
-  { action: 'even', label: ' },
-  { action: 'clear', label: ' }
+  { action: 'all', label: '全' },
+  { action: 'big', label: '大' },
+  { action: 'small', label: '小' },
+  { action: 'odd', label: '单' },
+  { action: 'even', label: '双' },
+  { action: 'clear', label: '清' }
 ]
 
 /** @type {import('vue').Ref<string | null>} */
@@ -230,8 +230,8 @@ const omission = reactive({
 })
 
 const hotCold = reactive({
-  triple: Array.from({ length: 10 }, (_, i) => (i % 3 === 0 ? ' : ')),
-  single: Array.from({ length: 10 }, (_, i) => (i % 4 === 0 ? ' : '))
+  triple: Array.from({ length: 10 }, (_, i) => (i % 3 === 0 ? '热' : '冷')),
+  single: Array.from({ length: 10 }, (_, i) => (i % 4 === 0 ? '热' : '冷'))
 })
 
 /** @type {Record<string, number[]>} */
@@ -350,7 +350,7 @@ function onPlayRuleClick() {
   showConfirmDialog({
     title: '玩法说明',
     message:
-      '【演示】当前为排列五标准盘示例。五星组合20：从0-9中选择5个不同号码组成一注；实际规则、奖金与限额以平台公告及投注单为准。,
+      '【演示】当前为排列五标准盘示例。五星组合20：从0-9中选择5个不同号码组成一注；实际规则、奖金与限额以平台公告及投注单为准。',
     confirmButtonText: '我知道了',
     showCancelButton: false
   }).catch(() => {})
@@ -367,7 +367,7 @@ function getBasketDraft() {
   }
   const count = betCount.value
   if (!count) return null
-  const playLabel = recentPlays.value.find((p) => p.id === activePlayId.value)?.label ?? '标准
+  const playLabel = recentPlays.value.find((p) => p.id === activePlayId.value)?.label ?? '标准盘'
   return {
     betCount: count,
     leftLabel: `标准${playLabel} ${parts.join(' ')}`,

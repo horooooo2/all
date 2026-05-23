@@ -11,7 +11,7 @@
       </aside>
 
       <div class="haolu-roadmap__right">
-        <div class="modes" role="tablist" aria-label="路子图筛>
+        <div class="modes" role="tablist" aria-label="路子图筛选">
           <button
             v-for="m in modes"
             :key="m.key"
@@ -27,7 +27,7 @@
         </div>
 
         <div class="haolu-roadmap__content">
-          <div class="grid-wrap" role="region" aria-label="路子图网>
+          <div class="grid-wrap" role="region" aria-label="路子图网格">
             <div class="grid">
               <template v-for="(rowCells, rowIdx) in gridRows" :key="`r-${rowIdx}`">
                 <div v-for="(cell, idx) in rowCells" :key="`c-${rowIdx}-${idx}`" class="cell" :class="cell.cls">
@@ -42,9 +42,9 @@
 
           <aside class="stats" aria-label="统计信息">
             <div class="stat-card">
-              <div class="stat-title">62%)</div>
+              <div class="stat-title">大(62%)</div>
               <div class="next">
-                <div class="next-title">下期/div>
+                <div class="next-title">下期大</div>
                 <div class="next-icons" aria-hidden="true">
                   <span class="ring red" />
                   <span class="dot red" />
@@ -53,9 +53,9 @@
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-title">38%)</div>
+              <div class="stat-title">小(38%)</div>
               <div class="next">
-                <div class="next-title">下期/div>
+                <div class="next-title">下期小</div>
                 <div class="next-icons" aria-hidden="true">
                   <span class="ring blue" />
                   <span class="dot blue" />
@@ -76,7 +76,7 @@ import { computed, ref } from 'vue'
 const props = defineProps({
   ballLabels: {
     type: Array,
-    default: () => ['第一, '第二, '第三, '第四, '第五]
+    default: () => ['第一球', '第二球', '第三球', '第四球', '第五球']
   },
   modes: {
     type: Array,
@@ -119,7 +119,7 @@ function buildMockRow(modeKey, rowIdx) {
       continue
     }
     if (modeKey === 'size') {
-      base.push({ kind: 'text', cls, text: isRed ? ' : ' })
+      base.push({ kind: 'text', cls, text: isRed ? '大' : '小' })
     } else if (modeKey === 'oddeven') {
       base.push({ kind: (t % 2 === 0 ? 'ring' : 'dot'), cls, text: '' })
     } else if (modeKey === 'prime') {

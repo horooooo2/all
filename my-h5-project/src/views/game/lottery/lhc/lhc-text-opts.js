@@ -1,10 +1,10 @@
 /** 六合彩购彩篮 / 展示用中文项文案（与玩法页一致） */
 
 export const TEMA_A_TEXT_OPTS = Object.freeze([
-  { key: 'big', label: ', odds: '1.945' },
-  { key: 'small', label: ', odds: '1.945' },
-  { key: 'odd', label: ', odds: '1.945' },
-  { key: 'even', label: ', odds: '1.945' },
+  { key: 'big', label: '大', odds: '1.945' },
+  { key: 'small', label: '小', odds: '1.945' },
+  { key: 'odd', label: '单', odds: '1.945' },
+  { key: 'even', label: '双', odds: '1.945' },
   { key: 'big-odd', label: '大单', odds: '3.8' },
   { key: 'small-odd', label: '小单', odds: '3.8' },
   { key: 'big-even', label: '大双', odds: '3.8' },
@@ -28,10 +28,10 @@ export const ZM_TEXT_OPTS = Object.freeze([
 ])
 
 export const ZMT_TEXT_OPTS = Object.freeze([
-  { key: 'big', label: ', odds: '1.945' },
-  { key: 'small', label: ', odds: '1.945' },
-  { key: 'odd', label: ', odds: '1.945' },
-  { key: 'even', label: ', odds: '1.945' },
+  { key: 'big', label: '大', odds: '1.945' },
+  { key: 'small', label: '小', odds: '1.945' },
+  { key: 'odd', label: '单', odds: '1.945' },
+  { key: 'even', label: '双', odds: '1.945' },
   { key: 'big-odd', label: '大单', odds: '3.8' },
   { key: 'small-odd', label: '小单', odds: '3.8' },
   { key: 'big-even', label: '大双', odds: '3.8' },

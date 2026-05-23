@@ -163,7 +163,10 @@ function onBet() {
 }
 
 .rsb {
-  padding: 14px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  .layout-padding-bottom(12px);
+  padding-top: 14px;
+  padding-left: 16px;
+  padding-right: 16px;
   background: #fff;
   box-sizing: border-box;
 }
@@ -200,8 +203,8 @@ function onBet() {
 }
 
 .rsb__close img {
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   display: block;
   object-fit: contain;
 }

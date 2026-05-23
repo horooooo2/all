@@ -24,6 +24,7 @@
         :variant="isLhc ? 'lhc' : ''"
         @expand="onExpandPrev"
         @plus="onPlus"
+        @deposit="depositPopupOpen = true"
         @mipai="onMiCard"
       />
 
@@ -149,6 +150,8 @@
       @submit="onLongDragonBetSubmit"
       @chase="onChase"
     />
+
+    <GameDepositPopup v-model:show="depositPopupOpen" />
   </div>
 </template>
 
@@ -164,12 +167,13 @@ import MipaiPopup from '@/views/game/components/MipaiPopup.vue'
 import RecentBetsPopup from '@/views/game/components/RecentBetsPopup.vue'
 import NextResultPopup from '@/components/lottery/NextResultPopup.vue'
 import recentIconSrc from '@/assets/icon_tzjl.svg'
-import basketIconSrc from '@/assets/icon_gcl.png'
-import addIconSrc from '@/assets/icon_add_white.png'
+import basketIconSrc from '@/assets/icon_gcl.svg'
+import addIconSrc from '@/assets/icon_add_white.svg'
 import LotteryBetBasket from '@/components/lottery/LotteryBetBasket.vue'
 import HaoluRoadmap from '@/components/lottery/HaoluRoadmap.vue'
 import LongDragonPanel from '@/components/lottery/LongDragonPanel.vue'
 import RecoSimpleBetPopup from '@/components/lottery/RecoSimpleBetPopup.vue'
+import GameDepositPopup from '@/views/game/components/GameDepositPopup.vue'
 import Pl5SmpPlay from './pl5/smp/Pl5SmpPlay.vue'
 import Pl5BzpPlay from './pl5/bzp/Pl5BzpPlay.vue'
 import LhcSmpPlay from './lhc/LhcSmpPlay.vue'
@@ -219,6 +223,7 @@ const basketIcon = basketIconSrc
 const addIcon = addIconSrc
 
 const recentOpen = ref(false)
+const depositPopupOpen = ref(false)
 const betBasketOpen = ref(false)
 const betBasketItems = ref([])
 /** 购彩篮归属彩种：仅在 pl5 / lhc 切换或离开页面时清空 */
@@ -777,7 +782,10 @@ function onMiRefresh() {
 
 .lottery-room-page {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--browser-ui-bottom, 0px);
   z-index: 1;
   display: flex;
   flex-direction: column;

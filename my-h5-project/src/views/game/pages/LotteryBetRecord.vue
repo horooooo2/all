@@ -47,14 +47,14 @@
     <!-- .top-tabs 同宽双列：左列对齐「普通记录」，右列对齐「追号记录-->
     <div class="lbr-subbar">
       <div class="lbr-subbar__col lbr-subbar__col--left">
-        <span class="lbr-subbar__game">加拿8</span>
+        <span class="lbr-subbar__game">加拿大28</span>
       </div>
       <div class="lbr-subbar__col lbr-subbar__col--right">
         <div
           class="lbr-subbar__scope"
           role="button"
           tabindex="0"
-          aria-label="订单状
+          aria-label="订单状态"
           aria-haspopup="listbox"
           :aria-expanded="statusFilterOpen ? 'true' : 'false'"
           @click="statusFilterOpen = true"
@@ -139,7 +139,7 @@
             type="text"
             inputmode="numeric"
             autocomplete="off"
-            placeholder="筛选期
+            placeholder="筛选期号"
           >
         </div>
 
@@ -158,7 +158,7 @@
             <van-icon name="cross" />
           </button>
         </div>
-        <div class="lbr-status-sheet__list" role="listbox" aria-label="订单状>
+        <div class="lbr-status-sheet__list" role="listbox" aria-label="订单状态">
           <div
             v-for="opt in statusFilterOptions"
             :key="opt.value"
@@ -196,19 +196,19 @@ const router = useRouter()
 
 const mainTab = ref('normal')
 
-/** 列表上方：订单状*/
+/** 列表上方：订单状态 */
 const statusFilterOpen = ref(false)
 const statusFilter = ref('all')
 const statusFilterOptions = [
-  { value: 'all', label: '所 },
-  { value: 'pending', label: '未开 },
-  { value: 'loss', label: '未中 },
-  { value: 'win', label: '已中 },
-  { value: 'canceled', label: '已撤 }
+  { value: 'all', label: '所有' },
+  { value: 'pending', label: '未开奖' },
+  { value: 'loss', label: '未中奖' },
+  { value: 'win', label: '已中奖' },
+  { value: 'canceled', label: '已撤单' }
 ]
 
 const statusFilterLabel = computed(
-  () => statusFilterOptions.find((o) => o.value === statusFilter.value)?.label ?? '所
+  () => statusFilterOptions.find((o) => o.value === statusFilter.value)?.label ?? '所有'
 )
 
 const startOfDay = (d) => {
@@ -303,7 +303,7 @@ function confirmTime() {
   showTimePopup.value = false
 }
 
-/** 演示数据lottery-bet-records.mock.js；接接口后改为请求结*/
+/** 演示数据 lottery-bet-records.mock.js；接接口后改为请求结果 */
 const demoBundle = getDemoBetRecordsBundle()
 const normalRecords = ref([...demoBundle.normal])
 const chaseRecords = ref([...demoBundle.chase])
@@ -319,7 +319,7 @@ const displayRecords = computed(() => {
 })
 
 const emptyText = computed(() =>
-  mainTab.value === 'chase' ? '暂无追号订单记录' : '暂无普通订单记
+  mainTab.value === 'chase' ? '暂无追号订单记录' : '暂无普通订单记录'
 )
 
 function goBack() {

@@ -55,7 +55,7 @@
         </div>
 
         <div class="quick-wrap" aria-label="快捷金额">
-          <div class="quick-bg" :style="{ backgroundImage: `url(${quickBgImg})` }" aria-hidden="true" />
+          <img class="quick-bg" :src="quickBgImg" alt="" aria-hidden="true" />
           <div class="quick-single" role="button" tabindex="0" @click="onChipClick(activeChip)">
             {{ formatChip(activeChip) }}
           </div>
@@ -99,12 +99,12 @@
                 :key="`p-${c}`"
                 class="quick-pop__chip"
                 :class="{ active: Number(c) === Number(activeChip) }"
-                :style="chipPopChipStyle(c)"
                 role="button"
                 tabindex="0"
                 @click="selectQuickChip(c)"
               >
-                {{ formatChip(c) }}
+                <img class="quick-pop__chip-bg" :src="quickBgImg" alt="" aria-hidden="true" />
+                <span class="quick-pop__chip-text">{{ formatChip(c) }}</span>
               </div>
             </div>
             <div class="quick-pop__edit" role="button" tabindex="0" aria-label="编辑筹码" @click.stop="openChipEditor">
@@ -167,7 +167,7 @@ import {
 import iconDel from '@/assets/icon_del.svg'
 import iconSwitch from '@/assets/icon_qh_sel.svg'
 import iconX from '@/assets/icon_x.svg'
-import quickBgImg from '@/assets/kuaijie_money_back.svg'
+import quickBgImg from '@/assets/kuaijie_money_back.png'
 
 const props = defineProps({
   balance: { type: [String, Number], default: 0 }
@@ -329,13 +329,6 @@ function formatChip(v) {
   if (n < 1000) return String(Math.floor(n))
   if (n < 10000) return `${floor1(n / 1000)}k`
   return `${floor1(n / 10000)}w`
-}
-
-function chipPopChipStyle(c) {
-  const isActive = Number(c) === Number(activeChip.value)
-  const img = `url(${quickBgImg})`
-  const overlay = isActive ? 'linear-gradient(rgba(0, 101, 255, 0.12), rgba(0, 101, 255, 0.12))' : 'none'
-  return { backgroundImage: `${overlay ? `${overlay},` : ''}${img}` }
 }
 
 function floor1(x) {

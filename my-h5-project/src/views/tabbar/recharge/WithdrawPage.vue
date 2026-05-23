@@ -65,7 +65,7 @@
             <img
               v-if="selectedMethod === m.key"
               class="check-icon"
-              src="../../../assets/icon_recharge_confirm_icon.svg"
+              :src="iconCheck"
               alt="selected"
             />
             <div class="check-corner" />
@@ -112,7 +112,7 @@
             <img
               v-if="selectedAccountId === a.id"
               class="check-icon"
-              src="../../../assets/icon_recharge_confirm_icon.svg"
+              :src="iconCheck"
               alt="selected"
             />
             <div class="check-corner" />
@@ -158,6 +158,7 @@ import { getWithdrawalAccounts, maskAccountDisplay } from '@/utils/withdrawalAcc
 import iconUsdtsm from '@/assets/icon_usdtsm.svg'
 import iconWyzf from '@/assets/icon_wyzf.svg'
 import iconDzqb from '@/assets/icon_dzqb.svg'
+import iconCheck from '@/assets/icon_recharge_confirm_icon.svg'
 
 const router = useRouter()
 

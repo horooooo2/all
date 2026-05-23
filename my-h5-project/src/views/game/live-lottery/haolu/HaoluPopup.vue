@@ -55,7 +55,7 @@ const popupStyle = computed(() => {
   const top = Math.max(0, Number(props.top || 0))
   return {
     top: `${top}px`,
-    height: `calc(100vh - ${top}px)`
+    bottom: 'var(--browser-ui-bottom, 0px)'
   }
 })
 </script>

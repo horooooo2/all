@@ -69,7 +69,7 @@ const sideTabs = [
   { key: 'ptyx', label: '平特一尾数' },
   { key: 'texiao', label: '特肖' },
   { key: 'lianxiao', label: '连肖' },
-  { key: 'weishulian', label: '尾数 }
+  { key: 'weishulian', label: '尾数连' }
 ]
 
 const activeSide = ref('tema')

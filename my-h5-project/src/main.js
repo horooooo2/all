@@ -7,6 +7,9 @@ import App from './App.vue'
 import i18n from './i18n'
 import router from './router'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { initBrowserUiInset } from './utils/browser-ui-inset'
+
+initBrowserUiInset()
 
 const app = createApp(App)
 

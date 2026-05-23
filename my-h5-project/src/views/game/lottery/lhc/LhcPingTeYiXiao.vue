@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-ptyx" aria-label="平特一肖尾>
-    <div class="lhc-ptyx__mode" role="tablist" aria-label="平特一肖尾数玩>
+  <div class="lhc-ptyx" aria-label="平特一肖尾数">
+    <div class="lhc-ptyx__mode" role="tablist" aria-label="平特一肖尾数玩法">
       <div class="lhc-ptyx__mode-grid">
         <button
           v-for="m in PLAY_MODES"
@@ -114,7 +114,7 @@ function getBasketDraft() {
   const set = activePicked.value
   if (!set.size) return null
   const modeLabel = ptyxModeLabel(subMode.value)
-  const prefix = subMode.value.startsWith('ws') ? '平特尾数' : '平特一
+  const prefix = subMode.value.startsWith('ws') ? '平特尾数' : '平特一肖'
   const keys = [...set]
   const labels = keys.map((key) => options.value.find((o) => o.key === key)?.label ?? key)
   return {

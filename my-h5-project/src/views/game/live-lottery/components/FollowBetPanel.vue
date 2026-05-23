@@ -1,7 +1,7 @@
 <template>
   <div class="follow-bet">
     <div class="follow-bet__list-wrap">
-      <ul class="follow-bet__list" aria-label="可跟投注>
+      <ul class="follow-bet__list" aria-label="可跟投注项">
         <li v-for="row in rows" :key="row.id" class="follow-card">
           <div class="follow-card__upper">
             <div class="follow-card__upper-row follow-card__upper-row--head">
@@ -10,7 +10,7 @@
                 <span class="follow-card__name">{{ row.maskName }}</span>
               </div>
               <div class="follow-card__total" aria-label="下注总额">
-                <span class="follow-card__total-label">下注总额/span>
+                <span class="follow-card__total-label">下注总额</span>
                 <span class="follow-card__total-num">¥{{ formatMoney(row.totalBet) }}</span>
               </div>
             </div>
@@ -71,12 +71,12 @@ const emit = defineEmits(['follow'])
 const rows = ref([
   {
     id: 'f1',
-    avatarChar: ',
+    avatarChar: '玩',
     maskName: '玩家***821',
     totalBet: 2000,
     statusText: '投注成功',
-    issue: '123111109,
-    playLabel: '大小单双 · ,
+    issue: '123111109',
+    playLabel: '大小单双 · 大',
     odds: 1.98,
     stake: 200,
     playKey: 'big',
@@ -88,7 +88,7 @@ const rows = ref([
     maskName: 'L***06',
     totalBet: 350,
     statusText: '投注成功',
-    issue: '123111109,
+    issue: '123111109',
     playLabel: '大小单双 · 小单',
     odds: 3.6,
     stake: 50,
@@ -101,12 +101,12 @@ const rows = ref([
   },
   {
     id: 'f3',
-    avatarChar: ',
-    maskName: '**,
+    avatarChar: '匿',
+    maskName: '玩家***',
     totalBet: 5000,
     statusText: '投注成功',
-    issue: '123111108,
-    playLabel: '总和 · ,
+    issue: '123111108',
+    playLabel: '总和 · 双',
     odds: 1.98,
     stake: 500,
     playKey: 'even',
@@ -118,8 +118,8 @@ const rows = ref([
     maskName: 'K***88',
     totalBet: 888,
     statusText: '投注成功',
-    issue: '123111108,
-    playLabel: '第一· ,
+    issue: '123111108',
+    playLabel: '第一球 · 大',
     odds: 1.98,
     stake: 100,
     playKey: 'b1-big',

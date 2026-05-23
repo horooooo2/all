@@ -294,7 +294,7 @@ function onBetSubmit(payload) {
   min-height: 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 12px 0 64px;
+  padding: 12px 0 calc(64px + @layout-bottom-inset);
   box-sizing: border-box;
 }
 
@@ -396,7 +396,7 @@ function onBetSubmit(payload) {
 .reco-streak-fab {
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  bottom: calc(12px + @layout-bottom-inset);
   z-index: 2;
   min-width: 112px;
   max-width: 140px;
@@ -514,7 +514,8 @@ function onBetSubmit(payload) {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 16px 16px;
+  .layout-padding-bottom(12px);
   box-sizing: border-box;
 }
 

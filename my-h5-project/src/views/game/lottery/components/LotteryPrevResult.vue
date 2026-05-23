@@ -1,9 +1,17 @@
 <template>
-  <section ref="rootRef" class="lottery-prev" :class="{ 'lottery-prev--lhc': variant === 'lhc' }" aria-label="上期开>
+  <section ref="rootRef" class="lottery-prev" :class="{ 'lottery-prev--lhc': variant === 'lhc' }" aria-label="上期开奖">
     <div class="lottery-prev__row1">
       <span class="lottery-prev__issue">{{ issueText }}</span>
       <div class="room-tabs-actions">
-        <div class="amount-box" aria-label="金额信息">
+        <div
+          class="amount-box"
+          role="button"
+          tabindex="0"
+          aria-label="金额信息，点击充值"
+          @click="onAmountBoxClick"
+          @keydown.enter.prevent="onAmountBoxClick"
+          @keydown.space.prevent="onAmountBoxClick"
+        >
           <div class="amount-ticker" aria-live="polite">
             <div class="amount-ticker__track" :class="{ 'is-second': amountTickerIndex === 1 }">
               <div class="amount-ticker__item" aria-label="上期盈亏">
@@ -72,7 +80,11 @@ const props = defineProps({
   balance: { type: [String, Number], default: 0 }
 })
 
-defineEmits(['expand', 'plus', 'mipai'])
+const emit = defineEmits(['expand', 'plus', 'mipai', 'deposit'])
+
+function onAmountBoxClick() {
+  emit('deposit')
+}
 
 defineExpose({
   getEl: () => rootRef.value
@@ -153,6 +165,8 @@ const balanceText = computed(() => {
   padding: 0 8px;
   box-sizing: border-box;
   overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .amount-ticker {

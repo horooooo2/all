@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-wsl" aria-label="尾数>
-    <div class="lhc-wsl__mode" role="tablist" aria-label="尾数连玩>
+  <div class="lhc-wsl" aria-label="尾数连">
+    <div class="lhc-wsl__mode" role="tablist" aria-label="尾数连玩法">
       <div class="lhc-wsl__mode-grid">
         <button
           v-for="m in PLAY_MODES"

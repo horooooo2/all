@@ -1,7 +1,7 @@
 <template>
   <div class="qcp">
     <div class="quick-wrap" aria-label="快捷金额">
-      <div class="quick-bg" :style="{ backgroundImage: `url(${quickBgImg})` }" aria-hidden="true" />
+      <img class="quick-bg" :src="quickBgImg" alt="" aria-hidden="true" />
       <div class="quick-single" role="button" tabindex="0" @click="onQuickWrapClick(activeChip)">
         {{ formatChip(activeChip) }}
       </div>
@@ -20,16 +20,16 @@
               :key="`p-${c}`"
               class="quick-pop__chip"
               :class="{ active: Number(c) === Number(activeChip) }"
-              :style="chipPopChipStyle(c)"
               role="button"
               tabindex="0"
               @click="selectQuickChip(c)"
             >
-              {{ formatChip(c) }}
+              <img class="quick-pop__chip-bg" :src="quickBgImg" alt="" aria-hidden="true" />
+              <span class="quick-pop__chip-text">{{ formatChip(c) }}</span>
             </div>
           </div>
           <div class="quick-pop__edit" role="button" tabindex="0" aria-label="编辑筹码" @click.stop="openChipEditor">
-            <span class="pencil" aria-hidden="true">/span>
+            <span class="pencil" aria-hidden="true">✎</span>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
             class="chip-editor__input"
             inputmode="numeric"
             placeholder="0"
-            aria-label="筹码）
+            aria-label="筹码值"
           />
         </div>
 
@@ -76,7 +76,7 @@
 import { computed, ref, watch } from 'vue'
 import iconSwitch from '@/assets/icon_qh_sel.svg'
 import iconX from '@/assets/icon_x.svg'
-import quickBgImg from '@/assets/kuaijie_money_back.svg'
+import quickBgImg from '@/assets/kuaijie_money_back.png'
 
 const STORAGE_KEY = 'betpanel.customChips.v1'
 const DEFAULT_CHIPS = [1, 10, 100, 500, 1000]
@@ -193,12 +193,6 @@ function formatChip(v) {
   return `${floor1(n / 10000)}w`
 }
 
-function chipPopChipStyle(c) {
-  const isActive = Number(c) === Number(activeChip.value)
-  const img = `url(${quickBgImg})`
-  const overlay = isActive ? 'linear-gradient(rgba(0, 101, 255, 0.12), rgba(0, 101, 255, 0.12))' : 'none'
-  return { backgroundImage: `${overlay ? `${overlay},` : ''}${img}` }
-}
 </script>
 
 <style lang="less" scoped>
@@ -245,9 +239,11 @@ function chipPopChipStyle(c) {
   top: 50%;
   width: 30px;
   height: 30px;
-  transform: translate(-50%, -50%);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  transform: translate3d(-50%, -50%, 0);
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .quick-single {
@@ -286,7 +282,7 @@ function chipPopChipStyle(c) {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: calc(96px + env(safe-area-inset-bottom, 0px) + 6px);
+  bottom: calc(96px + @layout-bottom-inset + 6px);
   width: 350px;
   height: 42px;
   border-radius: 8px;
@@ -310,6 +306,7 @@ function chipPopChipStyle(c) {
 }
 
 .quick-pop__chip {
+  position: relative;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -317,19 +314,43 @@ function chipPopChipStyle(c) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: @font-size-xs;
-  font-weight: 700;
-  color: #1d1d1f;
-  font-variant-numeric: tabular-nums;
-  background-color: #ffffff;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  overflow: hidden;
   padding: 0;
   box-sizing: border-box;
 }
 
+.quick-pop__chip-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.quick-pop__chip-text {
+  position: relative;
+  z-index: 2;
+  font-size: @font-size-xs;
+  font-weight: 700;
+  color: #1d1d1f;
+  font-variant-numeric: tabular-nums;
+}
+
 .quick-pop__chip.active {
   border-color: #0065ff;
+}
+
+.quick-pop__chip.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 101, 255, 0.12);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .quick-pop__edit {

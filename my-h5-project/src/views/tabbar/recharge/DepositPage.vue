@@ -31,7 +31,7 @@
             <img v-if="item.cornerIcon" class="hot-tag" :src="item.cornerIcon" alt="" />
             <img class="pay-icon" :src="item.icon" :alt="item.name" />
             <span class="pay-name">{{ item.name }}</span>
-            <img v-if="selectedPay === item.id" class="check-icon" src="../../../assets/icon_recharge_confirm_icon.svg" alt="selected" />
+            <img v-if="selectedPay === item.id" class="check-icon" :src="iconCheck" alt="selected" />
           </div>
         </div>
       </div>
@@ -134,6 +134,7 @@ import iconUsdtsm from '@/assets/icon_usdtsm.svg'
 import iconWyzf from '@/assets/icon_wyzf.svg'
 import icon988pay from '@/assets/icon_988pay.svg'
 import cornerPopular from '@/assets/corner_popular.svg'
+import iconCheck from '@/assets/icon_recharge_confirm_icon.svg'
 
 const loading = ref(true)
 const selectedPay = ref(1)

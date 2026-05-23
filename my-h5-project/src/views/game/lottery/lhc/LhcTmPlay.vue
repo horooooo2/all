@@ -1,7 +1,7 @@
 <template>
   <div class="lhc-tm" aria-label="特码选号">
-    <p class="lhc-tm__hint">点选号码（19），可多/p>
-    <div class="lhc-tm__grid" role="group" aria-label="特码号码>
+    <p class="lhc-tm__hint">点选号码（1-49），可多选</p>
+    <div class="lhc-tm__grid" role="group" aria-label="特码号码">
       <button
         v-for="n in 49"
         :key="n"

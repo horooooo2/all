@@ -48,12 +48,12 @@ const emit = defineEmits(['update:betCount'])
 const ZMT_NUMS = Object.freeze(Array.from({ length: 49 }, (_, i) => i + 1))
 
 const PLAY_MODES = Object.freeze([
-  { key: 'z1', label: '正一A },
-  { key: 'z2', label: '正二A },
-  { key: 'z3', label: '正三A },
-  { key: 'z4', label: '正四A },
-  { key: 'z5', label: '正五A },
-  { key: 'z6', label: '正六A }
+  { key: 'z1', label: '正一A' },
+  { key: 'z2', label: '正二A' },
+  { key: 'z3', label: '正三A' },
+  { key: 'z4', label: '正四A' },
+  { key: 'z5', label: '正五A' },
+  { key: 'z6', label: '正六A' }
 ])
 
 const NUM_ODDS = '48.015'

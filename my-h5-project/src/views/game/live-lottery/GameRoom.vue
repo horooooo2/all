@@ -264,7 +264,15 @@
                   <span class="mi-btn__text">咪牌</span>
                 </div>
 
-                <div class="amount-box" aria-label="金额信息">
+                <div
+                  class="amount-box"
+                  role="button"
+                  tabindex="0"
+                  aria-label="金额信息，点击充值"
+                  @click="depositPopupOpen = true"
+                  @keydown.enter.prevent="depositPopupOpen = true"
+                  @keydown.space.prevent="depositPopupOpen = true"
+                >
                   <div class="amount-ticker" aria-live="polite">
                     <div class="amount-ticker__track" :class="{ 'is-second': amountTickerIndex === 1 }">
                       <div class="amount-ticker__item" aria-label="上期盈亏">
@@ -488,6 +496,7 @@
     />
 
     <DashangPopup v-model:show="dashangPopupOpen" @confirm="onDashangConfirm" />
+    <GameDepositPopup v-model:show="depositPopupOpen" />
   </div>
 </template>
 
@@ -520,7 +529,10 @@ import iconSideMenuShow from '@/assets/silder_caidan.png'
 import iconSideMenuHide from '@/assets/silder_yincang.png'
 import HaoluPopup from './haolu/HaoluPopup.vue'
 import DashangPopup from './components/DashangPopup.vue'
+import GameDepositPopup from '@/views/game/components/GameDepositPopup.vue'
 import miCloseSrc from '@/assets/mipai_close.svg'
+import miQiu1Src from '@/assets/mipai_qiu1.png'
+import miQiu2Src from '@/assets/mipai_qiu2.png'
 
 const router = useRouter()
 const betPanelRef = ref(null)
@@ -529,6 +541,7 @@ const gameListOpen = ref(false)
 const rightMenuOpen = ref(false)
 const haoluPopupOpen = ref(false)
 const dashangPopupOpen = ref(false)
+const depositPopupOpen = ref(false)
 const activeGameId = ref('g-3')
 const activeRoomId = ref('g-3-r-1')
 const sideMenuExpanded = ref(false)
@@ -888,10 +901,6 @@ const miSum = computed(() => miNums.value.reduce((a, b) => a + Number(b || 0), 0
 const miLeft1 = ref(11)
 const miLeft2 = ref(21)
 
-// 注意：资源文件若尚未加入项目，这里会在运行时 404，但不会阻塞编译
-const miQiu1Src = computed(() => '/src/assets/mipai_qiu1.png')
-const miQiu2Src = computed(() => '/src/assets/mipai_qiu2.png')
-
 const miScratched = ref(false)
 const miCanvasRef = ref(null)
 const miScratchWrapRef = ref(null)
@@ -1126,7 +1135,10 @@ function onGroupVoteOpenRecent() {
 
 .game-room-page {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--browser-ui-bottom, 0px);
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -1947,6 +1959,8 @@ function onGroupVoteOpenRecent() {
   padding: 0 8px;
   box-sizing: border-box;
   overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .amount-ticker {

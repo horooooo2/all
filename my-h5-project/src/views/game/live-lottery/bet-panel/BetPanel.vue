@@ -273,11 +273,8 @@ const coreRef = ref(null)
 
 const popupStyle = computed(() => {
   const t = Math.max(0, Number(props.top || 0))
-  const topPx = `${t}px`
   return {
-    top: topPx,
-    bottom: '0px',
-    height: `calc(100vh - ${topPx})`
+    top: `${t}px`
   }
 })
 
@@ -560,6 +557,10 @@ defineExpose({
   background: #ffffff;
   color: #4f607f;
   font-size: @font-size-sm;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .recent-list {

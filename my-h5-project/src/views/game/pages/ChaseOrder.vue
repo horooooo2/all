@@ -32,7 +32,7 @@
             <van-icon name="success" class="stop-win__icon" />
             <span>中奖即停</span>
           </div>
-          <div class="build-btn" role="button" tabindex="0">生成追号/div>
+          <div class="build-btn" role="button" tabindex="0">生成追号</div>
         </div>
       </section>
 

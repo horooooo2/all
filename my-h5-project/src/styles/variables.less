@@ -78,3 +78,17 @@
   display: block;
   object-fit: contain;
 }
+
+/** 自营彩：号码球 / 选号格选中态（排列五、六合彩等共用） */
+.lottery-num-ball-active() {
+  border-color: transparent;
+  color: #ffffff;
+  background: linear-gradient(90deg, #1f78ff 0%, #00a1ff 100%);
+}
+
+/** 底部安全区：刘海 home 指示条 + 真机浏览器底栏 */
+@layout-bottom-inset: calc(env(safe-area-inset-bottom, 0px) + var(--browser-ui-bottom, 0px));
+
+.layout-padding-bottom(@base: 0px) {
+  padding-bottom: calc(@base + @layout-bottom-inset);
+}

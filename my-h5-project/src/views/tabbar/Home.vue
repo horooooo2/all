@@ -78,7 +78,12 @@
           class="game-card"
           v-for="item in gameList"
           :key="item.id"
+          role="button"
+          tabindex="0"
           :style="{ backgroundImage: `url(${item.bg})` }"
+          @click="goSelfLottery(item)"
+          @keydown.enter.prevent="goSelfLottery(item)"
+          @keydown.space.prevent="goSelfLottery(item)"
         >
           <div class="game-name">{{ $t(item.name) }}</div>
           <div class="game-time" :class="{ waiting: item.status === 'waiting' }">
@@ -251,10 +256,10 @@ const fetchData = async () => {
   banners.value = Array.from({ length: 3 }, () => ({ image: lunbo1 }))
 
   gameList.value = [
-    { id: 1, name: '比特币28', key: 'btc', bg: homeBtcIcon, remaining: 176, status: 'playing' },
-    { id: 2, name: '台湾宾果28', key: 'tw28', bg: homeTw28Icon, remaining: 0, status: 'waiting' },
-    { id: 3, name: '加拿大28', key: 'jnd28', bg: homeJnd28Icon, remaining: 122, status: 'playing' },
-    { id: 4, name: '加拿大西28', key: 'jndx28', bg: homeJndx28Icon, remaining: 113, status: 'playing' }
+    { id: 1, name: '比特币28', key: 'btc', bg: homeBtcIcon, remaining: 176, status: 'playing', room: 'pl5' },
+    { id: 2, name: '台湾宾果28', key: 'tw28', bg: homeTw28Icon, remaining: 0, status: 'waiting', room: 'lhc' },
+    { id: 3, name: '加拿大28', key: 'jnd28', bg: homeJnd28Icon, remaining: 122, status: 'playing', room: 'pl5' },
+    { id: 4, name: '加拿大西28', key: 'jndx28', bg: homeJndx28Icon, remaining: 113, status: 'playing', room: 'lhc' }
   ]
 
   categoryList.value = [
@@ -315,6 +320,15 @@ const formatTime = (seconds) => {
 const goLogin = () => router.push('/login')
 const goRegister = () => router.push('/register')
 const goGameHall = (key) => router.push({ path: '/game-hall', query: { category: key } })
+
+function goSelfLottery(item) {
+  const query = { gameId: item.key, gameName: item.name }
+  if (item.room === 'lhc') {
+    router.push({ name: 'lhcRoom', query })
+    return
+  }
+  router.push({ name: 'pl5Room', query })
+}
 
 let timer
 onMounted(() => {

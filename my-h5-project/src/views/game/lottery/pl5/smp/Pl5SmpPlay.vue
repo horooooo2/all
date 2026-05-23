@@ -49,7 +49,7 @@ const emit = defineEmits(['update:betCount'])
 const sideTabs = [
   { key: 'lht', label: '龙虎' },
   { key: 'sm', label: '双面' },
-  { key: 'sz', label: '数字 }
+  { key: 'sz', label: '数字盘' }
 ]
 
 const activeSide = ref('lht')

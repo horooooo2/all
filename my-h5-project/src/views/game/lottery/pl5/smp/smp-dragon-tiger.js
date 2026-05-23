@@ -1,4 +1,4 @@
-/** 双面· 龙虎：万/ 万百 / 万个 / 千十 / 千个 等（演示赔率*/
+/** 双面盘 · 龙虎：万/千/万百/万个/千十/千个 等（演示赔率） */
 export const SMP_DRAGON_TIGER_GROUPS = [
   { key: 'wq', title: '万千龙虎' },
   { key: 'wb', title: '万百龙虎' },
@@ -8,7 +8,7 @@ export const SMP_DRAGON_TIGER_GROUPS = [
 ]
 
 export const SMP_DRAGON_TIGER_OPTIONS = [
-  { key: 'long', label: ', odds: 1.98 },
-  { key: 'tie', label: ', odds: 1.98 },
-  { key: 'hu', label: ', odds: 1.98 }
+  { key: 'long', label: '龙', odds: 1.98 },
+  { key: 'tie', label: '和', odds: 1.98 },
+  { key: 'hu', label: '虎', odds: 1.98 }
 ]

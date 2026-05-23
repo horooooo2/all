@@ -17,7 +17,7 @@ import { computed } from 'vue'
 
 const props = defineProps({
   issue: { type: [String, Number], default: '' },
-  statusText: { type: String, default: '投注 },
+  statusText: { type: String, default: '投注中' },
   countdownText: { type: String, default: '00:00:00' }
 })
 

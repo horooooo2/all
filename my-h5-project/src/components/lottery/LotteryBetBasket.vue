@@ -11,7 +11,7 @@
     :overlay-style="{ background: 'rgba(0, 0, 0, 0.45)' }"
     @update:show="$emit('update:show', $event)"
   >
-    <section class="lbb" role="dialog" aria-modal="true" aria-label="购彩 @click.stop>
+    <section class="lbb" role="dialog" aria-modal="true" aria-label="购彩篮" @click.stop>
       <header class="lbb__head">
         <div class="lbb__title">{{ title }}</div>
         <button type="button" class="lbb__close" aria-label="关闭" @click="close">
@@ -23,7 +23,7 @@
         <template v-if="!items.length">
           <div class="lbb__empty">
             <img class="lbb__empty-img" :src="noDataImg" alt="" aria-hidden="true" />
-            <p class="lbb__empty-text">购彩蓝为请前去选号</p>
+            <p class="lbb__empty-text">购彩篮为空，请前去选号</p>
           </div>
         </template>
         <ul v-else class="lbb__list" aria-label="投注条目">
@@ -49,11 +49,11 @@
 
       <footer class="lbb__footer">
         <div class="lbb__foot-bar">
-          <div class="lbb__foot-stat" aria-label="单数与余>
+          <div class="lbb__foot-stat" aria-label="单数与余额">
             <div class="lbb__foot-stat-line">
-              <span class="lbb__foot-stat-txt">/span>
+              <span class="lbb__foot-stat-txt">单数</span>
               <span class="lbb__foot-stat-num">{{ items.length }}</span>
-              <span class="lbb__foot-stat-txt">/span>
+              <span class="lbb__foot-stat-txt">注</span>
             </div>
             <div class="lbb__foot-stat-line">
               <span class="lbb__foot-stat-txt">余额</span>
@@ -85,7 +85,7 @@
 <script setup>
 import { computed, reactive, watch } from 'vue'
 import iconX from '@/assets/icon_x.svg'
-import iconDel from '@/assets/icon_del.png'
+import iconDel from '@/assets/icon_del.svg'
 import noDataImg from '@/assets/no_data.svg'
 
 /**
@@ -108,7 +108,7 @@ const props = defineProps({
   top: { type: [String, Number], default: 0 },
   /** 投注条目（各业务页组装后传入*/
   items: { type: Array, default: () => [] },
-  title: { type: String, default: '购彩 },
+  title: { type: String, default: '购彩篮' },
   /** 底部栏展示用余额；不传则显示 0.00 */
   balance: { type: [Number, String], default: undefined },
   submitDisabled: { type: Boolean, default: false }
@@ -119,10 +119,9 @@ const emit = defineEmits(['update:show', 'submit', 'clear', 'remove', 'chase'])
 const popupStyle = computed(() => {
   const t = Math.max(0, Number(props.top || 0))
   const topPx = `${t}px`
-  const h = `min(calc(200vh / 3), calc(100vh - ${topPx}))`
+  const h = `min(calc(200dvh / 3), calc(100dvh - ${topPx} - env(safe-area-inset-bottom, 0px) - var(--browser-ui-bottom, 0px)))`
   return {
     top: 'auto',
-    bottom: '0px',
     height: h,
     maxHeight: h
   }
@@ -165,7 +164,7 @@ function rowLeftLabel(item) {
   if (item.metaRow) return item.metaRow
   const first = item.detailRows?.[0]?.left
   if (first) return first
-  return '
+  return ''
 }
 
 /**

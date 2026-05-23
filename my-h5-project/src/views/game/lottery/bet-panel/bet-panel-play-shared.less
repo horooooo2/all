@@ -283,9 +283,11 @@
   top: 50%;
   width: 30px;
   height: 30px;
-  transform: translate(-50%, -50%);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  transform: translate3d(-50%, -50%, 0);
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .quick-single {
@@ -370,7 +372,7 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: calc(96px + env(safe-area-inset-bottom, 0px) + 6px);
+  bottom: calc(96px + @layout-bottom-inset + 6px);
   width: 350px;
   height: 42px;
   border-radius: 8px;
@@ -394,6 +396,7 @@
 }
 
 .quick-pop__chip {
+  position: relative;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -401,19 +404,43 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: @font-size-xs;
-  font-weight: 700;
-  color: #1d1d1f;
-  font-variant-numeric: tabular-nums;
-  background-color: #ffffff;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  overflow: hidden;
   padding: 0;
   box-sizing: border-box;
 }
 
+.quick-pop__chip-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.quick-pop__chip-text {
+  position: relative;
+  z-index: 2;
+  font-size: @font-size-xs;
+  font-weight: 700;
+  color: #1d1d1f;
+  font-variant-numeric: tabular-nums;
+}
+
 .quick-pop__chip.active {
   border-color: #0065ff;
+}
+
+.quick-pop__chip.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 101, 255, 0.12);
+  z-index: 1;
+  pointer-events: none;
 }
 .quick-pop__edit {
   width: 35px;

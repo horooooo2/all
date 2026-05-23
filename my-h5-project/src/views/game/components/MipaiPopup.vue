@@ -6,7 +6,7 @@
           <div class="mipai-panel__head">
             <img class="mipai-qiu mipai-qiu--left" :src="miQiu1Src" alt="" aria-hidden="true" />
             <div class="mipai-head-pill">
-              <div class="mipai-head-text"><span class="issue">{{ issue }}</span> 期开奖结/div>
+              <div class="mipai-head-text"><span class="issue">{{ issue }}</span> 期开奖结果</div>
             </div>
             <img class="mipai-qiu mipai-qiu--right" :src="miQiu2Src" alt="" aria-hidden="true" />
           </div>
@@ -16,14 +16,14 @@
               <div
                 class="mipai-result-row"
                 :class="resultRowClass"
-                aria-label="开奖结
+                aria-label="开奖结果"
               >
                 <template v-if="variant === 'pl5'">
                   <div v-for="(n, idx) in safeNums" :key="idx" class="ball pl5">{{ n }}</div>
                 </template>
                 <template v-else-if="variant === 'lhc'">
                   <div v-for="(n, idx) in lhcMainNums" :key="'m' + idx" class="ball lhc">{{ n }}</div>
-                  <div class="op op--txt">/div>
+                  <div class="op op--txt">+</div>
                   <div class="ball lhc lhc--special">{{ lhcSpecialNum }}</div>
                 </template>
                 <template v-else>
@@ -85,6 +85,8 @@
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import miCloseSrc from '@/assets/mipai_close.svg'
+import miQiu1Src from '@/assets/mipai_qiu1.png'
+import miQiu2Src from '@/assets/mipai_qiu2.png'
 
 const props = defineProps({
   show: { type: Boolean, default: false },
@@ -132,10 +134,6 @@ const resultRowClass = computed(() => {
 const lhcMainNums = computed(() => safeNums.value.slice(0, 6))
 const lhcSpecialNum = computed(() => safeNums.value[6] ?? '1')
 
-// 注意：资源文件若尚未加入项目，这里会在运行时 404，但不会阻塞编译
-const miQiu1Src = computed(() => '/src/assets/mipai_qiu1.png')
-const miQiu2Src = computed(() => '/src/assets/mipai_qiu2.png')
-
 function close() {
   emit('update:show', false)
 }
@@ -177,7 +175,7 @@ function setupScratch() {
   ctx.font = '700 18px sans-serif'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText('已有结果，请刮涂, w / 2, h / 2)
+  ctx.fillText('已有结果，请刮涂层', w / 2, h / 2)
 
   ctx.globalCompositeOperation = 'destination-out'
   const radius = 18

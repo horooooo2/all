@@ -1,7 +1,7 @@
 <template>
   <div class="roadmap">
     <div class="roadmap__body">
-      <aside class="roadmap__tabs" aria-label="第几>
+      <aside class="roadmap__tabs" aria-label="第几球">
         <button
           v-for="t in ballTabs"
           :key="t.key"
@@ -18,7 +18,7 @@
       </aside>
 
       <div class="roadmap__right">
-        <div class="top-modes" role="tablist" aria-label="路子图模>
+        <div class="top-modes" role="tablist" aria-label="路子图模式">
           <button type="button" class="mode-btn" :class="{ active: mode === 'sum' }" @click="mode = 'sum'">总和</button>
           <button type="button" class="mode-btn" :class="{ active: mode === 'size' }" @click="mode = 'size'">大小</button>
           <button type="button" class="mode-btn" :class="{ active: mode === 'oddeven' }" @click="mode = 'oddeven'">单双</button>
@@ -53,9 +53,9 @@
           <aside class="right-info" aria-label="统计信息">
             <div class="ratio">
               <div class="ratio-item">
-                <div class="ratio-title">62%)</div>
+                <div class="ratio-title">大(62%)</div>
                 <div class="next-card">
-                  <div class="next-title">下期/div>
+                  <div class="next-title">下期大</div>
                   <div class="next-icons">
                     <span class="ring red" />
                     <span class="dot red" />
@@ -65,9 +65,9 @@
               </div>
 
               <div class="ratio-item">
-                <div class="ratio-title">38%)</div>
+                <div class="ratio-title">小(38%)</div>
                 <div class="next-card">
-                  <div class="next-title">下期/div>
+                  <div class="next-title">下期小</div>
                   <div class="next-icons">
                     <span class="ring blue" />
                     <span class="dot blue" />
@@ -89,9 +89,9 @@ import { computed, ref } from 'vue'
 const mode = ref('size') // sum | size | oddeven
 
 const ballTabs = [
-  { key: 1, label: '第一 },
-  { key: 2, label: '第二 },
-  { key: 3, label: '第三 }
+  { key: 1, label: '第一球' },
+  { key: 2, label: '第二球' },
+  { key: 3, label: '第三球' }
 ]
 const activeBall = ref(1)
 
@@ -116,17 +116,17 @@ function padToGrid(arr) {
 const board1 = computed(() => {
   // 简单占位：“大/小”交替，带一些空
   const base = [
-    { kind: 'text', text: ', cls: 'red' },
-    { kind: 'text', text: ', cls: 'blue' },
-    { kind: 'text', text: ', cls: 'red' },
-    { kind: 'text', text: ', cls: 'blue' },
-    { kind: 'text', text: ', cls: 'red' },
-    { kind: 'text', text: ', cls: 'blue' },
+    { kind: 'text', text: '大', cls: 'red' },
+    { kind: 'text', text: '小', cls: 'blue' },
+    { kind: 'text', text: '大', cls: 'red' },
+    { kind: 'text', text: '小', cls: 'blue' },
+    { kind: 'text', text: '大', cls: 'red' },
+    { kind: 'text', text: '小', cls: 'blue' },
     { kind: 'empty', text: '', cls: '' },
-    { kind: 'text', text: ', cls: 'red' },
-    { kind: 'text', text: ', cls: 'blue' },
+    { kind: 'text', text: '大', cls: 'red' },
+    { kind: 'text', text: '小', cls: 'blue' },
     { kind: 'empty', text: '', cls: '' },
-    { kind: 'text', text: ', cls: 'red' }
+    { kind: 'text', text: '大', cls: 'red' }
   ]
   return padToGrid(base)
 })

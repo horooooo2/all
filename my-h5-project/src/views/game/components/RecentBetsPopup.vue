@@ -42,7 +42,7 @@
 
       <div v-if="tab === 'settled'" class="recent-empty">
         <img :src="noDataImage" alt="no-data" class="recent-empty__img" />
-        <p class="recent-empty__text">暂无未结算订/p>
+        <p class="recent-empty__text">暂无未结算订单</p>
         <div role="button" tabindex="0" class="recent-empty__retry" @click="emit('reload')">刷新试试</div>
       </div>
 
@@ -50,7 +50,7 @@
         <article v-for="item in orders" :key="item.id" class="recent-card">
           <template v-if="item.cancelable">
             <div class="recent-card__line recent-card__line--top">
-              <div class="recent-card__issue">{{ item.issue }}/div>
+              <div class="recent-card__issue">{{ item.issue }}</div>
               <div class="recent-card__odds-wrap">
                 <div class="recent-card__odds">{{ item.betText }}</div>
                 <van-icon name="arrow" class="recent-card__arrow" />
@@ -65,7 +65,7 @@
             <div class="recent-card__line recent-card__line--top">
               <div class="recent-card__left-wrap">
                 <div class="recent-card__status-pill" :class="`is-${item.status}`">{{ statusTextMap[item.status] }}</div>
-                <div class="recent-card__issue">{{ item.issue }}/div>
+                <div class="recent-card__issue">{{ item.issue }}</div>
               </div>
               <div class="recent-card__money-line">
                 <span class="recent-card__money-label">奖金:</span>
@@ -105,11 +105,9 @@ const emit = defineEmits(['history', 'reload', 'cancel'])
 const popupStyle = computed(() => {
   const t = Math.max(0, Number(props.top || 0))
   const topPx = `${t}px`
-  // 原半屏约 50vh，再升高1/3 50vh×4/3（≈66.67vh）；top 为预留顶部区
-  const h = `min(calc(200vh / 3), calc(100vh - ${topPx}))`
+  const h = `min(calc(200dvh / 3), calc(100dvh - ${topPx} - env(safe-area-inset-bottom, 0px) - var(--browser-ui-bottom, 0px)))`
   return {
     top: 'auto',
-    bottom: '0px',
     height: h,
     maxHeight: h
   }
@@ -124,13 +122,13 @@ watch(show, (v) => {
 
 const statusTextMap = {
   cancelable: '可撤销',
-  loss: '未中,
-  win: '已中,
-  canceled: '已撤
+  loss: '未中奖',
+  win: '已中奖',
+  canceled: '已撤单'
 }
 
 const demoOrders = [
-  { id: 'uo-1', issue: '3123111111', betText: '1,赔率:9.8', status: 'cancelable', cancelable: true },
+  { id: 'uo-1', issue: '3123111111', betText: '大,赔率:9.8', status: 'cancelable', cancelable: true },
   { id: 'uo-2', issue: '3123111111', status: 'loss', cancelable: false, time: '2026-04-03 00:24:31', bonus: '0', rebate: '0.004' },
   { id: 'uo-3', issue: '3123111110', status: 'win', cancelable: false, time: '2026-04-03 00:24:31', bonus: '1', rebate: '0.004' },
   { id: 'uo-4', issue: '3123111109', status: 'canceled', cancelable: false, time: '2026-04-03 00:24:31', bonus: '1', rebate: '0.004' }
@@ -268,6 +266,10 @@ function onHistory() {
   background: #ffffff;
   color: #4f607f;
   font-size: @font-size-sm;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .recent-list {

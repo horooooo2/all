@@ -1,3 +1,14 @@
+import tab01Nor from '@/assets/tabbar/icon_tab_01_nor_day.svg'
+import tab01Sel from '@/assets/tabbar/icon_tab_01_sel_day.svg'
+import tab02Nor from '@/assets/tabbar/icon_tab_02_nor_day.svg'
+import tab02Sel from '@/assets/tabbar/icon_tab_02_sel_day.svg'
+import tab03Nor from '@/assets/tabbar/icon_tab_03_nor_day.svg'
+import tab03Sel from '@/assets/tabbar/icon_tab_03_sel_day.svg'
+import tab04Nor from '@/assets/tabbar/icon_tab_04_nor_day.svg'
+import tab04Sel from '@/assets/tabbar/icon_tab_04_sel_day.svg'
+import tab05Nor from '@/assets/tabbar/icon_tab_05_nor_day.svg'
+import tab05Sel from '@/assets/tabbar/icon_tab_05_sel_day.svg'
+
 export const tabBarConfig = [
     {
         name: '首页',
@@ -5,8 +16,8 @@ export const tabBarConfig = [
         icon: 'home-o',
         activeIcon: 'home',
         customIcon: {
-            inactive: new URL('@/assets/tabbar/icon_tab_01_nor_day.svg', import.meta.url).href,
-            active: new URL('@/assets/tabbar/icon_tab_01_sel_day.svg', import.meta.url).href
+            inactive: tab01Nor,
+            active: tab01Sel
         },
         meta: {
             title: '首页',
@@ -20,8 +31,8 @@ export const tabBarConfig = [
         activeIcon: 'service',
         badge: 99,
         customIcon: {
-            inactive: new URL('@/assets/tabbar/icon_tab_02_nor_day.svg', import.meta.url).href,
-            active: new URL('@/assets/tabbar/icon_tab_02_sel_day.svg', import.meta.url).href
+            inactive: tab02Nor,
+            active: tab02Sel
 
         },
         meta: {
@@ -35,8 +46,8 @@ export const tabBarConfig = [
         icon: 'balance-o',
         activeIcon: 'balance',
         customIcon: {
-            inactive: new URL('@/assets/tabbar/icon_tab_03_nor_day.svg', import.meta.url).href,
-            active: new URL('@/assets/tabbar/icon_tab_03_sel_day.svg', import.meta.url).href
+            inactive: tab03Nor,
+            active: tab03Sel
         },
         meta: {
             title: '充值',
@@ -49,8 +60,8 @@ export const tabBarConfig = [
         icon: 'gift-o',
         activeIcon: 'gift',
         customIcon: {
-            inactive: new URL('@/assets/tabbar/icon_tab_04_nor_day.svg', import.meta.url).href,
-            active: new URL('@/assets/tabbar/icon_tab_04_sel_day.svg', import.meta.url).href
+            inactive: tab04Nor,
+            active: tab04Sel
         },
         meta: {
             title: '优惠活动',
@@ -63,8 +74,8 @@ export const tabBarConfig = [
         icon: 'user-o',
         activeIcon: 'user',
         customIcon: {
-            inactive: new URL('@/assets/tabbar/icon_tab_05_nor_day.svg', import.meta.url).href,
-            active: new URL('@/assets/tabbar/icon_tab_05_sel_day.svg', import.meta.url).href
+            inactive: tab05Nor,
+            active: tab05Sel
         },
         meta: {
             title: '个人中心',

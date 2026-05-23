@@ -23,11 +23,11 @@
 
       <section class="lbod-card lbod-card--detail">
         <div class="lbod-row">
-          <span class="lbod-row__k">开奖号/span>
+          <span class="lbod-row__k">开奖号码</span>
           <span class="lbod-row__v">{{ order.drawNumbers }}</span>
         </div>
         <div class="lbod-row">
-          <span class="lbod-row__k">开奖时/span>
+          <span class="lbod-row__k">开奖时间</span>
           <span class="lbod-row__v">{{ order.drawTime }}</span>
         </div>
         <div class="lbod-row">
@@ -98,7 +98,7 @@ watch(
   orderId,
   (id) => {
     if (!id || !getDemoBetOrderById(id)) {
-      toast.error('未找到订)
+      toast.error('未找到订单')
       router.replace({ name: 'lotteryBetRecord' })
     }
   },
@@ -123,7 +123,7 @@ async function copyText(text) {
       document.execCommand('copy')
       document.body.removeChild(input)
     }
-    toast.success('已复)
+    toast.success('已复制')
   } catch {
     toast.error('复制失败')
   }

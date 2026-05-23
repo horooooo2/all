@@ -19,7 +19,7 @@
 
     <div class="pl5-trend-sub">
       <span class="sub-text">{{ currentIssue }} 截止时间:{{ cutoffText }}</span>
-      <button type="button" class="bet-btn" @click="goBet">去投/button>
+      <button type="button" class="bet-btn" @click="goBet">去投注</button>
     </div>
 
     <div class="pl5-trend-tabs" role="tablist" aria-label="走势切换">
@@ -38,8 +38,8 @@
     </div>
 
     <main class="pl5-trend-table-wrap" role="main">
-      <div v-if="activeTab === 'open'" class="pl5-open-wrap" aria-label="开奖号码表>
-        <div class="pl5-trend-table pl5-trend-table--head" role="table" aria-label="体彩排列五走势表>
+      <div v-if="activeTab === 'open'" class="pl5-open-wrap" aria-label="开奖号码表">
+        <div class="pl5-trend-table pl5-trend-table--head" role="table" aria-label="体彩排列五走势表">
           <div class="row row--head" role="row">
             <div class="col col-issue" role="columnheader">期号</div>
             <div class="col col-digit" :class="digitColClass(0)" role="columnheader">万位</div>
@@ -50,7 +50,7 @@
           </div>
         </div>
 
-        <div class="pl5-open-scroll" role="table" aria-label="体彩排列五走>
+        <div class="pl5-open-scroll" role="table" aria-label="体彩排列五走势">
           <div v-for="row in rows" :key="row.issue" class="row" role="row">
             <div class="col col-issue" role="cell">{{ row.issue }}</div>
             <div class="col col-digit" :class="digitColClass(0)" role="cell">{{ row.nums[0] }}</div>
@@ -130,7 +130,7 @@ onBeforeUnmount(() => {
 })
 
 const tabs = [
-  { key: 'open', label: '开奖号 },
+  { key: 'open', label: '开奖号' },
   { key: 'w', label: '万位走势' },
   { key: 'q', label: '千位走势' },
   { key: 'b', label: '百位走势' },
@@ -161,10 +161,10 @@ function activeDigitValue(row) {
 }
 
 const statRows = [
-  { key: 'count', label: '总次 },
+  { key: 'count', label: '总次数' },
   { key: 'avgMiss', label: '平均遗漏' },
-  { key: 'maxMiss', label: '最大遗漏 },
-  { key: 'maxStreak', label: '最大连 }
+  { key: 'maxMiss', label: '最大遗漏' },
+  { key: 'maxStreak', label: '最大连出' }
 ]
 
 const statsByNum = computed(() => {

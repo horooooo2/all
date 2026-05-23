@@ -1,6 +1,6 @@
 /** 标准· 五星组合20：演示遗漏（可接接口替换*/
 export const BZP_ZX120_ROWS = [
-  { key: 'triple', label: '三重 },
+  { key: 'triple', label: '三重号' },
   { key: 'single', label: '单号' }
 ]
 

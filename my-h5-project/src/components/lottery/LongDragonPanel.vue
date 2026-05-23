@@ -26,7 +26,7 @@
         </li>
       </ul>
 
-      <p v-else class="long-empty">暂无符合条件的长/p>
+      <p v-else class="long-empty">暂无符合条件的长龙</p>
     </div>
 
     <button
@@ -68,7 +68,7 @@
       </div>
       <div class="long-streak-popup__body">
         <div class="long-streak-popup__rate-row">
-          <span>预出/span>
+          <span>预出率</span>
           <span>{{ streakRateRight }}</span>
         </div>
         <div class="long-streak-slider-wrap">
@@ -244,7 +244,7 @@ function onRowClick(row) {
   min-height: 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 12px 0 64px;
+  padding: 12px 0 calc(64px + @layout-bottom-inset);
   box-sizing: border-box;
 }
 
@@ -353,7 +353,7 @@ function onRowClick(row) {
 .long-streak-fab {
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  bottom: calc(12px + @layout-bottom-inset);
   z-index: 2;
   min-width: 112px;
   max-width: 140px;
@@ -471,7 +471,8 @@ function onRowClick(row) {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 16px 16px;
+  .layout-padding-bottom(12px);
   box-sizing: border-box;
 }
 
