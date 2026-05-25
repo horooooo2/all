@@ -50,12 +50,20 @@ const hideToast = () => {
     hideWithAnimation()
 }
 
+/** 仅关闭 loading，避免误关掉刚展示的 error/success 提示 */
+const hideLoading = () => {
+    if (currentPayload?.type === 'loading') {
+        hideWithAnimation()
+    }
+}
+
 export const toast = {
     success: (msg, duration) => showToast('success', msg, duration),
     error: (msg, duration) => showToast('error', msg, duration),
     warning: (msg, duration) => showToast('warning', msg, duration),
     loading: (msg) => showToast('loading', msg),
-    hide: hideToast
+    hide: hideToast,
+    hideLoading
 }
 
 export default toast

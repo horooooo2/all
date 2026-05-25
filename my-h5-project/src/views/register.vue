@@ -55,29 +55,39 @@
         </div>
       </div>
 
-      <div class="login-field-wrap">
-        <div class="icon-placeholder">
-          <img src="@/assets/icon_login_passwordy.svg" alt="确认密码" />
-        </div>
-        <input
-          v-model="confirmPassword"
-          :type="showConfirmPassword ? 'text' : 'password'"
-          placeholder="确认密码"
-          autocomplete="new-password"
-        />
-        <div class="toggle-pwd" aria-label="切换确认密码可见" @click="showConfirmPassword = !showConfirmPassword">
+      <div class="login-field-group">
+        <div class="login-field-wrap">
           <div class="icon-placeholder">
-            <img
-              v-if="showConfirmPassword"
-              src="@/assets/icon_login_invisible_dark.svg"
-              alt="隐藏密码"
-            />
-            <img
-              v-else
-              src="@/assets/icon_login_visible.svg"
-              alt="查看密码"
-            />
+            <img src="@/assets/icon_login_passwordy.svg" alt="确认密码" />
           </div>
+          <input
+            v-model="confirmPassword"
+            :type="showConfirmPassword ? 'text' : 'password'"
+            placeholder="确认密码"
+            autocomplete="new-password"
+          />
+          <div class="toggle-pwd" aria-label="切换确认密码可见" @click="showConfirmPassword = !showConfirmPassword">
+            <div class="icon-placeholder">
+              <img
+                v-if="showConfirmPassword"
+                src="@/assets/icon_login_invisible_dark.svg"
+                alt="隐藏密码"
+              />
+              <img
+                v-else
+                src="@/assets/icon_login_visible.svg"
+                alt="查看密码"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="showPasswordMismatch"
+          class="register-pwd-hint"
+          role="alert"
+        >
+          <img src="@/assets/icon_exclamation_red.svg" alt="" />
+          <span>两次密码不一致，请检查</span>
         </div>
       </div>
 
@@ -111,10 +121,10 @@
       <button
         type="submit"
         class="login-btn"
-        :class="{ disabled: !canSubmit }"
-        :disabled="!canSubmit"
+        :class="{ disabled: !canSubmit || isSubmitting }"
+        :disabled="!canSubmit || isSubmitting"
       >
-        注册
+        {{ isSubmitting ? '注册中...' : '注册' }}
       </button>
     </form>
     </div>
@@ -153,7 +163,7 @@
         />
         <img
           v-else
-          src="@/assets/icon_usel.png"
+          src="@/assets/icon_usel.svg"
           alt="unchecked"
         />
       </span>
@@ -172,10 +182,13 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { showLoadingToast, closeToast } from 'vant'
 import LangPopup from '@/components/LangPopup.vue'
+import { toast } from '@/components/Toast'
+import { register } from '@/api/auth'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 const username = ref('')
 const password = ref('')
@@ -186,12 +199,17 @@ const agree = ref(false)
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const showLangPopup = ref(false)
+const isSubmitting = ref(false)
+
+const showPasswordMismatch = computed(
+  () => !!confirmPassword.value && password.value !== confirmPassword.value
+)
 
 const canSubmit = computed(() =>
   !!username.value &&
   !!password.value &&
   !!confirmPassword.value &&
-  password.value === confirmPassword.value &&
+  !showPasswordMismatch.value &&
   !!contact.value &&
   agree.value
 )
@@ -201,21 +219,26 @@ const goLogin = () => router.push('/login')
 const goService = () => router.push('/service')
 
 const handleRegister = async () => {
-  if (!canSubmit.value) return
-  const toast = showLoadingToast({
-    message: '注册中...',
-    forbidClick: true
-  })
+  if (isSubmitting.value || !canSubmit.value) return
+  isSubmitting.value = true
+  toast.loading('注册中...')
   try {
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    toast.message = '注册成功'
+    const result = await register({
+      username: username.value,
+      password: password.value,
+      confirm_password: confirmPassword.value,
+      invite_code: inviteCode.value,
+      contact: contact.value
+    })
+    await userStore.establishSession(result)
+    toast.success('注册成功', 500)
     setTimeout(() => {
-      closeToast()
-      router.replace('/login')
+      router.replace('/')
     }, 500)
   } catch (error) {
     console.error('注册失败:', error)
-    closeToast()
+    toast.hideLoading()
+    isSubmitting.value = false
   }
 }
 </script>

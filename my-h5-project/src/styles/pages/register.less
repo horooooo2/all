@@ -6,6 +6,42 @@
 
 @import '@/styles/pages/login.less';
 
+.register-page .login-field-group {
+  margin-bottom: @spacing-md;
+
+  .login-field-wrap {
+    margin-bottom: 0;
+  }
+}
+
+.register-page .register-pwd-hint {
+  display: flex;
+  width: 351px;
+  max-width: 100%;
+  box-sizing: border-box;
+  height: 28px;
+  padding: 0 12px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #EE1818;
+  background: #FFF;
+
+  img {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  span {
+    font-size: @font-size-sm;
+    line-height: 1.2;
+    color: #EE1818;
+  }
+}
+
 .register-page .register-tip {
   margin: @spacing-sm 0 @spacing-lg;
   font-size: @font-size-sm;

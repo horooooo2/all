@@ -3,10 +3,12 @@
 @vip-top-bg-height: 200px;
 @vip-card-h: 173px;
 @vip-card-w: 339px;
-@vip-card-gap: 12px;
-@vip-badge-float-h: 28px;
-@vip-swipe-h: (@vip-card-h + @vip-badge-float-h);
-@vip-swipe-slide-w: (@vip-card-w + @vip-card-gap);
+@vip-card-side-gap: 15px;
+@vip-badge-float-h: 34px;
+@vip-swipe-indicator-h: 16px;
+@vip-swipe-extra-h: 10px;
+@vip-swipe-h: (@vip-card-h + @vip-badge-float-h + @vip-swipe-indicator-h + @vip-swipe-extra-h);
+@vip-swipe-slide-w: (@vip-card-w + @vip-card-side-gap * 2);
 @vip-card-below-bg: 57px;
 // 卡片叠在背景上的上移量：卡高 − 向下超出背景的高度
 @vip-card-float-pull: -(@vip-card-h - @vip-card-below-bg);
@@ -151,12 +153,14 @@
   padding: 0;
   overflow: hidden;
   max-width: 100%;
+  height: @vip-swipe-h;
 }
 
-/* 每页宽度 = 卡片 + 右侧间距，与 :width 351 一致 */
+/* 每页宽度 = 卡片 + 间距，与 VipCenter.vue :width 一致 */
 .vip-card-float :deep(.van-swipe) {
   overflow: hidden;
   max-width: 100%;
+  height: @vip-swipe-h;
 }
 
 .vip-card-float :deep(.van-swipe__track) {
@@ -164,18 +168,23 @@
 }
 
 .vip-card-float :deep(.van-swipe-item) {
-  width: @vip-swipe-slide-w;
+  flex-shrink: 0;
+  width: @vip-swipe-slide-w !important;
   height: @vip-swipe-h;
   box-sizing: border-box;
-  overflow: hidden;
+  padding: @vip-badge-float-h @vip-card-side-gap 0;
+  overflow: visible;
+
+  &:not(:first-child) {
+    margin-left: 35px;
+  }
 }
 
 .vip-slide-inner {
   position: relative;
-  height: @vip-swipe-h;
-  padding-top: @vip-badge-float-h;
+  height: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .vip-card-float :deep(.van-swipe__indicator) {
@@ -192,7 +201,7 @@
   height: @vip-card-h;
   box-sizing: border-box;
   padding: 12px 14px;
-  margin-right: @vip-card-gap;
+  margin: 0;
   border-radius: 10px;
   background: linear-gradient(180deg, #3c578c 0%, #1a2333 100%);
   box-shadow: 0 6px 16px rgba(16, 64, 145, 0.16);

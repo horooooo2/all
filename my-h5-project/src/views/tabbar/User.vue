@@ -2,22 +2,23 @@
   <div class="user-page">
     <section class="top-panel">
       <div class="top-user">
-        <div class="avatar-wrap">
+        <div
+          class="avatar-wrap"
+          role="button"
+          tabindex="0"
+          @click="!isLogin && goLogin()"
+          @keydown.enter.prevent="!isLogin && goLogin()"
+          @keydown.space.prevent="!isLogin && goLogin()"
+        >
           <img
-            v-if="isLogin && viewUserInfo?.avatar"
-            :src="viewUserInfo.avatar"
+            :src="displayAvatar"
             alt="avatar"
-          >
-          <img
-            v-else
-            class="avatar-placeholder"
-            :src="avatarDefault"
-            alt="avatar"
+            :class="{ 'avatar-placeholder': !avatarUrl }"
           >
         </div>
         <div class="user-text">
           <div class="user-name">{{ isLogin ? (viewUserInfo?.name || '昵称') : '未登录' }}</div>
-          <div class="user-id">{{ isLogin ? `ID:${viewUserInfo?.id || '0000001'}` : '点击头像去登录' }}</div>
+          <div class="user-id">{{ isLogin ? `ID:${viewUserInfo?.id ?? '--'}` : '点击头像去登录' }}</div>
         </div>
         <div class="top-user-actions">
           <div
@@ -257,13 +258,12 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import LangPopup from '@/components/LangPopup.vue'
 import { useUserStore } from '@/stores/user'
-import toast from '@/components/Toast'
-import avatarDefault from '@/assets/touxiang2.png'
+import { useUserAvatar } from '@/composables/useUserAvatar'
 import iconBj from '@/assets/icon_bj.svg'
 import iconDack from '@/assets/icon_dack2.png'
 import iconVip00 from '@/assets/icon_vip_00.svg'
@@ -286,13 +286,13 @@ const router = useRouter()
 const userStore = useUserStore()
 const { locale } = useI18n()
 const showLangPopup = ref(false)
+const { avatarUrl, displayAvatar, refreshProfile } = useUserAvatar()
 
-// 临时：固定个人中心为“已登录”状态（仅影响此页面展示）
-const isLogin = computed(() => true)
-const viewUserInfo = computed(() => userStore.userInfo || {
-  id: '000001',
-  name: 'ACYOM',
-  avatar: ''
+const isLogin = computed(() => userStore.isLogin)
+const viewUserInfo = computed(() => userStore.userInfo)
+
+onMounted(() => {
+  refreshProfile().catch(() => {})
 })
 
 const LANG_LABELS = {
@@ -316,10 +316,6 @@ const goSettings = () => router.push({ name: 'settings' })
 const goVipCenter = () => router.push({ name: 'vipCenter' })
 const goAgentCenter = () => router.push({ name: 'agentCenter' })
 const goMemberManage = () => router.push({ name: 'memberManage' })
-
-const handleLogout = () => {
-  toast.warning('当前页面已临时固定为已登录')
-}
 </script>
 
 <style lang="less" scoped>

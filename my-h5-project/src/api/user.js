@@ -1,18 +1,8 @@
-import request from '@/utils/request'
+import { getProfile } from '@/api/auth'
 
-export function login(data) {
-    return request({
-        url: '/user/login',
-        method: 'post',
-        data
-    })
-}
-
+/** 获取当前用户资料（与 /auth/profile 一致） */
 export function getUserInfo() {
-    return request({
-        url: '/user/info',
-        method: 'get'
-    })
+    return getProfile()
 }
 
 export function updateUserProfile(data) {

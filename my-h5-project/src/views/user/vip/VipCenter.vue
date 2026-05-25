@@ -145,13 +145,15 @@ const nickname = computed(() => (userStore.isLogin ? (userStore.userInfo?.name |
 const userId = computed(() => (userStore.isLogin ? (userStore.userInfo?.id || '000001') : '000001'))
 const avatarUrl = computed(() => (userStore.isLogin && userStore.userInfo?.avatar ? userStore.userInfo.avatar : ''))
 
-/** 单页宽度 = 卡片宽 339 + 与右侧下一张的间距 12 */
+/** 与 vip-center.less 变量保持一致 */
 const VIP_CARD_W = 339
-const VIP_CARD_GAP = 24
+const VIP_CARD_SIDE_GAP = 15
 const VIP_CARD_H = 173
-const VIP_BADGE_FLOAT_H = 28
-const vipSwipeSlideWidth = VIP_CARD_W + VIP_CARD_GAP
-const vipSwipeHeight = VIP_CARD_H + VIP_BADGE_FLOAT_H
+const VIP_BADGE_FLOAT_H = 34
+const VIP_SWIPE_INDICATOR_H = 16
+const VIP_SWIPE_EXTRA_H = 10
+const vipSwipeSlideWidth = VIP_CARD_W + VIP_CARD_SIDE_GAP * 2
+const vipSwipeHeight = VIP_CARD_H + VIP_BADGE_FLOAT_H + VIP_SWIPE_INDICATOR_H + VIP_SWIPE_EXTRA_H
 
 const vipLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 const levelTabs = vipLevels.map((n) => `VIP${n}`)

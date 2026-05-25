@@ -3,7 +3,11 @@
     <div class="header">
       <img class="logo" src="@/assets/logo.svg" alt="LOGO"/>
       <div v-if="userStore.isLogin" class="user-avatar">
-        <img src="" alt="avatar"/>
+        <img
+          :src="displayAvatar"
+          alt="avatar"
+          @error="onAvatarError"
+        />
       </div>
       <div v-else class="user-language" @click="showLangPopup = true">
         <img src="@/assets/icon_en.svg" alt="language"/>
@@ -48,7 +52,7 @@
             <div class="left-info">
               <div class="vip-row">
                 <span>{{ userStore.userInfo?.name || $t('ACYOM VIPO') }}</span>
-                <img src="@/assets/icon_vip_00.svg" alt="VIP" />
+                <img :src="vipLevelIcon" alt="VIP" />
               </div>
               <div class="balance-row">
                 <img src="@/assets/icon_usdt.svg" alt="USDT" />
@@ -210,9 +214,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import LangPopup from '@/components/LangPopup.vue'
 import { toast } from '@/components/Toast'
+import { useUserStore } from '@/stores/user'
+import { useUserAvatar } from '@/composables/useUserAvatar'
+import { getVipLevelIcon } from '@/utils/vipLevelIcon'
+import avatarDefault from '@/assets/touxiang2.png'
 import iconTy from '@/assets/icon_ty.png'
 import iconSx from '@/assets/icon_sx.png'
 import iconDz from '@/assets/icon_dz.png'
@@ -241,7 +249,18 @@ import lunbo1 from '@/assets/lunbo1.png'
 const current = ref(0)
 const router = useRouter()
 const userStore = useUserStore()
+const { displayAvatar, refreshProfile } = useUserAvatar()
 const showLangPopup = ref(false)
+
+const vipLevelIcon = computed(() =>
+  getVipLevelIcon(userStore.userInfo?.vipLevel)
+)
+
+const onAvatarError = (e) => {
+  const el = e?.target
+  if (!el || el.src === avatarDefault) return
+  el.src = avatarDefault
+}
 
 const loading = ref({
   banner: true,
@@ -332,6 +351,9 @@ function goSelfLottery(item) {
 
 let timer
 onMounted(() => {
+  if (userStore.isLogin) {
+    refreshProfile().catch(() => {})
+  }
   fetchData()
   timer = setInterval(() => {
     gameList.value.forEach(item => {

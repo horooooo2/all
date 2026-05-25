@@ -64,7 +64,7 @@
           />
           <img
             v-else
-            src="@/assets/icon_usel.png"
+            src="@/assets/icon_usel.svg"
             alt="unchecked"
           />
         </span>
@@ -74,10 +74,10 @@
       <button
         type="submit"
         class="login-btn"
-        :class="{ disabled: !canSubmit }"
-        :disabled="!canSubmit"
+        :class="{ disabled: !canSubmit || isSubmitting }"
+        :disabled="!canSubmit || isSubmitting"
       >
-        登录
+        {{ isSubmitting ? '登录中...' : '登录' }}
       </button>
     </form>
     </div>
@@ -116,7 +116,7 @@
           />
           <img
             v-else
-            src="@/assets/icon_usel.png"
+            src="@/assets/icon_usel.svg"
             alt="unchecked"
           />
         </span>
@@ -133,46 +133,91 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { showLoadingToast, closeToast } from 'vant'
-import { login } from '@/api/user'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import LangPopup from '@/components/LangPopup.vue'
+import { toast } from '@/components/Toast'
+import { login } from '@/api/auth'
+import { useUserStore } from '@/stores/user'
+import {
+  getLoginRemember,
+  saveLoginRemember,
+  clearLoginRemember
+} from '@/utils/loginRemember'
 
 const router = useRouter()
+const route = useRoute()
+const userStore = useUserStore()
 const username = ref('')
 const password = ref('')
 const remember = ref(false)
 const showPassword = ref(false)
 const agree = ref(false)
 const showLangPopup = ref(false)
+const isSubmitting = ref(false)
 
-const canSubmit = computed(() => !!username.value && !!password.value)
+const canSubmit = computed(
+  () => !!username.value && !!password.value && agree.value
+)
+
+const resolveRedirect = () => {
+  const redirect = route.query.redirect
+  if (typeof redirect === 'string' && redirect.startsWith('/')) {
+    return redirect
+  }
+  return '/'
+}
+
+const persistRemember = () => {
+  if (remember.value) {
+    saveLoginRemember({
+      remember: true,
+      username: username.value,
+      password: password.value
+    })
+  } else {
+    clearLoginRemember()
+  }
+}
+
+onMounted(() => {
+  const saved = getLoginRemember()
+  if (saved.remember) {
+    remember.value = true
+    username.value = saved.username
+    password.value = saved.password
+  }
+})
+
+watch(remember, (checked) => {
+  if (!checked) {
+    clearLoginRemember()
+  }
+})
 
 const goBack = () => router.replace('/')
 const goRegister = () => router.push('/register')
 const goService = () => router.push('/service')
 
 const handleLogin = async () => {
-  if (!canSubmit.value) return
-  const toast = showLoadingToast({
-    message: '登录中...',
-    forbidClick: true
-  })
+  if (isSubmitting.value || !canSubmit.value) return
+  isSubmitting.value = true
+  toast.loading('登录中...')
   try {
-    const data = await login({
+    const result = await login({
       username: username.value,
       password: password.value
     })
-    localStorage.setItem('token', data.token)
-    toast.message = '登录成功'
+    await userStore.establishSession(result)
+    persistRemember()
+    toast.success('登录成功', 500)
     setTimeout(() => {
-      closeToast()
-      router.replace('/')
+      router.replace(resolveRedirect())
     }, 500)
   } catch (error) {
     console.error('登录失败:', error)
-    closeToast()
+    toast.hideLoading()
+    isSubmitting.value = false
   }
 }
 </script>

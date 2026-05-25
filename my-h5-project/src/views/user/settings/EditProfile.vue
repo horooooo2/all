@@ -178,11 +178,11 @@
 </template>
 
 <script setup>
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
-import avatarDefault from '@/assets/touxiang2.png'
 import { useUserStore } from '@/stores/user'
+import { useUserAvatar } from '@/composables/useUserAvatar'
 import toast from '@/components/Toast'
 import iconEdit from '@/assets/icon_edit.svg'
 import iconAccount from '@/assets/icon_account.svg'
@@ -200,6 +200,16 @@ import iconClose from '@/assets/icon_x.svg'
 
 const router = useRouter()
 const userStore = useUserStore()
+const { displayAvatar: profileAvatar, refreshProfile } = useUserAvatar()
+
+const GENDER_LABELS = { 0: '未知', 1: '男', 2: '女' }
+
+const formatGender = (value) => {
+  if (value === 1 || value === '1' || value === '男') return '男'
+  if (value === 2 || value === '2' || value === '女') return '女'
+  if (value === 0 || value === '0' || value === '未知') return '未知'
+  return value || '未知'
+}
 
 const showGenderPopup = ref(false)
 const showBirthdayPopup = ref(false)
@@ -226,21 +236,30 @@ const birthdayValues = ref([
 
 const user = computed(() => {
   const u = userStore.userInfo || {}
-  const phoneMasked = u.phoneMasked || (u.contactInfo ? String(u.contactInfo).replace(/^(\d{3})\d+(\d{4})$/, '$1****$2') : '199****0088')
+  const contact = u.contact || u.contactInfo || ''
+  const phoneMasked = u.phoneMasked || (
+    contact && /^\d{7,}$/.test(String(contact))
+      ? String(contact).replace(/^(\d{3})\d+(\d{4})$/, '$1****$2')
+      : contact || '--'
+  )
   return {
-    id: u.id || '000001',
-    name: u.name || 'ACYOM',
+    id: u.id ?? '--',
+    name: u.name || u.nickname || u.username || '昵称',
     avatar: u.avatar || '',
-    account: u.account || 'ACYOM',
-    nickname: u.nickname || 'AC0088',
-    gender: u.gender || '女',
+    account: u.username || u.account || '--',
+    nickname: u.nickname || u.name || '--',
+    gender: formatGender(u.gender),
     birthday: u.birthday || '',
     realName: u.realName || '',
     phoneMasked
   }
 })
 
-const displayAvatar = computed(() => avatarPreview.value || user.value.avatar || avatarDefault)
+const displayAvatar = computed(() => avatarPreview.value || profileAvatar.value)
+
+onMounted(() => {
+  refreshProfile().catch(() => {})
+})
 
 const goBack = () => router.back()
 

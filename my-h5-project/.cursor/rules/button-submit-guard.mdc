@@ -1,0 +1,54 @@
+---
+description: 所有触发请求/提交的按钮必须防重复点击
+alwaysApply: true
+---
+
+# 按钮防重复提交
+
+凡会触发 **接口请求、表单提交、支付、下单、删除** 等异步操作的按钮，必须做防重复点击防护。
+
+## 必须实现
+
+1. **`isSubmitting`（或等价）状态**：请求开始置 `true`，失败或取消后置 `false`；成功且即将跳转时可保持 `true` 直至离开页面。
+2. **逻辑层拦截**：处理函数开头 `if (isSubmitting) return`。
+3. **UI 层禁用**：`:disabled="!canSubmit || isSubmitting"`，必要时加 `disabled` 样式类。
+4. **文案反馈**：提交中可改为「提交中...」「注册中...」等，与 `toast.loading` 一致。
+
+## 参考写法（Vue）
+
+```vue
+<button
+  type="submit"
+  :disabled="!canSubmit || isSubmitting"
+  :class="{ disabled: !canSubmit || isSubmitting }"
+>
+  {{ isSubmitting ? '注册中...' : '注册' }}
+</button>
+```
+
+```js
+const isSubmitting = ref(false)
+
+const handleSubmit = async () => {
+  if (isSubmitting.value || !canSubmit.value) return
+  isSubmitting.value = true
+  toast.loading('提交中...')
+  try {
+    await someApi()
+    toast.success('成功', 500)
+    // 成功跳转：可不重置 isSubmitting，避免跳转前窗口期重复点击
+  } catch (e) {
+    toast.hideLoading()
+    isSubmitting.value = false
+  }
+}
+```
+
+## 禁止
+
+- 仅依赖 `toast.loading` 而不禁用按钮
+- 在 `catch` 里用 `toast.hide()` 关掉后续的 `toast.error`（应使用 `toast.hideLoading()`）
+
+## 新增/修改页面时
+
+创建或改动带提交按钮的页面时，默认按上述模式实现；无需用户再次提醒。

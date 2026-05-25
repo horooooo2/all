@@ -25,21 +25,29 @@
     </section>
 
     <section class="settings-menu settings-menu--logout">
-      <button type="button" class="settings-row settings-row--logout" @click="onLogout">
-        <span>退出登录</span>
+      <button
+        type="button"
+        class="settings-row settings-row--logout"
+        :disabled="isLoggingOut"
+        @click="onLogout"
+      >
+        <span>{{ isLoggingOut ? '退出中...' : '退出登录' }}</span>
       </button>
     </section>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { showConfirmDialog } from 'vant'
 import iconBack from '@/assets/icon_dack.svg'
 import { useUserStore } from '@/stores/user'
+import { toast } from '@/components/Toast'
 
 const router = useRouter()
 const userStore = useUserStore()
+const isLoggingOut = ref(false)
 
 const appVersion = __APP_VERSION__
 
@@ -49,13 +57,26 @@ const goUserAgreement = () => router.push({ name: 'userAgreement' })
 const goPrivacyPolicy = () => router.push({ name: 'privacyPolicy' })
 
 const onLogout = () => {
+  if (isLoggingOut.value) return
   showConfirmDialog({
     title: '温馨提示',
     message: '退出后，您需要重新登录才能继续访问账户与相关功能。'
   })
-    .then(() => {
-      userStore.logout()
-      router.replace({ name: 'user' })
+    .then(async () => {
+      if (isLoggingOut.value) return
+      isLoggingOut.value = true
+      toast.loading('退出中...')
+      try {
+        await userStore.logout()
+        toast.success('已退出登录', 500)
+        setTimeout(() => {
+          router.replace({ name: 'home' })
+        }, 500)
+      } catch (error) {
+        console.error('退出失败:', error)
+        toast.hideLoading()
+        isLoggingOut.value = false
+      }
     })
     .catch(() => {})
 }

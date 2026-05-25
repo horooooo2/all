@@ -17,7 +17,7 @@
           >
             <span>{{ lang.name }}</span>
             <img v-if="currentLang === lang.code" src="@/assets/icon_sel.svg" alt="">
-            <img v-else src="@/assets/icon_usel.png" alt="">
+            <img v-else src="@/assets/icon_usel.svg" alt="">
           </div>
         </div>
       </div>

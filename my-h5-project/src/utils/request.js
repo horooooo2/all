@@ -3,6 +3,7 @@ import router from "@/router"
 import { getActivePinia } from "pinia"
 import { useUserStore } from "@/stores/user"
 import toast from "@/components/Toast"
+import { API_BASE_URL, API_ACCEPT_LANGUAGE } from "@/config/env"
 
 const SUCCESS_CODES = [0, 200]
 
@@ -82,7 +83,7 @@ const forceLogout = () => {
     try {
         if (getActivePinia()) {
             const store = useUserStore()
-            store.logout()
+            store.clearSession()
         } else {
             localStorage.removeItem("user")
             localStorage.removeItem("token")
@@ -94,10 +95,11 @@ const forceLogout = () => {
 }
 
 const request = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
+    baseURL: API_BASE_URL,
     timeout: 15000,
     headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Accept-Language": API_ACCEPT_LANGUAGE
     }
 })
 
@@ -115,6 +117,16 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     (response) => {
         const res = response.data
+        // 认证 / 用户资料等直出结构（无业务 code 包裹）
+        if (res && res.code === undefined) {
+            if (res.token || (res.id != null && res.username != null)) {
+                return res
+            }
+            // 如 logout 返回空对象 {}
+            if (Object.keys(res).length === 0) {
+                return res
+            }
+        }
         if (res && SUCCESS_CODES.includes(res.code)) {
             // 优先返回业务 data，否则返回原始数据结构
             return res.data !== undefined ? res.data : res
