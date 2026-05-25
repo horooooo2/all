@@ -5,11 +5,17 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useSiteStore } from '@/stores/site'
 
 const route = useRoute()
 const router = useRouter()
+const siteStore = useSiteStore()
+
+onMounted(() => {
+  siteStore.fetchBrand().catch(() => {})
+})
 
 watch(() => route.fullPath, (newPath, oldPath) => {
   document.title = route.meta.title || 'PC28'

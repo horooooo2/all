@@ -1,0 +1,53 @@
+---
+description: 低频站点配置接口使用 localStorage 持久缓存，刷新不重复请求
+alwaysApply: true
+---
+
+# API localStorage 缓存
+
+变更不频繁的接口使用 `src/utils/apiLocalCache.js`，**首次请求后写入 localStorage；1 小时内刷新直接读缓存；超过 1 小时自动过期并重新请求**。
+
+## 已接入
+
+- `GET:/site/brand` → `getSiteBrand()`
+- `GET:/site/app` → `getSiteApp()`
+- `GET:/site/banner` → `getSiteBanners()`
+- `GET:/site/notice` → `getSiteNotices()`
+- `GET:/site/link` → `getSiteLinks()`
+- `GET:/vip/index` → `getVipIndex()`（按当前登录 `userId` 分 scope 缓存，避免串号）
+
+## 新增接口
+
+1. 在 `apiLocalCache.js` 的 `API_CACHE_KEYS` 与 `registeredKeys` 中注册 key（格式 `GET:/path`）
+2. API 层用 `fetchWithApiLocalCache(key, () => request(...).then(map))` 包装
+
+```js
+import { API_CACHE_KEYS, fetchWithApiLocalCache, registerApiLocalCache } from '@/utils/apiLocalCache'
+
+registerApiLocalCache('GET:/your/path') // 或写入 API_CACHE_KEYS
+
+export function getYourData(options) {
+  return fetchWithApiLocalCache(
+    'GET:/your/path',
+    () => request({ url: '/your/path', method: 'get' }).then(map),
+    options
+  )
+}
+```
+
+## 与 sessionCache 区分
+
+- **apiLocalCache**：跨刷新/关标签仍保留（品牌、APP 下载配置等）
+- **sessionCache**：关标签即清空（UI 状态、关闭浮层等）
+
+## 过期时间
+
+默认 `DEFAULT_CACHE_TTL_MS = 1 小时`（3600000ms）。读取时发现 `cachedAt` 超过 TTL 会删除旧缓存并重新请求。
+
+单接口可覆盖：`fetchWithApiLocalCache(key, fetcher, { ttlMs: 30 * 60 * 1000 })`。
+
+## 强制刷新
+
+`getSiteBrand({ force: true })` / `getSiteBanners({ force: true })` 等 / `getVipIndex({ force: true })` 忽略缓存重新请求并更新 localStorage。
+
+清空全部：`clearAllApiLocalCache()`（含 `#userId` 等 scope 条目）。

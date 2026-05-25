@@ -15,8 +15,13 @@
         placeholder="请输入昵称"
       >
 
-      <button type="button" class="confirm-btn" :disabled="!nickname" @click="onSubmit">
-        确认
+      <button
+        type="button"
+        class="confirm-btn"
+        :disabled="!nickname || isSubmitting"
+        @click="onSubmit"
+      >
+        {{ isSubmitting ? '提交中...' : '确认' }}
       </button>
     </main>
   </div>
@@ -27,15 +32,19 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import { useUserStore } from '@/stores/user'
+import { useProfileSave } from '@/composables/useProfileSave'
 import toast from '@/components/Toast'
 
 const router = useRouter()
 const userStore = useUserStore()
-const nickname = ref(userStore.userInfo?.nickname || 'AC0088')
+const { isSubmitting, saveProfile } = useProfileSave()
+const nickname = ref(userStore.userInfo?.nickname || '')
 
 const goBack = () => router.back()
 
-const onSubmit = () => {
+const onSubmit = async () => {
+  if (isSubmitting.value) return
+
   const value = nickname.value.trim()
 
   if (!value) {
@@ -47,18 +56,17 @@ const onSubmit = () => {
     return
   }
   if (!/^[\u4e00-\u9fa5A-Za-z0-9_]+$/.test(value)) {
-    toast.warning('昵称仅支持平台语言种类')
+    toast.warning('昵称仅支持中文、英文、数字及下划线')
     return
   }
 
-  const current = userStore.userInfo || {}
-  userStore.userInfo = { ...current, nickname: value }
-  toast.success('设置成功')
-  router.back()
+  const ok = await saveProfile({ nickname: value })
+  if (ok) {
+    router.back()
+  }
 }
 </script>
 
 <style lang="less" scoped>
 @import '@/styles/pages/profile-form.less';
 </style>
-

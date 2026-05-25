@@ -104,6 +104,11 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import iconX from '@/assets/icon_x.svg'
+import {
+  getSessionItem,
+  setSessionItem,
+  migrateLocalToSession
+} from '@/utils/sessionCache'
 
 /**
  * @typedef {{
@@ -187,7 +192,8 @@ function formatRangeLabel(pair) {
 
 function readStoredRange() {
   try {
-    const raw = localStorage.getItem(props.streakStorageKey)
+    migrateLocalToSession(props.streakStorageKey)
+    const raw = getSessionItem(props.streakStorageKey)
     if (!raw) return [...DEFAULT_STREAK_PAIR]
     const v = JSON.parse(raw)
     if (Array.isArray(v) && v.length >= 2) {
@@ -206,7 +212,7 @@ function readStoredRange() {
 
 function persistRange(pair) {
   try {
-    localStorage.setItem(props.streakStorageKey, JSON.stringify(normalizePair(pair)))
+    setSessionItem(props.streakStorageKey, JSON.stringify(normalizePair(pair)))
   } catch {
     // ignore
   }

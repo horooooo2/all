@@ -20,13 +20,18 @@
 .left-info {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 8px;
+
+  &--clickable {
+    cursor: pointer;
+  }
 
   .default-avatar {
     width: 38px;
     height: 38px;
     border-radius: @border-radius-circle;
     object-fit: cover;
+    flex-shrink: 0;
   }
 
   .text-group {
@@ -106,6 +111,14 @@
     object-fit: contain;
     flex-shrink: 0;
   }
+}
+
+.service-loading,
+.service-empty {
+  padding: @spacing-xl;
+  text-align: center;
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
 }
 
 .bottom-placeholder {

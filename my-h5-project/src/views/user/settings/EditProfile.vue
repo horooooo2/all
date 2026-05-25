@@ -6,114 +6,133 @@
     </header>
 
     <section class="profile-card">
-      <div class="profile-main">
-        <div class="avatar-wrap">
-          <img :src="displayAvatar" alt="avatar">
+        <div class="profile-main">
+          <div class="avatar-wrap">
+            <img :src="displayAvatar" alt="avatar" @error="onAvatarError">
+          </div>
+          <div class="profile-text">
+            <div class="profile-name">{{ user.name }}</div>
+            <div class="profile-id">ID:{{ user.id }}</div>
+          </div>
         </div>
-        <div class="profile-text">
-          <div class="profile-name">{{ user.name }}</div>
-          <div class="profile-id">ID:{{ user.id }}</div>
-        </div>
-      </div>
-      <img :src="iconEdit" alt="edit" class="profile-edit-btn" @click="onAvatarEdit">
-    </section>
+        <img :src="iconEdit" alt="edit" class="profile-edit-btn" @click="onAvatarEdit">
+      </section>
 
-    <section class="menu-card">
-      <button type="button" class="menu-row" @click="onCopyAccount">
-        <span class="menu-row-inner">
-          <img :src="iconAccount" alt="" class="menu-icon-img">
-          <span>账号</span>
-        </span>
-        <span class="right-wrap">
-          <span class="right-text">{{ user.account }}</span>
-          <img :src="iconCopy" alt="copy" class="right-icon">
-        </span>
-      </button>
+      <section class="menu-card">
+        <button type="button" class="menu-row" @click="onCopyAccount">
+          <span class="menu-row-inner">
+            <img :src="iconAccount" alt="" class="menu-icon-img">
+            <span>账号</span>
+          </span>
+          <span class="right-wrap">
+            <span class="right-text">{{ user.account }}</span>
+            <img
+              :src="iconCopy"
+              alt="复制账号"
+              class="right-icon"
+              role="button"
+              tabindex="0"
+              @click.stop="onCopyAccount"
+              @keydown.enter.prevent.stop="onCopyAccount"
+              @keydown.space.prevent.stop="onCopyAccount"
+            >
+          </span>
+        </button>
 
-      <button type="button" class="menu-row" @click="onEditNickname">
-        <span class="menu-row-inner">
-          <img :src="iconNickName" alt="" class="menu-icon-img">
-          <span>昵称</span>
-        </span>
-        <span class="right-wrap">
-          <span class="right-text">{{ user.nickname }}</span>
-          <img :src="iconGo" alt="go" class="right-icon">
-        </span>
-      </button>
+        <button type="button" class="menu-row" @click="onEditNickname">
+          <span class="menu-row-inner">
+            <img :src="iconNickName" alt="" class="menu-icon-img">
+            <span>昵称</span>
+          </span>
+          <span class="right-wrap">
+            <span class="right-text">{{ user.nickname }}</span>
+            <img :src="iconGo" alt="go" class="right-icon">
+          </span>
+        </button>
 
-      <button type="button" class="menu-row" @click="onEditGender">
-        <span class="menu-row-inner">
-          <img :src="iconGender" alt="" class="menu-icon-img">
-          <span>性别</span>
-        </span>
-        <span class="right-wrap">
-          <span class="right-text">{{ user.gender }}</span>
-          <img :src="iconGo" alt="go" class="right-icon">
-        </span>
-      </button>
+        <button type="button" class="menu-row" @click="onEditGender">
+          <span class="menu-row-inner">
+            <img :src="iconGender" alt="" class="menu-icon-img">
+            <span>性别</span>
+          </span>
+          <span class="right-wrap">
+            <span class="right-text">{{ user.gender }}</span>
+            <img :src="iconGo" alt="go" class="right-icon">
+          </span>
+        </button>
 
-      <button type="button" class="menu-row" @click="onEditBirthday">
-        <span class="menu-row-inner">
-          <img :src="iconUpgrade" alt="" class="menu-icon-img">
-          <span>生日</span>
-        </span>
-        <span class="right-wrap">
-          <span class="right-text" :class="{ 'right-text--unset': !user.birthday }">
-            {{ user.birthday || '未设置' }}
+        <button type="button" class="menu-row" @click="onEditBirthday">
+          <span class="menu-row-inner">
+            <img :src="iconUpgrade" alt="" class="menu-icon-img">
+            <span>生日</span>
+          </span>
+          <span class="right-wrap">
+            <span class="right-text" :class="{ 'right-text--unset': !user.birthday }">
+              {{ user.birthday || '未设置' }}
+            </span>
+            <img :src="iconGo" alt="go" class="right-icon">
+          </span>
+        </button>
+
+        <button type="button" class="menu-row" @click="onEditRealName">
+          <span class="menu-row-inner">
+            <img :src="iconName" alt="" class="menu-icon-img">
+            <span>姓名</span>
+          </span>
+          <span class="right-wrap">
+            <span class="right-text" :class="{ 'right-text--unset': !user.realName }">
+              {{ user.realName || '未设置' }}
+            </span>
+            <img :src="iconGo" alt="go" class="right-icon">
+          </span>
+        </button>
+
+        <button type="button" class="menu-row" @click="onEditPhone">
+          <span class="menu-row-inner">
+            <img :src="iconContactInformation" alt="" class="menu-icon-img">
+            <span>联系方式</span>
+          </span>
+          <span class="right-wrap">
+            <span class="right-text">{{ user.contactDisplay }}</span>
+            <img :src="iconGo" alt="go" class="right-icon">
+          </span>
+        </button>
+      </section>
+
+      <section class="menu-card menu-card--spaced">
+        <button type="button" class="menu-row" @click="onWithdrawAccount">
+          <span class="menu-row-inner">
+            <img :src="iconWithdrawalAccount" alt="" class="menu-icon-img">
+            <span>提款账户</span>
           </span>
           <img :src="iconGo" alt="go" class="right-icon">
-        </span>
-      </button>
+        </button>
+      </section>
 
-      <button type="button" class="menu-row" @click="onEditRealName">
-        <span class="menu-row-inner">
-          <img :src="iconName" alt="" class="menu-icon-img">
-          <span>姓名</span>
-        </span>
-        <span class="right-wrap">
-          <span class="right-text">{{ user.realName ? '已设置' : '未设置' }}</span>
+      <section class="menu-card menu-card--spaced">
+        <button type="button" class="menu-row" @click="onChangeLoginPwd">
+          <span class="menu-row-inner">
+            <img :src="iconChangeLoginPassword" alt="" class="menu-icon-img">
+            <span>更改登录密码</span>
+          </span>
           <img :src="iconGo" alt="go" class="right-icon">
-        </span>
-      </button>
-
-      <button type="button" class="menu-row" @click="onEditPhone">
-        <span class="menu-row-inner">
-          <img :src="iconContactInformation" alt="" class="menu-icon-img">
-          <span>联系方式</span>
-        </span>
-        <span class="right-wrap">
-          <span class="right-text">{{ user.phoneMasked }}</span>
-          <img :src="iconGo" alt="go" class="right-icon">
-        </span>
-      </button>
-    </section>
-
-    <section class="menu-card menu-card--spaced">
-      <button type="button" class="menu-row" @click="onWithdrawAccount">
-        <span class="menu-row-inner">
-          <img :src="iconWithdrawalAccount" alt="" class="menu-icon-img">
-          <span>提款账户</span>
-        </span>
-        <img :src="iconGo" alt="go" class="right-icon">
-      </button>
-    </section>
-
-    <section class="menu-card menu-card--spaced">
-      <button type="button" class="menu-row" @click="onChangeLoginPwd">
-        <span class="menu-row-inner">
-          <img :src="iconChangeLoginPassword" alt="" class="menu-icon-img">
-          <span>更改登录密码</span>
-        </span>
-        <img :src="iconGo" alt="go" class="right-icon">
-      </button>
-      <button type="button" class="menu-row" @click="onChangePayPwd">
-        <span class="menu-row-inner">
-          <img :src="iconChangeWithdrawalPassword" alt="" class="menu-icon-img">
-          <span>更改取款密码</span>
-        </span>
-        <img :src="iconGo" alt="go" class="right-icon">
-      </button>
-    </section>
+        </button>
+        <button type="button" class="menu-row" @click="onChangePayPwd">
+          <span class="menu-row-inner">
+            <img :src="iconChangeWithdrawalPassword" alt="" class="menu-icon-img">
+            <span>{{ user.hasWithdrawPassword ? '更改取款密码' : '设置取款密码' }}</span>
+          </span>
+          <span class="right-wrap">
+            <span
+              class="right-text"
+              :class="{ 'right-text--unset': !user.hasWithdrawPassword }"
+            >
+              {{ user.hasWithdrawPassword ? '已设置' : '未设置' }}
+            </span>
+            <img :src="iconGo" alt="go" class="right-icon">
+          </span>
+        </button>
+      </section>
 
     <van-popup v-model:show="showGenderPopup" position="bottom" round class="selection-popup">
       <div class="selection-sheet">
@@ -181,9 +200,15 @@
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
+import avatarDefault from '@/assets/touxiang2.png'
 import { useUserStore } from '@/stores/user'
 import { useUserAvatar } from '@/composables/useUserAvatar'
+import { genderLabelToCode, mapUserInfoToEditView } from '@/api/auth'
+import { getProfileDetail, pickAvatarUrlFromUpload } from '@/api/profile'
+import { uploadAvatar } from '@/api/user'
+import { useProfileSave } from '@/composables/useProfileSave'
 import toast from '@/components/Toast'
+import { copyTextToClipboard } from '@/utils/copyText'
 import iconEdit from '@/assets/icon_edit.svg'
 import iconAccount from '@/assets/icon_account.svg'
 import iconNickName from '@/assets/icon_nick_name.svg'
@@ -200,16 +225,8 @@ import iconClose from '@/assets/icon_x.svg'
 
 const router = useRouter()
 const userStore = useUserStore()
-const { displayAvatar: profileAvatar, refreshProfile } = useUserAvatar()
-
-const GENDER_LABELS = { 0: '未知', 1: '男', 2: '女' }
-
-const formatGender = (value) => {
-  if (value === 1 || value === '1' || value === '男') return '男'
-  if (value === 2 || value === '2' || value === '女') return '女'
-  if (value === 0 || value === '0' || value === '未知') return '未知'
-  return value || '未知'
-}
+const { displayAvatar: profileAvatar } = useUserAvatar()
+const { isSubmitting, saveProfile } = useProfileSave()
 
 const showGenderPopup = ref(false)
 const showBirthdayPopup = ref(false)
@@ -222,43 +239,57 @@ const minDate = new Date(1970, 0, 1)
 const maxDate = new Date()
 
 const parseBirthday = (value) => {
-  if (!value) return new Date(2026, 1, 8)
+  if (!value) return new Date()
   const [year, month, day] = String(value).split('-')
-  return new Date(Number(year), Number(month) - 1, Number(day))
+  const d = new Date(Number(year), Number(month) - 1, Number(day))
+  return Number.isNaN(d.getTime()) ? new Date() : d
 }
 
-const initialBirthday = parseBirthday(userStore.userInfo?.birthday)
-const birthdayValues = ref([
-  `${initialBirthday.getFullYear()}`,
-  `${initialBirthday.getMonth() + 1}`.padStart(2, '0'),
-  `${initialBirthday.getDate()}`.padStart(2, '0')
-])
+const birthdayValues = ref(['2000', '01', '01'])
 
-const user = computed(() => {
-  const u = userStore.userInfo || {}
-  const contact = u.contact || u.contactInfo || ''
-  const phoneMasked = u.phoneMasked || (
-    contact && /^\d{7,}$/.test(String(contact))
-      ? String(contact).replace(/^(\d{3})\d+(\d{4})$/, '$1****$2')
-      : contact || '--'
-  )
-  return {
-    id: u.id ?? '--',
-    name: u.name || u.nickname || u.username || '昵称',
-    avatar: u.avatar || '',
-    account: u.username || u.account || '--',
-    nickname: u.nickname || u.name || '--',
-    gender: formatGender(u.gender),
-    birthday: u.birthday || '',
-    realName: u.realName || '',
-    phoneMasked
-  }
-})
+const syncBirthdayPicker = () => {
+  const d = parseBirthday(userStore.userInfo?.birthday)
+  birthdayValues.value = [
+    `${d.getFullYear()}`,
+    `${d.getMonth() + 1}`.padStart(2, '0'),
+    `${d.getDate()}`.padStart(2, '0')
+  ]
+}
+
+const user = computed(() => mapUserInfoToEditView(userStore.userInfo))
 
 const displayAvatar = computed(() => avatarPreview.value || profileAvatar.value)
 
+const onAvatarError = (e) => {
+  const el = e?.target
+  if (!el || el.src === avatarDefault) return
+  el.src = avatarDefault
+}
+
+const loadProfile = async () => {
+  if (!userStore.isLogin) {
+    router.replace({ name: 'login', query: { redirect: '/edit-profile' } })
+    return
+  }
+
+  try {
+    const detail = await getProfileDetail()
+    userStore.setProfile(detail)
+    avatarPreview.value = ''
+    syncBirthdayPicker()
+  } catch (error) {
+    console.error('加载个人信息失败:', error)
+    toast.error('加载个人资料失败')
+  }
+}
+
 onMounted(() => {
-  refreshProfile().catch(() => {})
+  if (!userStore.userInfo) {
+    loadProfile()
+  } else {
+    avatarPreview.value = ''
+    syncBirthdayPicker()
+  }
 })
 
 const goBack = () => router.back()
@@ -274,7 +305,9 @@ const onAvatarSheetSelect = (action) => {
   })
 }
 
-const onAvatarAfterRead = (file) => {
+const onAvatarAfterRead = async (file) => {
+  if (isSubmitting.value) return
+
   const item = Array.isArray(file) ? file[0] : file
   const rawFile = item?.file
   if (!rawFile) return
@@ -282,18 +315,42 @@ const onAvatarAfterRead = (file) => {
   const localUrl = item.content || URL.createObjectURL(rawFile)
   avatarPreview.value = localUrl
 
-  const current = userStore.userInfo || {}
-  userStore.userInfo = { ...current, avatar: localUrl }
-  toast.success('头像已更新')
+  isSubmitting.value = true
+  toast.loading('上传中...')
+
+  try {
+    const uploadRes = await uploadAvatar(rawFile)
+    const avatarUrl = pickAvatarUrlFromUpload(uploadRes)
+    if (!avatarUrl) {
+      toast.hideLoading()
+      toast.error('头像上传失败，请重试')
+      avatarPreview.value = ''
+      return
+    }
+    await userStore.patchProfile({ avatar_url: avatarUrl })
+    avatarPreview.value = ''
+    toast.hideLoading()
+    toast.success('头像已更新')
+  } catch (error) {
+    toast.hideLoading()
+    console.error('更新头像失败:', error)
+    avatarPreview.value = ''
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 const onCopyAccount = async () => {
-  const text = user.value.account
-  try {
-    await navigator.clipboard.writeText(text)
-    toast.success('已复制')
-  } catch (e) {
-    toast.warning(text)
+  const text = String(userStore.userInfo?.username || user.value.account || '').trim()
+  if (!text || text === '--') {
+    toast.warning('暂无可复制账号')
+    return
+  }
+  const ok = await copyTextToClipboard(text)
+  if (ok) {
+    toast.success('账号已复制')
+  } else {
+    toast.error('复制失败，请长按账号手动复制')
   }
 }
 
@@ -302,41 +359,33 @@ const onEditGender = () => {
   showGenderPopup.value = true
 }
 const onEditBirthday = () => {
-  const currentBirthday = parseBirthday(userStore.userInfo?.birthday)
-  birthdayValues.value = [
-    `${currentBirthday.getFullYear()}`,
-    `${currentBirthday.getMonth() + 1}`.padStart(2, '0'),
-    `${currentBirthday.getDate()}`.padStart(2, '0')
-  ]
+  syncBirthdayPicker()
   showBirthdayPopup.value = true
 }
 const onEditRealName = () => router.push({ name: 'setRealName' })
 const onEditPhone = () => router.push({ name: 'setContactInfo' })
 const onWithdrawAccount = () => router.push({ name: 'withdrawalAccounts' })
-const onDeleteAccount = () => toast.warning('敬请期待')
 const onChangeLoginPwd = () => router.push({ name: 'changeLoginPassword' })
 const onChangePayPwd = () => router.push({ name: 'changeWithdrawPassword' })
 
-const selectGender = (value) => {
-  const current = userStore.userInfo || {}
-  userStore.userInfo = { ...current, gender: value }
-  showGenderPopup.value = false
-  toast.success('设置成功')
+const selectGender = async (value) => {
+  if (isSubmitting.value) return
+  const ok = await saveProfile({ gender: genderLabelToCode(value) })
+  if (ok) {
+    showGenderPopup.value = false
+  }
 }
 
-const confirmBirthday = () => {
+const confirmBirthday = async () => {
+  if (isSubmitting.value) return
   const [year, month, day] = birthdayValues.value
-  const current = userStore.userInfo || {}
-  userStore.userInfo = {
-    ...current,
-    birthday: `${year}-${month}-${day}`
+  const ok = await saveProfile({ birthday: `${year}-${month}-${day}` })
+  if (ok) {
+    showBirthdayPopup.value = false
   }
-  showBirthdayPopup.value = false
-  toast.success('设置成功')
 }
 </script>
 
 <style lang="less" scoped>
 @import '@/styles/pages/edit-profile.less';
 </style>
-

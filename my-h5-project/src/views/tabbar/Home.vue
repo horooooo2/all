@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="header">
-      <img class="logo" src="@/assets/logo.svg" alt="LOGO"/>
+      <BrandLogo class="logo" alt="LOGO" />
       <div v-if="userStore.isLogin" class="user-avatar">
         <img
           :src="displayAvatar"
@@ -18,14 +18,28 @@
       <div class="skeleton-block banner-skeleton shimmer"></div>
     </div>
     <div v-else class="banner-wrapper">
-      <van-swipe class="banner-swipe" :autoplay="3000" :loop="true" @change="current = $event">
-        <van-swipe-item v-for="(item, index) in banners" :key="index">
-          <img :src="item.image" class="banner-image"/>
+      <van-swipe
+        v-if="banners.length"
+        class="banner-swipe"
+        :autoplay="3000"
+        :loop="banners.length > 1"
+        @change="current = $event"
+      >
+        <van-swipe-item
+          v-for="item in banners"
+          :key="item.id"
+          @click="onBannerClick(item)"
+        >
+          <img :src="item.image" class="banner-image" alt="">
         </van-swipe-item>
         <template #indicator>
           <div class="custom-indicator">
-            <span v-for="(item, index) in banners" :key="index"
-                  class="dot" :class="{ active: current === index }"></span>
+            <span
+              v-for="(item, index) in banners"
+              :key="item.id"
+              class="dot"
+              :class="{ active: current === index }"
+            />
           </div>
         </template>
       </van-swipe>
@@ -35,7 +49,7 @@
       <div class="announcement">
         <img class="icon-20" src="@/assets/icon_announcement.png" alt="" />
         <div class="announcement-marquee">
-          <div class="notice-bar">{{ $t('马年迎新春，电子老虎机最高领取888元，更有现金') }}</div>
+          <div class="notice-bar">{{ noticeMarqueeText }}</div>
         </div>
       </div>
 
@@ -153,18 +167,27 @@
             <span class="label">{{ $t('过去30天内发放的奖金') }}</span>
             <div class="amount">
               <img src="@/assets/icon_cny.svg" alt="CNY" />
-              <span>¥890,685.50</span>
+              <span>{{ awardTotalAmount }}</span>
             </div>
           </div>
         </div>
         <div class="winners-list">
-          <div class="list-item" v-for="(item, index) in winnerList" :key="index">
+          <div
+            v-for="(item, index) in winnerList"
+            :key="`${item.nickname}-${item.payoutAt}-${index}`"
+            class="list-item"
+          >
             <div class="user-info">
-              <img :src="item.avatar" alt="avatar" class="avatar" />
-              <span class="name">{{ $t(item.name) }}</span>
+              <img
+                :src="item.gameIconUrl || avatarDefault"
+                :alt="item.gameName || item.nickname"
+                class="avatar"
+                @error="onWinnerAvatarError"
+              />
+              <span class="name">{{ item.nickname }}</span>
             </div>
             <div class="amount">
-              <span>{{ item.amount }}</span>
+              <span>{{ item.displayAmount }}</span>
               <img src="@/assets/icon_cny.svg" alt="CNY" />
             </div>
           </div>
@@ -174,24 +197,37 @@
 
     <div class="community-section">
       <div class="section-label">
-        <img src="@/assets/icon_sq.png" :alt="$t('社区')" />
+        <img src="@/assets/icon_sq.svg" :alt="$t('社区')" />
         <span>{{ $t('社区') }}</span>
       </div>
       <div class="community-scroll">
-        <div class="community-item" v-for="(item, index) in communityList" :key="index">
-          <img :src="item.icon" :alt="item.name" />
+        <div
+          v-for="item in communityList"
+          :key="item.id"
+          class="community-item"
+          role="button"
+          tabindex="0"
+          @click="onSiteLinkClick(item)"
+          @keydown.enter.prevent="onSiteLinkClick(item)"
+        >
+          <img :src="item.image" :alt="item.title">
         </div>
       </div>
     </div>
 
     <div class="partners-section">
       <div class="section-label">
-        <img src="@/assets/icon_hz.png" :alt="$t('合作供应商')" />
+        <img src="@/assets/icon_hz.svg" :alt="$t('合作供应商')" />
         <span>{{ $t('合作供应商') }}</span>
       </div>
       <div class="partners-grid">
-        <div class="partner-item" v-for="(item, index) in partnerList" :key="index">
-          {{ $t(item.name) }}
+        <div
+          v-for="item in partnerList"
+          :key="item.id"
+          class="partner-item"
+        >
+          <img v-if="item.image" :src="item.image" :alt="item.title" class="partner-logo">
+          <span v-else>{{ item.title }}</span>
         </div>
       </div>
     </div>
@@ -199,10 +235,16 @@
     <div class="footer-section">
       <div class="service-label">{{ $t('服务中心') }}</div>
       <div class="service-links">
-        <span>{{ $t('隐私政策') }}</span><span class="dot">·</span>
-        <span>{{ $t('用户协议') }}</span><span class="dot">·</span>
-        <span>{{ $t('帮助中心') }}</span><span class="dot">·</span>
-        <span>{{ $t('关于我们') }}</span>
+        <template v-for="(item, index) in serviceLinks" :key="item.id">
+          <span
+            class="service-link-item"
+            role="button"
+            tabindex="0"
+            @click="onServiceLinkClick(item)"
+            @keydown.enter.prevent="onServiceLinkClick(item)"
+          >{{ item.title }}</span>
+          <span v-if="index < serviceLinks.length - 1" class="dot">·</span>
+        </template>
       </div>
       <div class="company-name">28娱乐</div>
       <div class="company-desc">
@@ -220,6 +262,9 @@ import { toast } from '@/components/Toast'
 import { useUserStore } from '@/stores/user'
 import { useUserAvatar } from '@/composables/useUserAvatar'
 import { getVipLevelIcon } from '@/utils/vipLevelIcon'
+import { getSiteBanners, getSiteNotices, getNoticeDisplayText, getSiteLinks } from '@/api/site'
+import { getGameAwards, formatPayoutAmount } from '@/api/game'
+import { navigateSiteLink, navigateServiceLink } from '@/utils/siteNavigate'
 import avatarDefault from '@/assets/touxiang2.png'
 import iconTy from '@/assets/icon_ty.png'
 import iconSx from '@/assets/icon_sx.png'
@@ -234,12 +279,6 @@ import iconKefu from '@/assets/icon_kefu.png'
 import iconUsdtjc from '@/assets/icon_usdtjc.png'
 import iconPromotionLink from '@/assets/icon_invitation_link.png'
 import iconYqm from '@/assets/icon_yqm.svg'
-import iconTelegram from '@/assets/telegram.svg'
-import iconWhatsapp from '@/assets/whatsapp.svg'
-import iconTeams from '@/assets/teams.svg'
-import iconX from '@/assets/x.svg'
-import iconSlack from '@/assets/slack.svg'
-import iconFacebook from '@/assets/facebook.svg'
 import homeBtcIcon from '@/assets/home_btc_icon.png'
 import homeTw28Icon from '@/assets/home_tw28_icon.png'
 import homeJnd28Icon from '@/assets/home_jnd28_icon.png'
@@ -262,6 +301,27 @@ const onAvatarError = (e) => {
   el.src = avatarDefault
 }
 
+const onWinnerAvatarError = (e) => {
+  const el = e?.target
+  if (!el || el.src === avatarDefault) return
+  el.src = avatarDefault
+}
+
+const NOTICE_FALLBACK = '马年迎新春，电子老虎机最高领取888元，更有现金'
+
+const notices = ref([])
+
+const noticeMarqueeText = computed(() => {
+  if (!notices.value.length) {
+    return NOTICE_FALLBACK
+  }
+  const text = notices.value
+    .map(getNoticeDisplayText)
+    .filter(Boolean)
+    .join('　　　')
+  return text || NOTICE_FALLBACK
+})
+
 const loading = ref({
   banner: true,
   games: true,
@@ -269,10 +329,79 @@ const loading = ref({
   winners: true
 })
 
-const fetchData = async () => {
-  await new Promise(resolve => setTimeout(resolve, 100))
+const fetchBanners = async () => {
+  loading.value.banner = true
+  try {
+    const list = await getSiteBanners()
+    banners.value = list.length
+      ? list
+      : [{ id: 'fallback', image: lunbo1, linkType: '', linkValue: '' }]
+  } catch (error) {
+    console.error('加载轮播图失败:', error)
+    banners.value = [{ id: 'fallback', image: lunbo1, linkType: '', linkValue: '' }]
+  } finally {
+    loading.value.banner = false
+  }
+}
 
-  banners.value = Array.from({ length: 3 }, () => ({ image: lunbo1 }))
+const fetchNotices = async () => {
+  try {
+    notices.value = await getSiteNotices()
+  } catch (error) {
+    console.error('加载公告失败:', error)
+    notices.value = []
+  }
+}
+
+const DEFAULT_SERVICE_LINKS = [
+  { id: 'privacy', title: '隐私政策', code: 'privacy_policy', linkType: '', linkValue: '' },
+  { id: 'agreement', title: '用户协议', code: 'user_agreement', linkType: '', linkValue: '' },
+  { id: 'help', title: '帮助中心', code: 'help_center', linkType: '', linkValue: '' },
+  { id: 'about', title: '关于我们', code: 'about_us', linkType: '', linkValue: '' }
+]
+
+const awardTotalAmount = ref(formatPayoutAmount(0))
+const winnerList = ref([])
+
+const fetchGameAwards = async () => {
+  loading.value.winners = true
+  try {
+    const data = await getGameAwards()
+    awardTotalAmount.value = data.displayTotalAmount
+    winnerList.value = data.list
+  } catch (error) {
+    console.error('加载近期大奖失败:', error)
+    awardTotalAmount.value = formatPayoutAmount(0)
+    winnerList.value = []
+  } finally {
+    loading.value.winners = false
+  }
+}
+
+const fetchSiteLinks = async () => {
+  try {
+    const data = await getSiteLinks()
+    communityList.value = data.communities
+    partnerList.value = data.providers
+    serviceLinks.value = data.serviceLinks.length
+      ? data.serviceLinks
+      : DEFAULT_SERVICE_LINKS
+  } catch (error) {
+    console.error('加载站点链接失败:', error)
+    communityList.value = []
+    partnerList.value = []
+    serviceLinks.value = DEFAULT_SERVICE_LINKS
+  }
+}
+
+const fetchData = async () => {
+  await Promise.all([
+    fetchBanners(),
+    fetchNotices(),
+    fetchSiteLinks(),
+    fetchGameAwards(),
+    new Promise((resolve) => setTimeout(resolve, 100))
+  ])
 
   gameList.value = [
     { id: 1, name: '比特币28', key: 'btc', bg: homeBtcIcon, remaining: 176, status: 'playing', room: 'pl5' },
@@ -290,19 +419,23 @@ const fetchData = async () => {
     { id: 6, name: '棋牌', key: 'qp', icon: iconQp }
   ]
 
-  winnerList.value = [
-    { name: '刘德华', avatar: '', amount: '¥890,685.50' },
-    { name: '刘德华', avatar: '', amount: '¥890,685.50' },
-    { name: '刘德华', avatar: '', amount: '¥890,685.50' },
-    { name: '刘德华', avatar: '', amount: '¥890,685.50' }
-  ]
-
   loading.value = {
-    banner: false,
+    ...loading.value,
     games: false,
-    category: false,
-    winners: false
+    category: false
   }
+}
+
+const onBannerClick = (item) => {
+  navigateSiteLink(router, item)
+}
+
+const onSiteLinkClick = (item) => {
+  navigateSiteLink(router, item)
+}
+
+const onServiceLinkClick = (item) => {
+  navigateServiceLink(router, item)
 }
 
 const banners = ref([])
@@ -317,16 +450,9 @@ const helpList = ref([
   { id: 1, name: '在线客服', icon: iconKefu },
   { id: 2, name: 'USDT教程', icon: iconUsdtjc },
 ])
-const winnerList = ref([])
-const communityList = ref([
-  { name: 'telegram', icon: iconTelegram },
-  { name: 'whatsapp', icon: iconWhatsapp },
-  { name: 'teams', icon: iconTeams },
-  { name: 'x', icon: iconX },
-  { name: 'slack', icon: iconSlack },
-  { name: 'facebook', icon: iconFacebook }
-])
-const partnerList = ref(Array(6).fill({ name: 'PLAYACE' }))
+const communityList = ref([])
+const partnerList = ref([])
+const serviceLinks = ref([...DEFAULT_SERVICE_LINKS])
 
 const formatTime = (seconds) => {
   if (seconds <= 0) return '00:00:00'

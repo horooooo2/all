@@ -11,7 +11,7 @@
         <img class="vip-explain-deco" :src="iconVipxq" alt="" aria-hidden="true">
       </div>
       <p class="vip-explain-text">
-        VIP等级设定为1-10级。用户通过在平台充值金币并满足各层级规定的储值要求，即可达到相应的VIP等级并享受该等级的特权。
+        VIP等级设定为1-10级。用户通过在平台充值并满足各层级规定的充值与有效投注要求，即可达到相应的VIP等级并享受该等级的特权。
       </p>
     </section>
 
@@ -21,7 +21,8 @@
       <img class="vip-priv-title-side" :src="iconZsRight" alt="">
     </div>
 
-    <div class="vip-condition-table-wrap">
+    <div v-if="loading" class="vip-condition-loading">加载中...</div>
+    <div v-else class="vip-condition-table-wrap">
       <table class="vip-condition-table">
         <colgroup>
           <col class="col-level">
@@ -42,11 +43,11 @@
             </th>
             <th colspan="2">
               <div class="vip-condition-group-head">
-                <span>降级条件</span>
+                <span>保级条件</span>
                 <span class="vip-condition-group-time">近30天</span>
               </div>
             </th>
-            <th rowspan="2">等级彩金</th>
+            <th rowspan="2">升级礼金</th>
           </tr>
           <tr>
             <th>
@@ -64,7 +65,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="row in conditionRows" :key="row.level">
+          <tr v-for="row in conditionRows" :key="row.id">
             <td class="vip-level-cell">{{ row.levelLabel }}</td>
             <td>{{ row.upBet }}</td>
             <td>{{ row.upRecharge }}</td>
@@ -79,7 +80,9 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getVipRules, formatVipThreshold, formatVipMoney } from '@/api/vip'
 import iconBack from '@/assets/icon_dack.svg'
 import iconVipxq from '@/assets/icon_vipxq.png'
 import iconZsLeft from '@/assets/icon_zs_left.svg'
@@ -88,21 +91,51 @@ import iconZsRight from '@/assets/icon_zs_right.svg'
 const router = useRouter()
 const goBack = () => router.back()
 
-/** 占位数据，后续对接配置/接口 */
-const conditionRows = [
-  { level: 1, levelLabel: 'VIP1', upBet: '—', upRecharge: '≥100', downBet: '—', downRecharge: '—', bonus: '¥18' },
-  { level: 2, levelLabel: 'VIP2', upBet: '5,000', upRecharge: '500', downBet: '—', downRecharge: '—', bonus: '¥28' },
-  { level: 3, levelLabel: 'VIP3', upBet: '20,000', upRecharge: '2,000', downBet: '2,000', downRecharge: '200', bonus: '¥38' },
-  { level: 4, levelLabel: 'VIP4', upBet: '50,000', upRecharge: '5,000', downBet: '8,000', downRecharge: '800', bonus: '¥58' },
-  { level: 5, levelLabel: 'VIP5', upBet: '100,000', upRecharge: '10,000', downBet: '30,000', downRecharge: '3,000', bonus: '¥88' },
-  { level: 6, levelLabel: 'VIP6', upBet: '300,000', upRecharge: '30,000', downBet: '100,000', downRecharge: '10,000', bonus: '¥128' },
-  { level: 7, levelLabel: 'VIP7', upBet: '500,000', upRecharge: '50,000', downBet: '200,000', downRecharge: '20,000', bonus: '¥188' },
-  { level: 8, levelLabel: 'VIP8', upBet: '1,000,000', upRecharge: '100,000', downBet: '400,000', downRecharge: '40,000', bonus: '¥288' },
-  { level: 9, levelLabel: 'VIP9', upBet: '2,000,000', upRecharge: '200,000', downBet: '800,000', downRecharge: '80,000', bonus: '¥388' },
-  { level: 10, levelLabel: 'VIP10', upBet: '已达最高', upRecharge: '—', downBet: '—', downRecharge: '—', bonus: '¥588' }
-]
+const loading = ref(true)
+const conditionRows = ref([])
+
+const mapRuleToRow = (rule, maxLevel) => {
+  const isMax = rule.levelNo >= maxLevel
+  return {
+    id: rule.id,
+    levelLabel: rule.levelName || `VIP${rule.levelNo}`,
+    upBet: isMax && rule.upgradeValidBetAmount <= 0
+      ? '已达最高'
+      : formatVipThreshold(rule.upgradeValidBetAmount, rule.currencyCode),
+    upRecharge: formatVipThreshold(rule.upgradeRechargeAmount, rule.currencyCode),
+    downBet: formatVipThreshold(rule.retainValidBetAmount, rule.currencyCode),
+    downRecharge: formatVipThreshold(rule.retainRechargeAmount, rule.currencyCode),
+    bonus: formatVipMoney(rule.upgradeBonus, rule.currencyCode)
+  }
+}
+
+const fetchVipRules = async () => {
+  loading.value = true
+  try {
+    const rules = await getVipRules()
+    const maxLevel = rules.reduce((max, item) => Math.max(max, item.levelNo), 0)
+    conditionRows.value = rules.map((rule) => mapRuleToRow(rule, maxLevel))
+  } catch (error) {
+    console.error('加载 VIP 规则失败:', error)
+    conditionRows.value = []
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchVipRules()
+})
 </script>
 
 <style lang="less" scoped>
 @import '@/styles/pages/vip-detail.less';
+@import '@/styles/variables.less';
+
+.vip-condition-loading {
+  margin: @spacing-md;
+  text-align: center;
+  font-size: @font-size-sm;
+  color: #8f9ab1;
+}
 </style>

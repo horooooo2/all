@@ -11,12 +11,15 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppDownloadBar: typeof import('./components/AppDownloadBar.vue')['default']
+    BrandLogo: typeof import('./components/BrandLogo.vue')['default']
     HaoluRoadmap: typeof import('./components/lottery/HaoluRoadmap.vue')['default']
     LangPopup: typeof import('./components/LangPopup.vue')['default']
     LangSwitcher: typeof import('./components/LangSwitcher.vue')['default']
     LongDragonPanel: typeof import('./components/lottery/LongDragonPanel.vue')['default']
     LotteryBetBasket: typeof import('./components/lottery/LotteryBetBasket.vue')['default']
     NextResultPopup: typeof import('./components/lottery/NextResultPopup.vue')['default']
+    PasswordMismatchHint: typeof import('./components/PasswordMismatchHint.vue')['default']
     RecommendHaoluPanel: typeof import('./components/lottery/RecommendHaoluPanel.vue')['default']
     RecoSimpleBetPopup: typeof import('./components/lottery/RecoSimpleBetPopup.vue')['default']
     Roadmap: typeof import('./components/lottery/Roadmap.vue')['default']
@@ -29,6 +32,7 @@ declare module 'vue' {
     VanCalendar: typeof import('vant/es')['Calendar']
     VanDatePicker: typeof import('vant/es')['DatePicker']
     VanIcon: typeof import('vant/es')['Icon']
+    VanList: typeof import('vant/es')['List']
     VanLoading: typeof import('vant/es')['Loading']
     VanPicker: typeof import('vant/es')['Picker']
     VanPopup: typeof import('vant/es')['Popup']

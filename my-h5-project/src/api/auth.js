@@ -41,16 +41,19 @@ import { APP_DEVICE } from '@/config/env'
  * @property {string} nickname
  * @property {string} avatar_url
  * @property {number} vip_level
- * @property {number|string} balance
- * @property {number|string} frozen_balance
- * @property {number|string} diamond_balance
  * @property {number} gender
  * @property {string} birthday
  * @property {string} real_name
  * @property {string} contact
- * @property {number|string} status
- * @property {string} last_login_at
- * @property {number} token_expire_at
+ * @property {number|string} balance
+ * @property {number|string} frozen_balance
+ * @property {number|string} diamond_balance
+ * @property {boolean|number|string} [has_withdraw_password]
+ * @property {string} [created_at]
+ * @property {string} [updated_at]
+ * @property {number|string} [status]
+ * @property {string} [last_login_at]
+ * @property {number} [token_expire_at]
  */
 
 /**
@@ -101,12 +104,12 @@ export function logoutAccount() {
 }
 
 /**
- * 获取当前用户资料（需已登录）
+ * 获取当前用户资料（需已登录，走 /profile/detail）
  * @returns {Promise<UserProfile>}
  */
 export function getProfile() {
     return request({
-        url: '/auth/profile',
+        url: '/profile/detail',
         method: 'get'
     })
 }
@@ -115,6 +118,54 @@ export function getProfile() {
  * 将 profile 接口返回值映射为 userStore.userInfo
  * @param {UserProfile} profile
  */
+/** 性别接口值 → 展示文案 */
+export function formatGenderLabel(value) {
+    if (value === 1 || value === '1' || value === '男') return '男'
+    if (value === 2 || value === '2' || value === '女') return '女'
+    if (value === 0 || value === '0' || value === '未知') return '未知'
+    return value ? String(value) : '未知'
+}
+
+/** 展示文案 → 性别接口值 */
+export function genderLabelToCode(label) {
+    if (label === '男') return 1
+    if (label === '女') return 2
+    return 0
+}
+
+/** 联系方式展示（数字脱敏） */
+export function formatContactDisplay(contact) {
+    if (!contact) return '--'
+    const text = String(contact)
+    if (/^\d{7,}$/.test(text)) {
+        return text.replace(/^(\d{3})\d+(\d{4})$/, '$1****$2')
+    }
+    return text
+}
+
+/**
+ * userStore.userInfo → 编辑资料页展示结构
+ * @param {ReturnType<typeof mapProfileToUserInfo>|null} info
+ */
+export function mapUserInfoToEditView(info) {
+    const u = info || {}
+    return {
+        id: u.id ?? '--',
+        name: u.nickname || u.name || u.username || '昵称',
+        avatar: u.avatar || '',
+        account: u.username || '--',
+        nickname: u.nickname || '--',
+        gender: formatGenderLabel(u.gender),
+        genderCode: genderLabelToCode(formatGenderLabel(u.gender)),
+        birthday: u.birthday || '',
+        realName: u.realName || '',
+        contact: u.contact || '',
+        contactDisplay: formatContactDisplay(u.contact),
+        vipLevel: u.vipLevel ?? 0,
+        hasWithdrawPassword: !!u.hasWithdrawPassword
+    }
+}
+
 export function mapProfileToUserInfo(profile) {
     const balance = Number(profile.balance)
     const frozenBalance = Number(profile.frozen_balance)
@@ -134,10 +185,24 @@ export function mapProfileToUserInfo(profile) {
         birthday: profile.birthday,
         realName: profile.real_name,
         contact: profile.contact,
+        hasWithdrawPassword: normalizeHasWithdrawPassword(profile.has_withdraw_password),
+        createdAt: profile.created_at ?? '',
+        updatedAt: profile.updated_at ?? '',
         status: profile.status,
         lastLoginAt: profile.last_login_at,
         tokenExpireAt: profile.token_expire_at
     }
+}
+
+/** @param {boolean|number|string|undefined} value */
+function normalizeHasWithdrawPassword(value) {
+    if (value === true || value === 1 || value === '1') {
+        return true
+    }
+    if (value === false || value === 0 || value === '0') {
+        return false
+    }
+    return !!value
 }
 
 /**

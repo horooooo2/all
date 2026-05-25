@@ -1,17 +1,15 @@
+import {
+    getSessionJSON,
+    setSessionJSON,
+    removeSessionItem,
+    migrateLocalToSession
+} from '@/utils/sessionCache'
+
 const STORAGE_KEY = 'login_remember_v1'
 
-function safeParse(json, fallback) {
-    try {
-        return JSON.parse(json)
-    } catch (e) {
-        return fallback
-    }
-}
-
-/** @returns {{ remember: boolean, username: string, password: string }} */
-export function getLoginRemember() {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    const data = safeParse(raw || '{}', {})
+function readRememberData() {
+    migrateLocalToSession(STORAGE_KEY)
+    const data = getSessionJSON(STORAGE_KEY, {}) || {}
     return {
         remember: !!data.remember,
         username: typeof data.username === 'string' ? data.username : '',
@@ -19,20 +17,28 @@ export function getLoginRemember() {
     }
 }
 
+/** @returns {{ remember: boolean, username: string, password: string }} */
+export function getLoginRemember() {
+    return readRememberData()
+}
+
 /**
  * @param {{ remember: boolean, username: string, password: string }} payload
  */
 export function saveLoginRemember(payload) {
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-            remember: !!payload.remember,
-            username: payload.username || '',
-            password: payload.password || ''
-        })
-    )
+    setSessionJSON(STORAGE_KEY, {
+        remember: !!payload.remember,
+        username: payload.username || '',
+        password: payload.password || ''
+    })
 }
 
+/** 仅用户主动取消「记住密码」时调用；退出/改密等不调用 */
 export function clearLoginRemember() {
-    localStorage.removeItem(STORAGE_KEY)
+    removeSessionItem(STORAGE_KEY)
+    try {
+        localStorage.removeItem(STORAGE_KEY)
+    } catch {
+        // ignore
+    }
 }

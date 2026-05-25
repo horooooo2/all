@@ -1,48 +1,29 @@
+import {
+  getSessionJSON,
+  setSessionJSON,
+  migrateLocalToSession
+} from '@/utils/sessionCache'
+import { fetchWalletAccountList } from '@/api/wallet'
+
 const STORAGE_KEY = 'withdrawal_accounts_v1'
 
-const DEFAULT_WITHDRAWAL_ACCOUNTS = [
-  {
-    id: 'default-usdt',
-    method: 'usdt',
-    createdAt: 1,
-    updatedAt: 1,
-    data: { chain: 'TRC-20', address: 'TXYZabcdefghijklmnopqrstuv3689' }
-  },
-  {
-    id: 'default-bank',
-    method: 'bank',
-    createdAt: 2,
-    updatedAt: 2,
-    data: { bankName: '\u4e2d\u56fd\u5de5\u5546\u94f6\u884c', cardNo: '6222021234567893689' }
-  },
-  {
-    id: 'default-wallet',
-    method: 'wallet',
-    createdAt: 3,
-    updatedAt: 3,
-    data: { realName: '\u5f20\u4e09', walletName: 'K\u8c46\u94b1\u5305', walletNo: '13800138003689' }
-  }
-]
-
-function safeParse(json, fallback) {
-  try {
-    return JSON.parse(json)
-  } catch (e) {
-    return fallback
-  }
+/**
+ * 拉取提款账户列表（接口）
+ * @returns {Promise<import('@/api/wallet').WalletAccount[]>}
+ */
+export async function fetchWithdrawalAccounts() {
+  return fetchWalletAccountList()
 }
 
+/** @deprecated 编辑页本地草稿；列表页请用 fetchWithdrawalAccounts */
 export function getWithdrawalAccounts() {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  const list = safeParse(raw || '[]', [])
-  const arr = Array.isArray(list) ? list : []
-  if (arr.length > 0) return arr
-  saveWithdrawalAccounts(DEFAULT_WITHDRAWAL_ACCOUNTS)
-  return DEFAULT_WITHDRAWAL_ACCOUNTS.map((item) => ({ ...item }))
+  migrateLocalToSession(STORAGE_KEY)
+  const list = getSessionJSON(STORAGE_KEY, [])
+  return Array.isArray(list) ? list : []
 }
 
 export function saveWithdrawalAccounts(list) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.isArray(list) ? list : []))
+  setSessionJSON(STORAGE_KEY, Array.isArray(list) ? list : [])
 }
 
 export function upsertWithdrawalAccount(payload) {
@@ -109,4 +90,3 @@ export function maskAccountDisplay(method, data = {}) {
     display: `**** **** **** ${tail}`
   }
 }
-

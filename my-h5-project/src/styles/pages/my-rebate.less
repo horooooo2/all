@@ -216,10 +216,6 @@
   }
 }
 
-.treatment-table .group-row.treatment-group-row span {
-  text-align: left;
-}
-
 .table-head {
   height: 44px;
   min-height: 44px;
@@ -288,16 +284,15 @@
 }
 
 .treatment-table .group-row.treatment-group-row {
-  display: flex;
-  grid-template-columns: none;
-  justify-content: space-between;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  justify-items: unset;
-  text-align: left;
+  justify-items: center;
   width: 100%;
   height: 44px;
   min-height: 44px;
-  padding: 0 12px 0 @spacing-md;
+  padding: 0 @spacing-md;
   background: #D7E2F5;
   border-left: none;
   border-right: none;
@@ -306,22 +301,27 @@
 }
 
 .treatment-table .treatment-group-row__title {
-  flex: 1;
+  grid-column: 1;
   min-width: 0;
-  display: block;
-  text-align: left;
+  width: 100%;
+  text-align: center;
   color: #2d3b57;
   font-size: @font-size-sm;
 }
 
 .treatment-table .treatment-group-row__arrow {
+  position: absolute;
+  right: @spacing-md;
+  top: 50%;
+  z-index: 1;
   width: 16px;
   height: 16px;
-  flex-shrink: 0;
   object-fit: contain;
+  pointer-events: none;
+  transform: translateY(-50%);
 
   &.is-up {
-    transform: rotate(180deg);
+    transform: translateY(-50%) rotate(180deg);
   }
 }
 
@@ -343,6 +343,12 @@
   align-items: center;
   gap: @spacing-sm;
   overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .treatment-table {
@@ -364,6 +370,29 @@
     color: var(--text-color-tertiary);
     font-size: @font-size-md;
   }
+}
+
+.record-empty--inline {
+  margin: @spacing-lg 0;
+}
+
+.record-loading,
+.record-finished-tip {
+  padding: @spacing-md 0;
+  text-align: center;
+  font-size: @font-size-sm;
+  color: var(--text-color-tertiary);
+}
+
+.load-more-btn {
+  display: block;
+  width: 100%;
+  margin-top: @spacing-sm;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  color: var(--primary-color);
+  font-size: @font-size-sm;
 }
 
 ::deep(.custom-popup.van-popup) {

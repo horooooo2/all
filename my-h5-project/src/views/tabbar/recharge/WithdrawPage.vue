@@ -154,7 +154,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { getWithdrawalAccounts, maskAccountDisplay } from '@/utils/withdrawalAccounts'
+import { fetchWithdrawalAccounts, maskAccountDisplay } from '@/utils/withdrawalAccounts'
 import iconUsdtsm from '@/assets/icon_usdtsm.svg'
 import iconWyzf from '@/assets/icon_wyzf.svg'
 import iconDzqb from '@/assets/icon_dzqb.svg'
@@ -173,22 +173,17 @@ const methods = [
 const selectedMethod = ref('usdt')
 const amount = ref('')
 
-const DEFAULT_ACCOUNTS = [
-  { id: 'demo-usdt-1', method: 'usdt', data: { chain: 'TRC-20', address: 'T9yD14Nj9j7xABCDEF00013689' } },
-  { id: 'demo-usdt-2', method: 'usdt', data: { chain: 'ERC-20', address: '0x1234567890abcdef00023689' } },
-  { id: 'demo-bank-1', method: 'bank', data: { bankName: '工商银行', cardNo: '6222021234567890' } },
-  { id: 'demo-bank-2', method: 'bank', data: { bankName: '建设银行', cardNo: '6227009876543210' } },
-  { id: 'demo-wallet-1', method: 'wallet', data: { walletName: '支付宝', walletNo: '13800138001' } },
-  { id: 'demo-wallet-2', method: 'wallet', data: { walletName: '微信', walletNo: '13900139002' } }
-]
-
 const accounts = ref([])
 const selectedAccountId = ref('')
 const showTipPopup = ref(false)
 
-const refreshAccounts = () => {
-  const stored = getWithdrawalAccounts()
-  accounts.value = stored.length >= 2 ? stored : DEFAULT_ACCOUNTS
+const refreshAccounts = async () => {
+  try {
+    accounts.value = await fetchWithdrawalAccounts()
+  } catch (error) {
+    console.error('加载提款账户失败:', error)
+    accounts.value = []
+  }
 }
 
 const filteredAccounts = computed(() => {
@@ -215,8 +210,12 @@ const goManageAccounts = () => router.push({ name: 'withdrawalAccounts' })
 const goAddAccount = () => router.push({ name: 'withdrawalAccountEdit', query: { mode: 'create', method: selectedMethod.value } })
 
 const fetchData = async () => {
-  refreshAccounts()
-  loading.value = false
+  loading.value = true
+  try {
+    await refreshAccounts()
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(() => {

@@ -19,19 +19,45 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
+import { fetchContentDetail, resolveLegalContentCode } from '@/api/content'
+import toast from '@/components/Toast'
 
 const router = useRouter()
 const route = useRoute()
 
 const loading = ref(false)
 const html = ref('')
+const detailTitle = ref('')
 
-const pageTitle = computed(() => route.meta.title || '')
+const pageTitle = computed(() => detailTitle.value || route.meta.title || '')
 
-/** 二级页面暂不请求接口，后续接入 content 模块时在此调用 API */
-function load() {
+const load = async () => {
+  const code = resolveLegalContentCode(route.meta.legalKind)
+  if (!code) {
+    html.value = ''
+    detailTitle.value = ''
+    loading.value = false
+    return
+  }
+
+  loading.value = true
   html.value = ''
-  loading.value = false
+  detailTitle.value = ''
+
+  try {
+    const detail = await fetchContentDetail({ code })
+    detailTitle.value = detail.title
+    html.value = detail.content
+    if (detail.title) {
+      document.title = detail.title
+    }
+  } catch (error) {
+    console.error('加载内容详情失败:', error)
+    html.value = ''
+    toast.error('加载失败')
+  } finally {
+    loading.value = false
+  }
 }
 
 const goBack = () => router.back()

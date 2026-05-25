@@ -38,6 +38,7 @@ const router = useRouter()
 
 const goBack = () => router.back()
 const goCommonQuestions = () => router.push({ name: 'commonQuestions' })
+const goService = () => router.push({ name: 'service' })
 </script>
 
 <style lang="less" scoped>

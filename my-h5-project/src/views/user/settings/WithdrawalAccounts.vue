@@ -9,7 +9,9 @@
     </header>
 
     <main class="content">
-      <template v-if="accounts.length === 0">
+      <div v-if="loading" class="loading-state">加载中...</div>
+
+      <template v-else-if="accounts.length === 0">
         <div class="empty-state">
           <img :src="imgEmpty" class="empty-img" alt="">
           <div class="empty-text">暂无提款账户，去添加</div>
@@ -25,22 +27,12 @@
           >
             <div class="card-left">
               <div class="card-icon">
-                <img :src="iconCardLeft" alt="">
+                <img :src="methodIcon(item.method)" alt="">
               </div>
               <div class="card-text">
                 <div class="card-title">{{ displayMap[item.id]?.title }}</div>
                 <div class="card-subtitle">{{ displayMap[item.id]?.subTitle }}</div>
               </div>
-            </div>
-
-            <div
-              class="delete-btn"
-              role="button"
-              tabindex="0"
-              aria-label="??"
-              @click.stop="onDelete(item.id)"
-            >
-              <img :src="iconCardDel" alt="">
             </div>
 
             <div class="card-no">{{ displayMap[item.id]?.display }}</div>
@@ -56,19 +48,30 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onActivated, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { showConfirmDialog } from 'vant'
 import toast from '@/components/Toast'
+import { useUserStore } from '@/stores/user'
 import iconBack from '@/assets/icon_dack.svg'
 import iconService from '@/assets/icon_zxkf.svg'
 import imgEmpty from '@/assets/no_data.svg'
-import iconCardDel from '@/assets/icon_card_del.svg'
-import iconCardLeft from '@/assets/icon_zfb.svg'
-import { deleteWithdrawalAccount, getWithdrawalAccounts, maskAccountDisplay } from '@/utils/withdrawalAccounts'
+import iconUsdt from '@/assets/icon_usdtsm.svg'
+import iconBank from '@/assets/icon_wyzf.svg'
+import iconWallet from '@/assets/icon_dzqb.svg'
+import { fetchWithdrawalAccounts, maskAccountDisplay } from '@/utils/withdrawalAccounts'
 
 const router = useRouter()
+const userStore = useUserStore()
 const accounts = ref([])
+const loading = ref(true)
+
+const METHOD_ICONS = {
+  usdt: iconUsdt,
+  bank: iconBank,
+  wallet: iconWallet
+}
+
+const methodIcon = (method) => METHOD_ICONS[method] || iconWallet
 
 const displayMap = computed(() => {
   const map = {}
@@ -78,31 +81,46 @@ const displayMap = computed(() => {
   return map
 })
 
-const refresh = () => {
-  accounts.value = getWithdrawalAccounts()
+const loadAccounts = async () => {
+  if (!userStore.isLogin) {
+    router.replace({ name: 'login', query: { redirect: '/withdrawal-accounts' } })
+    return
+  }
+
+  loading.value = true
+  try {
+    accounts.value = await fetchWithdrawalAccounts()
+  } catch (error) {
+    console.error('加载提款账户失败:', error)
+    accounts.value = []
+    toast.error('加载提款账户失败')
+  } finally {
+    loading.value = false
+  }
 }
 
 const goBack = () => router.back()
 const goService = () => router.push({ name: 'service' })
 const goAdd = () => router.push({ name: 'withdrawalAccountEdit', query: { mode: 'create' } })
 
-const onDelete = async (id) => {
-  try {
-    await showConfirmDialog({
-      title: '\u63d0\u793a',
-      message: '\u786e\u5b9a\u8981\u5220\u9664\u8be5\u63d0\u6b3e\u8d26\u6237\u5417\uff1f'
-    })
-    deleteWithdrawalAccount(id)
-    toast.success('\u5df2\u5220\u9664')
-    refresh()
-  } catch (e) {}
-}
-
 onMounted(() => {
-  refresh()
+  loadAccounts()
+})
+
+onActivated(() => {
+  if (userStore.isLogin && !loading.value) {
+    loadAccounts()
+  }
 })
 </script>
 
 <style lang="less" scoped>
 @import '@/styles/pages/withdrawal-accounts.less';
+
+.withdrawal-accounts-page .loading-state {
+  padding: 48px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #8aa2d6;
+}
 </style>

@@ -5,77 +5,96 @@
       <h1>游戏记录详情</h1>
     </header>
 
-    <section class="detail-list">
-      <article v-for="item in detailRecords" :key="item.id" class="detail-card">
+    <section v-if="detail" class="detail-list">
+      <article class="detail-card">
         <div class="detail-right">
-          <img class="status-image" :src="statusIconByKey(item.status)" alt="status">
-          <div v-if="item.status === 'unsettled'" class="result-amount result-amount--unsettled">未结算</div>
-          <div v-else-if="item.status === 'revoked'" class="result-amount result-amount--revoked">已撤销</div>
-          <div v-else class="result-amount" :class="item.winLoss >= 0 ? 'positive' : 'negative'">
-            <span>{{ item.winLoss >= 0 ? '' : '-' }}{{ Math.abs(item.winLoss) }}</span>
+          <img class="status-image" :src="statusIconByKey(detail.status)" alt="status">
+          <div v-if="detail.status === 'unsettled'" class="result-amount result-amount--unsettled">
+            未结算
+          </div>
+          <div v-else-if="detail.status === 'revoked'" class="result-amount result-amount--revoked">
+            已撤销
+          </div>
+          <div v-else class="result-amount" :class="detail.winLoss >= 0 ? 'positive' : 'negative'">
+            <span>{{ detail.winLoss >= 0 ? '' : '-' }}{{ formatMoney(Math.abs(detail.winLoss)) }}</span>
             <img class="amount-currency" :src="iconCny" alt="">
           </div>
         </div>
         <div class="card-head">
-          <strong>{{ item.gameName }}</strong>
+          <strong>{{ detail.gameName }}</strong>
         </div>
         <div class="row">
           <span class="row-label">平台：</span>
-          <span class="row-value">{{ item.platform }}</span>
+          <span class="row-value">{{ detail.platform }}</span>
         </div>
         <div class="row">
           <span class="row-label">金额：</span>
-          <span class="row-value">¥{{ item.amount }}</span>
+          <span class="row-value">¥{{ formatMoney(detail.amount) }}</span>
         </div>
         <div class="row">
           <span class="row-label">时间：</span>
-          <span class="row-value">{{ item.orderTime }}</span>
+          <span class="row-value">{{ detail.orderTime }}</span>
         </div>
         <div class="row">
           <span class="row-label">局号：</span>
-          <span class="row-value">{{ item.id }}</span>
-          <button type="button" class="copy-btn" @click="copyIssue(item.id)">
+          <span class="row-value">{{ detail.roundNo || detail.id }}</span>
+          <button type="button" class="copy-btn" @click="copyIssue(detail.roundNo || detail.id)">
             <img :src="iconCopy" alt="copy">
           </button>
         </div>
-        <div class="result-row">
-          <span class="result-row-label">开奖结果：</span>
-          <span class="result-row-value">{{ item.resultText }}</span>
+        <div v-if="detail.orderNo" class="row">
+          <span class="row-label">订单号：</span>
+          <span class="row-value">{{ detail.orderNo }}</span>
         </div>
         <div class="bet-box">
           <div class="bet-box-line">
             <span class="bet-box-label">投注：</span>
             <span class="bet-box-value">
-              <template v-if="parseBetText(item.betText).odds">
-                {{ parseBetText(item.betText).main }}<span class="bet-odds"> @{{ parseBetText(item.betText).odds }}</span>
+              <template v-if="parseBetText(detail.betText).odds">
+                {{ parseBetText(detail.betText).main }}<span class="bet-odds"> @{{ parseBetText(detail.betText).odds }}</span>
               </template>
-              <template v-else>{{ item.betText }}</template>
+              <template v-else>{{ detail.betText || '--' }}</template>
             </span>
           </div>
           <div class="bet-box-line">
             <span class="bet-box-label">投注金额：</span>
-            <span class="bet-box-value">¥{{ item.betAmount }}</span>
+            <span class="bet-box-value">¥{{ formatMoney(detail.betAmount) }}</span>
+          </div>
+          <div class="bet-box-line">
+            <span class="bet-box-label">有效投注：</span>
+            <span class="bet-box-value">¥{{ formatMoney(detail.validBet) }}</span>
           </div>
           <div class="bet-box-line">
             <span class="bet-box-label">派彩：</span>
-            <span class="bet-box-value">¥{{ item.payout }}</span>
+            <span class="bet-box-value">¥{{ formatMoney(detail.payout) }}</span>
+          </div>
+          <div v-if="detail.payoutAt" class="bet-box-line">
+            <span class="bet-box-label">派彩时间：</span>
+            <span class="bet-box-value">{{ detail.payoutAt }}</span>
           </div>
         </div>
         <div class="total-row">
-          <span class="total-row-label">总投注金额：</span>
-          <span class="total-row-value">¥{{ item.betAmount }}</span>
+          <span class="total-row-label">盈亏金额：</span>
+          <span class="total-row-value">
+            {{ detail.winLoss >= 0 ? '+' : '-' }}¥{{ formatMoney(Math.abs(detail.winLoss)) }}
+          </span>
         </div>
       </article>
     </section>
+
+    <div v-else class="detail-empty">
+      <p>记录不存在或已删除</p>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import toast from '@/components/Toast'
-import { gameRecords } from './game-record.mock'
+import { getGameRecordCache } from '@/utils/gameRecordCache'
+import { copyTextToClipboard } from '@/utils/copyText'
 import iconCopy from '@/assets/icon_copy.svg'
 import iconCny from '@/assets/icon_cny.svg'
 import iconSettled from '@/assets/icon_settled.svg'
@@ -89,7 +108,6 @@ const statusIconMap = {
 }
 const statusIconByKey = (status) => statusIconMap[status] || iconUnsettled
 
-/** 投注文案拆出赔率，如「… @4.28」 */
 function parseBetText(text) {
   const s = String(text ?? '')
   const idx = s.lastIndexOf(' @')
@@ -97,38 +115,43 @@ function parseBetText(text) {
   return { main: s.slice(0, idx), odds: s.slice(idx + 2).trim() }
 }
 
+const formatMoney = (value) => {
+  const n = Number(value)
+  return (Number.isNaN(n) ? 0 : n).toFixed(2)
+}
+
 const route = useRoute()
 const router = useRouter()
+const detail = ref(null)
 
-const detailRecords = computed(() => {
-  const id = Number(route.query.id)
-  if (!id) return gameRecords.slice(0, 2)
-  const one = gameRecords.find(i => i.id === id)
-  return one ? [one, ...gameRecords.filter(i => i.id !== id).slice(0, 1)] : gameRecords.slice(0, 2)
-})
+const load = () => {
+  const id = route.query.id
+  detail.value = id ? getGameRecordCache(id) : null
+}
 
 const goBack = () => router.back()
 
 const copyIssue = async (issueNo) => {
-  try {
-    const text = String(issueNo)
-    if (navigator?.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text)
-    } else {
-      const input = document.createElement('input')
-      input.value = text
-      document.body.appendChild(input)
-      input.select()
-      document.execCommand('copy')
-      document.body.removeChild(input)
-    }
+  const ok = await copyTextToClipboard(String(issueNo))
+  if (ok) {
     toast.success('已复制局号')
-  } catch (error) {
+  } else {
     toast.error('复制失败')
   }
 }
+
+onMounted(() => {
+  load()
+})
 </script>
 
 <style lang="less" scoped>
 @import '@/styles/pages/game-record-detail.less';
+
+.game-record-detail-page .detail-empty {
+  padding: 48px 16px;
+  text-align: center;
+  color: #8aa2d6;
+  font-size: 14px;
+}
 </style>

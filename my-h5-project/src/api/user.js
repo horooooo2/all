@@ -1,8 +1,9 @@
-import { getProfile } from '@/api/auth'
+import request from '@/utils/request'
+import { getProfileDetail } from '@/api/profile'
 
-/** 获取当前用户资料（与 /auth/profile 一致） */
+/** 获取当前用户资料详情 */
 export function getUserInfo() {
-    return getProfile()
+    return getProfileDetail()
 }
 
 export function updateUserProfile(data) {

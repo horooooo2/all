@@ -43,9 +43,9 @@
         </div>
       </div>
 
-      <div class="vip-progress-wrap">
+      <div v-if="isLogin" class="vip-progress-wrap">
         <div class="vip-line">
-          <span>当前等级VIP0 晋级进度 ¥10/¥10,000</span>
+          <span>{{ vipProgressText }}</span>
           <div
             class="link-btn"
             role="button"
@@ -59,24 +59,24 @@
           </div>
         </div>
         <div class="vip-track">
-          <span class="vip-tag">VIP0</span>
+          <span class="vip-tag">{{ currentVipLabel }}</span>
           <div class="track-bg">
-            <div class="track-inner" />
+            <div class="track-inner" :style="{ width: `${vipProgressPercent}%` }" />
           </div>
-          <span class="vip-tag">VIP1</span>
+          <span class="vip-tag">{{ nextVipLabel }}</span>
         </div>
       </div>
     </section>
 
     <section class="wallet-card">
       <div class="wallet-header">
-        <span>TG2323121</span>
-        <img class="vip-chip-img" :src="iconVip00" alt="VIP0">
+        <span>{{ walletDisplayName }}</span>
+        <img class="vip-chip-img" :src="walletVipIcon" :alt="currentVipLabel">
       </div>
       <div class="wallet-body">
         <div class="balance-wrap">
           <img class="currency-icon" :src="iconCny" alt="">
-          <span class="balance">89,685.50</span>
+          <span class="balance">{{ displayBalance }}</span>
         </div>
         <div class="wallet-actions">
           <div
@@ -178,7 +178,14 @@
         </span>
         <van-icon name="arrow" />
       </div>
-      <div class="menu-row" role="button" tabindex="0">
+      <div
+        class="menu-row"
+        role="button"
+        tabindex="0"
+        @click="onDownloadApp"
+        @keydown.enter.prevent="onDownloadApp"
+        @keydown.space.prevent="onDownloadApp"
+      >
         <span class="menu-row-inner">
           <img class="menu-icon" :src="iconApp" alt="">
           <span>下载应用程序</span>
@@ -264,9 +271,11 @@ import { useRouter } from 'vue-router'
 import LangPopup from '@/components/LangPopup.vue'
 import { useUserStore } from '@/stores/user'
 import { useUserAvatar } from '@/composables/useUserAvatar'
+import { getVipIndex, formatVipBetAmount } from '@/api/vip'
+import { openSiteAppDownload } from '@/utils/siteAppDownload'
+import { getVipLevelIcon } from '@/utils/vipLevelIcon'
 import iconBj from '@/assets/icon_bj.svg'
 import iconDack from '@/assets/icon_dack2.png'
-import iconVip00 from '@/assets/icon_vip_00.svg'
 import iconCny from '@/assets/icon_cny.svg'
 import iconDeposit2 from '@/assets/icon_deposit.svg'
 import iconWithdrawal from '@/assets/icon_withdrawal.png'
@@ -290,9 +299,96 @@ const { avatarUrl, displayAvatar, refreshProfile } = useUserAvatar()
 
 const isLogin = computed(() => userStore.isLogin)
 const viewUserInfo = computed(() => userStore.userInfo)
+const vipIndex = ref(null)
+
+const currentVipLevel = computed(() => {
+  const fromIndex = vipIndex.value?.currentLevel
+  if (fromIndex != null && fromIndex >= 0) {
+    return fromIndex
+  }
+  return Number(viewUserInfo.value?.vipLevel) || 0
+})
+
+const nextVipLevel = computed(() => {
+  const next = vipIndex.value?.nextLevel
+  if (next > 0) {
+    return next
+  }
+  const cur = currentVipLevel.value
+  return cur < 10 ? cur + 1 : 10
+})
+
+const currentVipLabel = computed(() =>
+  vipIndex.value?.currentLevelName || `VIP${currentVipLevel.value}`
+)
+
+const nextVipLabel = computed(() =>
+  vipIndex.value?.nextLevelName || `VIP${nextVipLevel.value}`
+)
+
+const isVipMax = computed(() => {
+  const cur = currentVipLevel.value
+  const next = nextVipLevel.value
+  return cur >= 10 || next <= cur
+})
+
+const vipProgressText = computed(() => {
+  if (!isLogin.value) {
+    return ''
+  }
+  if (isVipMax.value) {
+    return `当前等级${currentVipLabel.value} 已满级`
+  }
+  const valid = vipIndex.value?.validBetAmount ?? 0
+  const upgrade = vipIndex.value?.upgradeValidBetAmount ?? 0
+  return `当前等级${currentVipLabel.value} 晋级进度 ¥${formatVipBetAmount(valid)}/¥${formatVipBetAmount(upgrade)}`
+})
+
+const vipProgressPercent = computed(() => {
+  if (!isLogin.value) {
+    return 0
+  }
+  if (isVipMax.value) {
+    return 100
+  }
+  return vipIndex.value?.progressRate ?? 0
+})
+
+const walletVipIcon = computed(() => getVipLevelIcon(currentVipLevel.value))
+
+const walletDisplayName = computed(() => {
+  if (!isLogin.value) {
+    return '--'
+  }
+  return viewUserInfo.value?.username || viewUserInfo.value?.name || '--'
+})
+
+const displayBalance = computed(() => {
+  const balance = Number(viewUserInfo.value?.balance)
+  if (!isLogin.value || Number.isNaN(balance)) {
+    return '0.00'
+  }
+  return balance.toLocaleString('zh-CN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
+})
+
+const loadUserVipData = async () => {
+  if (!userStore.isLogin) {
+    vipIndex.value = null
+    return
+  }
+  await refreshProfile().catch(() => {})
+  try {
+    vipIndex.value = await getVipIndex()
+  } catch {
+    vipIndex.value = null
+  }
+}
 
 onMounted(() => {
-  refreshProfile().catch(() => {})
+  loadUserVipData()
 })
 
 const LANG_LABELS = {
@@ -311,6 +407,7 @@ const goTransactionRecord = () => router.push('/transaction-record')
 const goGameRecord = () => router.push('/game-record')
 const goTodayProfitLoss = () => router.push('/today-profit-loss')
 const goMyRebate = () => router.push('/my-rebate')
+const onDownloadApp = () => openSiteAppDownload()
 const goHelpCenter = () => router.push({ name: 'helpCenter' })
 const goSettings = () => router.push({ name: 'settings' })
 const goVipCenter = () => router.push({ name: 'vipCenter' })

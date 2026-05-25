@@ -27,21 +27,21 @@
     <section v-if="activeMainTab === 'record'" class="record-tab-panel">
       <div class="income-card">
         <span>今日返水收入</span>
-        <strong>¥{{ currentRecordStat.todayIncome }}</strong>
+        <strong>¥{{ formatMoney(summary.todayRebateAmount) }}</strong>
       </div>
 
       <div class="overview-card">
         <div class="overview-row">
           <span>昨天个人有效投注</span>
-          <strong>¥{{ currentRecordStat.yesterdayValidBet }}</strong>
+          <strong>¥{{ formatMoney(summary.yesterdayValidBet) }}</strong>
         </div>
         <div class="overview-row">
           <span>有效结算投注返水</span>
-          <strong>¥{{ currentRecordStat.settledRebate }}</strong>
+          <strong>¥{{ formatMoney(summary.settledValidBetRebate) }}</strong>
         </div>
         <div class="overview-row">
           <span>本月累计返水量</span>
-          <strong>¥{{ currentRecordStat.monthlyRebate }}</strong>
+          <strong>¥{{ formatMoney(summary.monthRebateAmount) }}</strong>
         </div>
       </div>
 
@@ -68,12 +68,14 @@
           <span>返水</span>
         </div>
 
-        <template v-if="recordRows.length">
-          <template v-for="group in recordRows" :key="group.date">
+        <div v-if="loading && !recordGroups.length" class="record-loading">加载中...</div>
+
+        <template v-else-if="recordGroups.length">
+          <template v-for="group in recordGroups" :key="group.date">
             <button type="button" class="group-row" @click="toggleGroup(group.date)">
               <span>{{ group.date }}</span>
-              <span>¥{{ group.totalValidBet }}</span>
-              <span>¥{{ group.totalRebate }}</span>
+              <span>¥{{ formatMoney(group.totalValidBet) }}</span>
+              <span>¥{{ formatMoney(group.totalRebate) }}</span>
               <img
                 class="group-row__arrow"
                 :class="{ 'is-up': expandedGroups.includes(group.date) }"
@@ -88,36 +90,59 @@
                 class="detail-row"
               >
                 <span>{{ detail.time }}</span>
-                <span>¥{{ detail.validBet }}</span>
-                <span>¥{{ detail.rebate }}</span>
+                <span>¥{{ formatMoney(detail.validBet) }}</span>
+                <span>¥{{ formatMoney(detail.rebate) }}</span>
               </div>
             </div>
           </template>
         </template>
 
-        <div class="summary-row">
+        <div v-else-if="!loading" class="record-empty record-empty--inline">
+          <img :src="noDataImage" alt="no-data">
+          <p>暂无数据</p>
+        </div>
+
+        <div v-if="recordGroups.length" class="summary-row">
           <span>总计</span>
-          <span>¥{{ recordSummary.totalValidBet }}</span>
-          <span>¥{{ recordSummary.totalRebate }}</span>
+          <span>¥{{ formatMoney(recordSummary.totalValidBet) }}</span>
+          <span>¥{{ formatMoney(recordSummary.totalRebate) }}</span>
+        </div>
+
+        <button
+          v-if="!loading && !finished && recordGroups.length"
+          type="button"
+          class="load-more-btn"
+          @click="loadRecords"
+        >
+          加载更多
+        </button>
+
+        <div
+          v-else-if="!loading && finished && recordGroups.length"
+          class="record-finished-tip"
+        >
+          没有更多了
         </div>
       </div>
     </section>
 
     <section v-else class="treatment-tab-panel">
-      <div class="game-tabs">
+      <div v-if="treatmentGameTabs.length" class="game-tabs">
         <button
           v-for="item in treatmentGameTabs"
           :key="item.value"
           type="button"
           class="game-tab-btn"
           :class="{ active: activeTreatmentGameTab === item.value }"
-          @click="activeTreatmentGameTab = item.value"
+          @click="onTreatmentTabChange(item.value)"
         >
           {{ item.label }}
         </button>
       </div>
 
-      <template v-if="currentTreatmentRows.length">
+      <div v-if="treatmentLoading" class="record-loading">加载中...</div>
+
+      <template v-else-if="currentTreatmentRows.length">
         <div class="treatment-table">
           <div class="table-head">
             <span>类型</span>
@@ -150,7 +175,7 @@
         </div>
       </template>
 
-      <div v-else class="record-empty">
+      <div v-else-if="!treatmentLoading" class="record-empty">
         <img :src="noDataImage" alt="no-data">
         <p>暂无数据</p>
       </div>
@@ -211,16 +236,28 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import noDataImage from '@/assets/no_data.svg'
 import iconFunction from '@/assets/icon_function.svg'
 import iconSelected from '@/assets/icon_sel.svg'
 import iconDetailsDown from '@/assets/icon_details_down.svg'
+import toast from '@/components/Toast'
+import {
+  buildRebateRecordQuery,
+  fetchRebateRecords,
+  fetchRebateRules,
+  getRebateRangeByPreset,
+  groupRebateRecordsByDate
+} from '@/api/rebate'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 const goBack = () => router.back()
+
+const PAGE_SIZE = 20
 
 const activeMainTab = ref('record')
 const recordTimeTabs = [
@@ -238,98 +275,112 @@ const quickOptions = [
 const selectedQuick = ref('today')
 const draftQuick = ref('today')
 
-const allRecordGroups = [
-  {
-    date: '2026-03-12',
-    totalValidBet: 10000,
-    totalRebate: 400,
-    items: [
-      { time: '14:08:29', validBet: 5000, rebate: 200 },
-      { time: '18:10:12', validBet: 5000, rebate: 200 }
-    ]
-  },
-  {
-    date: '2026-03-13',
-    totalValidBet: 20000,
-    totalRebate: 800,
-    items: [
-      { time: '21:25:29', validBet: 10000, rebate: 400 },
-      { time: '21:25:29', validBet: 20000, rebate: 400 }
-    ]
-  }
-]
+const initRange = getRebateRangeByPreset('today')
+const selectedStartDate = ref(initRange.start)
+const selectedEndDate = ref(initRange.end)
+const draftStartDate = ref(new Date(initRange.start))
+const draftEndDate = ref(new Date(initRange.end))
 
-const anchorDate = new Date(2026, 2, 13)
-const selectedStartDate = ref(new Date(2026, 2, 13))
-const selectedEndDate = ref(new Date(2026, 2, 13))
-const draftStartDate = ref(new Date(2026, 2, 13))
-const draftEndDate = ref(new Date(2026, 2, 13))
+const recordList = ref([])
+const summary = ref({
+  todayRebateAmount: 0,
+  yesterdayValidBet: 0,
+  settledValidBetRebate: 0,
+  monthRebateAmount: 0
+})
+const page = ref(1)
+const total = ref(0)
+const loading = ref(false)
+const finished = ref(false)
 
-const toDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate())
-const parseYmd = (text) => {
-  const [y, m, d] = text.split('-').map(Number)
-  return new Date(y, m - 1, d)
-}
-const inDateRange = (valueDate, start, end) => {
-  const date = toDateOnly(valueDate)
-  const startDate = toDateOnly(start)
-  const endDate = toDateOnly(end)
-  return date >= startDate && date <= endDate
+const formatMoney = (value) => {
+  const n = Number(value)
+  return (Number.isNaN(n) ? 0 : n).toFixed(2)
 }
 
-const getRangeByQuick = (value) => {
-  const anchor = new Date(anchorDate)
-  if (value === 'today') {
-    return [new Date(anchor), new Date(anchor)]
-  }
-  if (value === 'yesterday') {
-    const yesterday = new Date(anchor)
-    yesterday.setDate(anchor.getDate() - 1)
-    return [yesterday, yesterday]
-  }
-  if (value === 'week') {
-    const weekStart = new Date(anchor)
-    weekStart.setDate(anchor.getDate() - 6)
-    return [weekStart, new Date(anchor)]
-  }
-  if (value === 'month') {
-    const start = new Date(anchor.getFullYear(), anchor.getMonth(), 1)
-    return [start, new Date(anchor)]
-  }
-  if (value === 'lastMonth') {
-    const start = new Date(anchor.getFullYear(), anchor.getMonth() - 1, 1)
-    const end = new Date(anchor.getFullYear(), anchor.getMonth(), 0)
-    return [start, end]
-  }
-  return [new Date(anchor), new Date(anchor)]
-}
+const recordGroups = computed(() => groupRebateRecordsByDate(recordList.value))
+
+const recordSummary = computed(() =>
+  recordGroups.value.reduce(
+    (acc, item) => {
+      acc.totalValidBet += item.totalValidBet
+      acc.totalRebate += item.totalRebate
+      return acc
+    },
+    { totalValidBet: 0, totalRebate: 0 }
+  )
+)
 
 const selectRecordTimeTab = (value) => {
   activeRecordTimeTab.value = value
   selectedQuick.value = value
-  const [start, end] = getRangeByQuick(value)
+  const { start, end } = getRebateRangeByPreset(value)
   selectedStartDate.value = start
   selectedEndDate.value = end
+  resetAndLoadRecords()
 }
 
-const expandedGroups = ref(['2026-03-13'])
-const recordRows = computed(() => allRecordGroups.filter(group => inDateRange(
-  parseYmd(group.date),
-  selectedStartDate.value,
-  selectedEndDate.value
-)))
-const recordSummary = computed(() => recordRows.value.reduce((acc, item) => {
-  acc.totalValidBet += item.totalValidBet
-  acc.totalRebate += item.totalRebate
-  return acc
-}, { totalValidBet: 0, totalRebate: 0 }))
-const monthlyRebate = computed(() => allRecordGroups.reduce((sum, item) => sum + item.totalRebate, 0))
-const currentRecordStat = computed(() => ({
-  todayIncome: recordSummary.value.totalRebate,
-  yesterdayValidBet: recordSummary.value.totalValidBet,
-  settledRebate: recordSummary.value.totalRebate,
-  monthlyRebate: monthlyRebate.value
-}))
+const expandedGroups = ref([])
+
+const loadRecords = async () => {
+  if (activeMainTab.value !== 'record') return
+
+  if (!userStore.isLogin) {
+    loading.value = false
+    finished.value = true
+    router.replace({ name: 'login', query: { redirect: '/my-rebate' } })
+    return
+  }
+
+  if (finished.value && page.value > 1) return
+
+  loading.value = true
+  try {
+    const params = buildRebateRecordQuery(
+      selectedStartDate.value,
+      selectedEndDate.value,
+      page.value,
+      PAGE_SIZE
+    )
+    const res = await fetchRebateRecords(params)
+
+    if (page.value === 1) {
+      recordList.value = res.list
+      summary.value = res.summary
+      if (res.groups.length) {
+        expandedGroups.value = [res.groups[0].date]
+      } else {
+        expandedGroups.value = []
+      }
+    } else {
+      recordList.value = [...recordList.value, ...res.list]
+    }
+
+    total.value = res.total
+    finished.value = recordList.value.length >= total.value || res.list.length < PAGE_SIZE
+    if (!finished.value) {
+      page.value += 1
+    }
+  } catch (error) {
+    console.error('加载返水记录失败:', error)
+    if (page.value === 1) {
+      recordList.value = []
+      expandedGroups.value = []
+    }
+    finished.value = true
+    toast.error('加载返水记录失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const resetAndLoadRecords = () => {
+  page.value = 1
+  total.value = 0
+  recordList.value = []
+  finished.value = false
+  loadRecords()
+}
 
 const toggleGroup = (date) => {
   const index = expandedGroups.value.indexOf(date)
@@ -340,101 +391,69 @@ const toggleGroup = (date) => {
   }
 }
 
-const treatmentGameTabs = [
-  { label: '电子', value: 'slot' },
-  { label: '棋牌', value: 'chess' },
-  { label: '视讯', value: 'live' }
-]
-const activeTreatmentGameTab = ref('slot')
-
-const treatmentRowsMap = {
-  slot: [
-    {
-      type: '电子',
-      minValidBet: '¥100',
-      rate: '0.5%',
-      children: [
-        { type: 'PG电子', minValidBet: '¥100', rate: '0.5%' },
-        { type: 'JDB电子', minValidBet: '¥100', rate: '0.4%' },
-        { type: 'PP电子', minValidBet: '¥100', rate: '0.5%' }
-      ]
-    },
-    {
-      type: '棋牌',
-      minValidBet: '¥100',
-      rate: '0.3%',
-      children: [
-        { type: '开元棋牌', minValidBet: '¥100', rate: '0.3%' },
-        { type: '乐游棋牌', minValidBet: '¥100', rate: '0.3%' }
-      ]
-    },
-    {
-      type: '视讯',
-      minValidBet: '¥100',
-      rate: '0.4%',
-      children: [
-        { type: 'AG视讯', minValidBet: '¥100', rate: '0.4%' },
-        { type: 'BBIN视讯', minValidBet: '¥100', rate: '0.4%' }
-      ]
-    },
-    {
-      type: '捕鱼',
-      minValidBet: '¥100',
-      rate: '0.5%',
-      children: [
-        { type: 'JILI捕鱼', minValidBet: '¥100', rate: '0.5%' },
-        { type: 'MW捕鱼', minValidBet: '¥100', rate: '0.5%' }
-      ]
-    },
-    {
-      type: '体育',
-      minValidBet: '¥100',
-      rate: '0.3%',
-      children: [
-        { type: '沙巴体育', minValidBet: '¥100', rate: '0.3%' },
-        { type: '皇冠体育', minValidBet: '¥100', rate: '0.3%' }
-      ]
-    },
-    {
-      type: '彩票',
-      minValidBet: '¥0',
-      rate: '0.4%',
-      children: [
-        { type: '比特币28', minValidBet: '¥0', rate: '0.4%' },
-        { type: '台湾宾果28', minValidBet: '¥0', rate: '0.4%' },
-        { type: '加拿大28', minValidBet: '¥0', rate: '0.4%' },
-        { type: '加拿大西28', minValidBet: '¥0', rate: '0.4%' }
-      ]
-    }
-  ],
-  chess: [
-    {
-      type: '棋牌',
-      minValidBet: '¥100',
-      rate: '0.3%',
-      children: [
-        { type: '开元棋牌', minValidBet: '¥100', rate: '0.3%' },
-        { type: '乐游棋牌', minValidBet: '¥100', rate: '0.3%' },
-        { type: '博乐棋牌', minValidBet: '¥100', rate: '0.3%' }
-      ]
-    }
-  ],
-  live: [
-    {
-      type: '视讯',
-      minValidBet: '¥100',
-      rate: '0.4%',
-      children: [
-        { type: 'AG视讯', minValidBet: '¥100', rate: '0.4%' },
-        { type: 'BBIN视讯', minValidBet: '¥100', rate: '0.4%' },
-        { type: 'DG视讯', minValidBet: '¥100', rate: '0.4%' }
-      ]
-    }
-  ]
-}
+const treatmentGameTabs = ref([])
+const treatmentRulesMap = ref({})
+const activeTreatmentGameTab = ref('')
+const treatmentLoading = ref(false)
+const treatmentLoaded = ref(false)
 
 const expandedTreatment = ref([])
-const currentTreatmentRows = computed(() => treatmentRowsMap[activeTreatmentGameTab.value] || [])
+
+const currentTreatmentRows = computed(
+  () => treatmentRulesMap.value[activeTreatmentGameTab.value] || []
+)
+
+const syncTreatmentExpand = () => {
+  const first = currentTreatmentRows.value[0]
+  expandedTreatment.value = first?.type ? [first.type] : []
+}
+
+const loadTreatmentRules = async () => {
+  if (!userStore.isLogin) {
+    router.replace({ name: 'login', query: { redirect: '/my-rebate' } })
+    return
+  }
+
+  treatmentLoading.value = true
+  try {
+    const categories = await fetchRebateRules()
+    const tabs = []
+    const map = {}
+
+    categories.forEach((cat) => {
+      tabs.push({ label: cat.label, value: cat.key })
+      map[cat.key] = cat.rows
+    })
+
+    treatmentGameTabs.value = tabs
+    treatmentRulesMap.value = map
+    treatmentLoaded.value = true
+
+    if (!tabs.length) {
+      activeTreatmentGameTab.value = ''
+      expandedTreatment.value = []
+      return
+    }
+
+    if (!tabs.some((item) => item.value === activeTreatmentGameTab.value)) {
+      activeTreatmentGameTab.value = tabs[0].value
+    }
+    syncTreatmentExpand()
+  } catch (error) {
+    console.error('加载返水待遇失败:', error)
+    treatmentGameTabs.value = []
+    treatmentRulesMap.value = {}
+    treatmentLoaded.value = false
+    toast.error('加载返水待遇失败')
+  } finally {
+    treatmentLoading.value = false
+  }
+}
+
+const onTreatmentTabChange = (value) => {
+  activeTreatmentGameTab.value = value
+  syncTreatmentExpand()
+}
 const toggleTreatment = (type) => {
   const index = expandedTreatment.value.indexOf(type)
   if (index > -1) {
@@ -445,8 +464,8 @@ const toggleTreatment = (type) => {
 }
 
 const showDatePickerPopup = ref(false)
-const minDate = new Date(2023, 0, 1)
-const maxDate = new Date(2026, 11, 31)
+const minDate = new Date(2020, 0, 1)
+const maxDate = new Date()
 const pickerDateValues = ref(['2026', '03', '08'])
 const pickerTarget = ref('start')
 const datePickerTitle = computed(() => (pickerTarget.value === 'start' ? '开始时间' : '结束时间'))
@@ -458,7 +477,7 @@ const formatSlashDate = (date) => {
 
 const selectQuick = (value) => {
   draftQuick.value = value
-  const [start, end] = getRangeByQuick(value)
+  const { start, end } = getRebateRangeByPreset(value)
   draftStartDate.value = start
   draftEndDate.value = end
 }
@@ -501,7 +520,7 @@ const confirmPickDate = () => {
 
 const resetTime = () => {
   draftQuick.value = 'today'
-  const [start, end] = getRangeByQuick('today')
+  const { start, end } = getRebateRangeByPreset('today')
   draftStartDate.value = start
   draftEndDate.value = end
 }
@@ -514,7 +533,25 @@ const confirmTime = () => {
   selectedStartDate.value = new Date(draftStartDate.value)
   selectedEndDate.value = new Date(draftEndDate.value)
   showTimePopup.value = false
+  resetAndLoadRecords()
 }
+
+watch(activeMainTab, (tab) => {
+  if (tab === 'record' && !recordList.value.length && !loading.value) {
+    resetAndLoadRecords()
+  }
+  if (tab === 'treatment' && !treatmentLoaded.value && !treatmentLoading.value) {
+    loadTreatmentRules()
+  }
+})
+
+onMounted(() => {
+  if (!userStore.isLogin) {
+    router.replace({ name: 'login', query: { redirect: '/my-rebate' } })
+    return
+  }
+  resetAndLoadRecords()
+})
 </script>
 
 <style lang="less" scoped>

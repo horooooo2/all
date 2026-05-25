@@ -6,6 +6,8 @@ import toast from "@/components/Toast"
 import { API_BASE_URL, API_ACCEPT_LANGUAGE } from "@/config/env"
 
 const SUCCESS_CODES = [0, 200]
+/** 业务 code：登录态失效，需重新登录 */
+const AUTH_EXPIRED_BUSINESS_CODE = 40101
 
 const PAGE_404_NAMES = new Set(["error404", "notFound404"])
 
@@ -94,6 +96,22 @@ const forceLogout = () => {
     }
 }
 
+function isAuthExpiredBusinessCode(code) {
+    return Number(code) === AUTH_EXPIRED_BUSINESS_CODE
+}
+
+/** 登录态失效：清会话并跳转登录页 */
+function handleAuthExpired(message = "登录已过期，请重新登录") {
+    forceLogout()
+    if (router.currentRoute.value.name !== "login") {
+        router.replace({
+            path: "/login",
+            query: { redirect: router.currentRoute.value.fullPath }
+        })
+    }
+    toast.warning(message)
+}
+
 const request = axios.create({
     baseURL: API_BASE_URL,
     timeout: 15000,
@@ -126,10 +144,47 @@ request.interceptors.response.use(
             if (Object.keys(res).length === 0) {
                 return res
             }
+            // 如轮播图 { list: [...] }、VIP 规则等直出数组
+            if (Array.isArray(res)) {
+                return res
+            }
+            if (Array.isArray(res.list)) {
+                return res
+            }
+            if (Array.isArray(res.rules) || Array.isArray(res.items)) {
+                return res
+            }
+            // 如品牌信息 { name, logo_url, slogan }
+            if (res.logo_url != null || (res.name != null && !res.list && !res.token)) {
+                return res
+            }
+            // 如站点链接 { communities, providers, service_links }
+            if (
+                Array.isArray(res.communities) ||
+                Array.isArray(res.providers) ||
+                Array.isArray(res.service_links)
+            ) {
+                return res
+            }
+            // 如 VIP 首页 { current_level, privileges, ... }
+            if (
+                res.current_level != null ||
+                res.current_level_name != null ||
+                Array.isArray(res.privileges)
+            ) {
+                return res
+            }
         }
         if (res && SUCCESS_CODES.includes(res.code)) {
             // 优先返回业务 data，否则返回原始数据结构
             return res.data !== undefined ? res.data : res
+        }
+
+        // 业务 code 40101：登录态失效
+        if (res && isAuthExpiredBusinessCode(res.code)) {
+            const msg = res?.message || res?.msg || "登录已过期，请重新登录"
+            handleAuthExpired(msg)
+            return Promise.reject(new Error(msg))
         }
 
         // 业务层返回 404 / 500：跳转全屏异常页（不再 Toast）
@@ -152,17 +207,10 @@ request.interceptors.response.use(
         } else {
             const { status, data } = error.response
 
-            // 401：优先处理登录态，不进入 404/500 页
-            if (status === 401) {
-                message = "登录已过期，请重新登录"
-                forceLogout()
-                if (router.currentRoute.value.name !== "login") {
-                    router.replace({
-                        path: "/login",
-                        query: { redirect: router.currentRoute.value.fullPath }
-                    })
-                }
-                toast.warning(message)
+            // HTTP 401 或 body 内业务 code 40101：跳转登录
+            if (status === 401 || isAuthExpiredBusinessCode(data?.code)) {
+                message = data?.message || data?.msg || "登录已过期，请重新登录"
+                handleAuthExpired(message)
                 return Promise.reject(error)
             }
 

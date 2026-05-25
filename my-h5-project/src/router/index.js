@@ -82,6 +82,15 @@ const routes = [
                 }
             },
             {
+                path: 'activity/detail',
+                name: 'activityDetail',
+                component: () => import('@/views/activity/ActivityDetail.vue'),
+                meta: {
+                    title: '活动详情',
+                    keepAlive: false
+                }
+            },
+            {
                 path: 'user',
                 name: 'user',
                 component: () => import('@/views/tabbar/User.vue'),

@@ -21,8 +21,13 @@
         placeholder="请输入联系方式"
       >
 
-      <button type="button" class="confirm-btn" :disabled="!contactInfo" @click="onSubmit">
-        确认
+      <button
+        type="button"
+        class="confirm-btn"
+        :disabled="!contactInfo || isSubmitting"
+        @click="onSubmit"
+      >
+        {{ isSubmitting ? '提交中...' : '确认' }}
       </button>
     </main>
   </div>
@@ -33,19 +38,21 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import { useUserStore } from '@/stores/user'
+import { useProfileSave } from '@/composables/useProfileSave'
 import toast from '@/components/Toast'
 
 import heroIcon from '@/assets/img_contact_information.png'
 
 const router = useRouter()
 const userStore = useUserStore()
-const contactInfo = ref(userStore.userInfo?.contactInfo || '1990800088')
-
-const maskPhone = (value) => value.replace(/^(\d{3})\d+(\d{4})$/, '$1****$2')
+const { isSubmitting, saveProfile } = useProfileSave()
+const contactInfo = ref(userStore.userInfo?.contact || '')
 
 const goBack = () => router.back()
 
-const onSubmit = () => {
+const onSubmit = async () => {
+  if (isSubmitting.value) return
+
   const value = contactInfo.value.trim()
 
   if (!/^1\d{10}$/.test(value)) {
@@ -53,18 +60,13 @@ const onSubmit = () => {
     return
   }
 
-  const current = userStore.userInfo || {}
-  userStore.userInfo = {
-    ...current,
-    contactInfo: value,
-    phoneMasked: maskPhone(value)
+  const ok = await saveProfile({ contact: value })
+  if (ok) {
+    router.back()
   }
-  toast.success('设置成功')
-  router.back()
 }
 </script>
 
 <style lang="less" scoped>
 @import '@/styles/pages/profile-form.less';
 </style>
-

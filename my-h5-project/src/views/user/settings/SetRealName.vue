@@ -15,8 +15,13 @@
         placeholder="请输入真实姓名"
       >
 
-      <button type="button" class="confirm-btn" :disabled="!realName" @click="onSubmit">
-        确认
+      <button
+        type="button"
+        class="confirm-btn"
+        :disabled="!realName || isSubmitting"
+        @click="onSubmit"
+      >
+        {{ isSubmitting ? '提交中...' : '确认' }}
       </button>
     </main>
   </div>
@@ -27,15 +32,19 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import { useUserStore } from '@/stores/user'
+import { useProfileSave } from '@/composables/useProfileSave'
 import toast from '@/components/Toast'
 
 const router = useRouter()
 const userStore = useUserStore()
+const { isSubmitting, saveProfile } = useProfileSave()
 const realName = ref(userStore.userInfo?.realName || '')
 
 const goBack = () => router.back()
 
-const onSubmit = () => {
+const onSubmit = async () => {
+  if (isSubmitting.value) return
+
   const value = realName.value.trim()
 
   if (!value) {
@@ -47,14 +56,13 @@ const onSubmit = () => {
     return
   }
 
-  const current = userStore.userInfo || {}
-  userStore.userInfo = { ...current, realName: value }
-  toast.success('设置成功')
-  router.back()
+  const ok = await saveProfile({ real_name: value })
+  if (ok) {
+    router.back()
+  }
 }
 </script>
 
 <style lang="less" scoped>
 @import '@/styles/pages/profile-form.less';
 </style>
-

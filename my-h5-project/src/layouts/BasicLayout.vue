@@ -1,6 +1,12 @@
 <template>
   <div class="basic-layout">
-    <main class="main-content" :class="{ 'main-content--no-tabbar': !showTabBar }">
+    <main
+        class="main-content"
+        :class="{
+          'main-content--no-tabbar': !showTabBar,
+          'main-content--with-download-bar': showTabBar && downloadBarVisible
+        }"
+    >
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component
@@ -17,16 +23,26 @@
       </router-view>
     </main>
 
+    <AppDownloadBar
+        v-if="showTabBar"
+        @visible-change="onDownloadBarVisibleChange"
+    />
     <TabBar v-if="showTabBar" />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import TabBar from '@/components/TabBar.vue'
+import AppDownloadBar from '@/components/AppDownloadBar.vue'
 
 const route = useRoute()
+const downloadBarVisible = ref(true)
+
+const onDownloadBarVisibleChange = (visible) => {
+  downloadBarVisible.value = visible
+}
 
 const showTabBar = computed(() => {
   const hidePages = [
@@ -55,6 +71,7 @@ const showTabBar = computed(() => {
     '/lottery-bet-record',
     '/lottery-bet-order-detail',
     '/service/detail',
+    '/activity/detail',
     '/help-center',
     '/help-center/questions'
   ]
@@ -68,7 +85,11 @@ const showTabBar = computed(() => {
   background-color: var(--bg-color);
 
   .main-content {
-    padding-bottom: 50px;
+    padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .main-content.main-content--with-download-bar {
+    padding-bottom: calc(98px + env(safe-area-inset-bottom, 0px));
   }
 
   .main-content.main-content--no-tabbar {

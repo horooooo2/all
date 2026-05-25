@@ -71,4 +71,22 @@
   color: #9db2de;
   font-size: 12px;
   line-height: 1.35;
+  word-break: break-word;
+
+  :deep(p) {
+    margin: 0 0 0.5em;
+  }
+
+  :deep(img) {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.question-loading,
+.question-empty {
+  padding: 48px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #9db2de;
 }

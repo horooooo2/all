@@ -106,6 +106,11 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import {
+  getSessionItem,
+  setSessionItem,
+  migrateLocalToSession
+} from '@/utils/sessionCache'
 import iconX from '@/assets/icon_x.svg'
 import RecoSimpleBetPopup from './RecoSimpleBetPopup.vue'
 
@@ -225,7 +230,8 @@ function formatRangeLabel(pair) {
 
 function readStoredRange() {
   try {
-    const raw = localStorage.getItem(STREAK_STORAGE_KEY)
+    migrateLocalToSession(STREAK_STORAGE_KEY)
+    const raw = getSessionItem(STREAK_STORAGE_KEY)
     if (!raw) return [...DEFAULT_STREAK_PAIR]
     const v = JSON.parse(raw)
     if (Array.isArray(v) && v.length >= 2) {
@@ -244,7 +250,7 @@ function readStoredRange() {
 
 function persistRange(pair) {
   try {
-    localStorage.setItem(STREAK_STORAGE_KEY, JSON.stringify(normalizePair(pair)))
+    setSessionItem(STREAK_STORAGE_KEY, JSON.stringify(normalizePair(pair)))
   } catch {
     // ignore
   }

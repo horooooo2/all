@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import {
-    getProfile,
     logoutAccount,
     mapAuthToUserSession,
     mapProfileToUserInfo
 } from '@/api/auth'
+import {
+    getProfileDetail,
+    mapProfileFromUpdateResponse,
+    updateProfile
+} from '@/api/profile'
 
 export const useUserStore = defineStore('user', () => {
     const token = ref('')
@@ -31,9 +35,23 @@ export const useUserStore = defineStore('user', () => {
 
     /** 拉取并更新用户资料 */
     const fetchProfile = async () => {
-        const profile = await getProfile()
+        const profile = await getProfileDetail()
         setProfile(profile)
         return userInfo.value
+    }
+
+    /**
+     * 修改个人资料并刷新本地 userInfo
+     * @param {import('@/api/profile').ProfileUpdateParams} partial
+     */
+    const patchProfile = async (partial) => {
+        const res = await updateProfile(partial)
+        const mapped = mapProfileFromUpdateResponse(res)
+        if (mapped) {
+            userInfo.value = mapped
+            return userInfo.value
+        }
+        return fetchProfile()
     }
 
     /**
@@ -97,6 +115,7 @@ export const useUserStore = defineStore('user', () => {
         applyAuthSession,
         setProfile,
         fetchProfile,
+        patchProfile,
         establishSession,
         login,
         clearSession,

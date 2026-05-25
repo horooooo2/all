@@ -74,6 +74,11 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import {
+  getSessionJSON,
+  setSessionJSON,
+  migrateLocalToSession
+} from '@/utils/sessionCache'
 import iconSwitch from '@/assets/icon_qh_sel.svg'
 import iconX from '@/assets/icon_x.svg'
 import quickBgImg from '@/assets/kuaijie_money_back.png'
@@ -142,11 +147,7 @@ function saveCustomChips() {
 
   const out = normalizeFive(parsed.length ? parsed : DEFAULT_CHIPS)
   chipOptions.value = out
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(out))
-  } catch {
-    // ignore
-  }
+  setSessionJSON(STORAGE_KEY, out)
   chipEditorOpen.value = false
 
   // 如果当前值不在新筹码列表里，自动切换到第一
@@ -163,9 +164,8 @@ function normalizeFive(arr) {
 
 function loadCustomChips() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const v = JSON.parse(raw)
+    migrateLocalToSession(STORAGE_KEY)
+    const v = getSessionJSON(STORAGE_KEY)
     if (!Array.isArray(v)) return null
     const nums = v
       .map((x) => Number(x))

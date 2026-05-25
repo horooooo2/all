@@ -156,6 +156,11 @@
 
 <script setup>
 import { computed, defineExpose, ref, watch } from 'vue'
+import {
+  getSessionJSON,
+  setSessionJSON,
+  migrateLocalToSession
+} from '@/utils/sessionCache'
 import { toast } from '@/components/Toast'
 import {
   BET_PANEL_STORAGE_KEY,
@@ -291,11 +296,7 @@ function saveCustomChips() {
   const out = normalizeFive(parsed.length ? parsed : defaultChips)
   chipOptions.value = out
   if (!out.some((x) => Number(x) === Number(activeChip.value))) activeChip.value = out[0] ?? 1
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(out))
-  } catch {
-    // ignore
-  }
+  setSessionJSON(STORAGE_KEY, out)
   chipEditorOpen.value = false
   toast.success('已保存')
 }
@@ -308,9 +309,8 @@ function normalizeFive(arr) {
 
 function loadCustomChips() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const v = JSON.parse(raw)
+    migrateLocalToSession(STORAGE_KEY)
+    const v = getSessionJSON(STORAGE_KEY)
     if (!Array.isArray(v)) return null
     const nums = v
       .map((x) => Number(x))

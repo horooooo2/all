@@ -82,6 +82,10 @@ const AGENT_MAP = {
 
 const agentList = ref([])
 const pageTitle = computed(() => {
+  const queryTitle = String(route.query.title || '').trim()
+  if (queryTitle) {
+    return queryTitle
+  }
   const type = route.query.type
   return AGENT_MAP[type]?.title || '在线客服'
 })

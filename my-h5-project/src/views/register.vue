@@ -3,7 +3,7 @@
     <div class="login-top">
     <header class="login-header">
       <div class="login-header-row">
-        <img class="logo" src="@/assets/logo.svg" alt="LOGO" />
+        <BrandLogo class="logo" alt="LOGO" />
         <div class="icon-btn" aria-label="关闭" @click="goBack">
           <img src="@/assets/icon_x.svg" alt="关闭" />
         </div>
