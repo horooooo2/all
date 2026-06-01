@@ -5,11 +5,12 @@
     role="alert"
   >
     <img :src="iconExclamation" alt="">
-    <span>两次密码不一致，请检查</span>
+    <span>{{ $t('两次密码不一致，请检查') }}</span>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import iconExclamation from '@/assets/icon_exclamation_red.svg'
 
 defineProps({

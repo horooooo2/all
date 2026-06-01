@@ -1,6 +1,6 @@
 <template>
   <div class="group-vote-workspace">
-    <div class="gv-tabs" role="tablist" aria-label="群投模式内容">
+    <div class="gv-tabs" role="tablist" :aria-label="$t('群投模式内容')">
       <button
         v-for="t in tabs"
         :key="t.key"
@@ -37,6 +37,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import BetPanelCore from './bet-panel/BetPanelCore.vue'
 import Roadmap from './haolu/Roadmap.vue'
@@ -49,9 +51,9 @@ defineProps({
 const emit = defineEmits(['submit', 'chase', 'open-recent'])
 
 const tabs = [
-  { key: 'double', label: '双面盘' },
-  { key: 'road', label: '路子图' },
-  { key: 'reco', label: '推荐好路' }
+  { key: 'double', label: t('双面盘') },
+  { key: 'road', label: t('路子图') },
+  { key: 'reco', label: t('推荐好路') }
 ]
 
 const active = ref('double')

@@ -2,7 +2,7 @@
   <div class="pl5-bzp">
     <!-- 第一行：近期玩法 + 筛-->
     <div class="pl5-bzp__row pl5-bzp__row--history">
-      <div class="pl5-bzp__pills" role="list" aria-label="近期玩法">
+      <div class="pl5-bzp__pills" role="list" :aria-label="$t('近期玩法')">
         <div
           v-for="p in recentPlays"
           :key="p.id"
@@ -24,14 +24,14 @@
         @keydown="(e) => keyActivate(e, onFilterClick)"
       >
         <img class="pl5-bzp__filter-icon" :src="iconSx" alt="" aria-hidden="true" />
-        <span class="pl5-bzp__filter-txt">筛选</span>
+        <span class="pl5-bzp__filter-txt">{{ $t('筛选') }}</span>
       </div>
     </div>
 
     <!-- 第二行：奖金 + 玩法说明；遗漏/ 冷热（单选） -->
     <div class="pl5-bzp__row pl5-bzp__row--meta">
       <div class="pl5-bzp__prize-line">
-        <span class="pl5-bzp__prize-label">奖金:</span>
+        <span class="pl5-bzp__prize-label">{{ $t('奖金:') }}</span>
         <span class="pl5-bzp__prize-num">{{ prizeDisplay }}</span>
         <div
           role="button"
@@ -45,8 +45,8 @@
         </div>
       </div>
       <van-radio-group v-model="statMode" direction="horizontal" class="pl5-bzp__radio-group">
-        <van-radio name="omission" icon-size="18px">遗漏</van-radio>
-        <van-radio name="hotcold" icon-size="18px">冷热</van-radio>
+        <van-radio name="omission" icon-size="18px">{{ $t('遗漏') }}</van-radio>
+        <van-radio name="hotcold" icon-size="18px">{{ $t('冷热') }}</van-radio>
       </van-radio-group>
     </div>
 
@@ -131,7 +131,7 @@
       :z-index="3000"
       teleport="body"
     >
-      <div class="pl5-bzp-filter__panel" role="dialog" aria-modal="true" aria-label="全部玩法">
+      <div class="pl5-bzp-filter__panel" role="dialog" aria-modal="true" :aria-label="$t('全部玩法')">
         <div class="pl5-bzp-filter__body">
           <div class="pl5-bzp-filter__subs">
             <div
@@ -149,7 +149,7 @@
           <aside class="pl5-bzp-filter__mains" aria-label="大玩法">
             <div class="pl5-bzp-filter__mains-head">
               <img class="pl5-bzp-filter__mains-head-icon" :src="iconSx" alt="" aria-hidden="true" />
-              <span>全部玩法</span>
+              <span>{{ $t('全部玩法') }}</span>
             </div>
             <div class="pl5-bzp-filter__main-list">
               <div
@@ -173,6 +173,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { showConfirmDialog } from 'vant'
 import { BZP_ZX120_ROWS, mockOmission } from './bzp-zx120.js'
@@ -215,8 +217,8 @@ const currentFilterSubs = computed(() => {
 })
 
 const recentPlays = ref([
-  { id: 'zx120', label: '五星-五星组合20' },
-  { id: 'hs-zx', label: '后四-后四组4' }
+  { id: 'zx120', label: t('五星-五星组合20') },
+  { id: 'hs-zx', label: t('后四-后四组4') }
 ])
 const activePlayId = ref('zx120')
 
@@ -367,7 +369,7 @@ function getBasketDraft() {
   }
   const count = betCount.value
   if (!count) return null
-  const playLabel = recentPlays.value.find((p) => p.id === activePlayId.value)?.label ?? '标准盘'
+  const playLabel = recentPlays.value.find((p) => p.id === activePlayId.value)?.label ?? t('标准盘')
   return {
     betCount: count,
     leftLabel: `标准${playLabel} ${parts.join(' ')}`,

@@ -129,6 +129,7 @@ const gamesByCategory = {
   cp: [
     { id: 'cp-pl5', name: '排列5', image: imgHomeSportSb, room: 'pl5' },
     { id: 'cp-lhc', name: '六合彩', image: imgHomeSportSb, room: 'lhc' },
+    { id: 'cp-pc28', name: '加拿大PC28', image: imgHomeSportSb, room: 'pc28' },
     { id: 'cp-1', name: '彩票中心', image: imgHomeSportSb, room: 'live' },
     { id: 'cp-2', name: '快三', image: imgHomeSportSb, room: 'live' }
   ],
@@ -223,6 +224,10 @@ function onGameClick(item) {
     }
     if (item.room === 'lhc') {
       router.push({ name: 'lhcRoom', query })
+      return
+    }
+    if (item.room === 'pc28') {
+      router.push({ name: 'pc28Room', query })
       return
     }
     router.push({ path: '/game-room', query })

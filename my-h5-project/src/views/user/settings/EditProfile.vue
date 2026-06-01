@@ -2,7 +2,7 @@
   <div class="edit-profile-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>编辑个人资料</h1>
+      <h1>{{ $t('编辑个人资料') }}</h1>
     </header>
 
     <section class="profile-card">
@@ -22,7 +22,7 @@
         <button type="button" class="menu-row" @click="onCopyAccount">
           <span class="menu-row-inner">
             <img :src="iconAccount" alt="" class="menu-icon-img">
-            <span>账号</span>
+            <span>{{ $t('账号') }}</span>
           </span>
           <span class="right-wrap">
             <span class="right-text">{{ user.account }}</span>
@@ -42,7 +42,7 @@
         <button type="button" class="menu-row" @click="onEditNickname">
           <span class="menu-row-inner">
             <img :src="iconNickName" alt="" class="menu-icon-img">
-            <span>昵称</span>
+            <span>{{ $t('昵称') }}</span>
           </span>
           <span class="right-wrap">
             <span class="right-text">{{ user.nickname }}</span>
@@ -53,7 +53,7 @@
         <button type="button" class="menu-row" @click="onEditGender">
           <span class="menu-row-inner">
             <img :src="iconGender" alt="" class="menu-icon-img">
-            <span>性别</span>
+            <span>{{ $t('性别') }}</span>
           </span>
           <span class="right-wrap">
             <span class="right-text">{{ user.gender }}</span>
@@ -64,7 +64,7 @@
         <button type="button" class="menu-row" @click="onEditBirthday">
           <span class="menu-row-inner">
             <img :src="iconUpgrade" alt="" class="menu-icon-img">
-            <span>生日</span>
+            <span>{{ $t('生日') }}</span>
           </span>
           <span class="right-wrap">
             <span class="right-text" :class="{ 'right-text--unset': !user.birthday }">
@@ -77,7 +77,7 @@
         <button type="button" class="menu-row" @click="onEditRealName">
           <span class="menu-row-inner">
             <img :src="iconName" alt="" class="menu-icon-img">
-            <span>姓名</span>
+            <span>{{ $t('姓名') }}</span>
           </span>
           <span class="right-wrap">
             <span class="right-text" :class="{ 'right-text--unset': !user.realName }">
@@ -90,7 +90,7 @@
         <button type="button" class="menu-row" @click="onEditPhone">
           <span class="menu-row-inner">
             <img :src="iconContactInformation" alt="" class="menu-icon-img">
-            <span>联系方式</span>
+            <span>{{ $t('联系方式') }}</span>
           </span>
           <span class="right-wrap">
             <span class="right-text">{{ user.contactDisplay }}</span>
@@ -103,7 +103,7 @@
         <button type="button" class="menu-row" @click="onWithdrawAccount">
           <span class="menu-row-inner">
             <img :src="iconWithdrawalAccount" alt="" class="menu-icon-img">
-            <span>提款账户</span>
+            <span>{{ $t('提款账户') }}</span>
           </span>
           <img :src="iconGo" alt="go" class="right-icon">
         </button>
@@ -113,7 +113,7 @@
         <button type="button" class="menu-row" @click="onChangeLoginPwd">
           <span class="menu-row-inner">
             <img :src="iconChangeLoginPassword" alt="" class="menu-icon-img">
-            <span>更改登录密码</span>
+            <span>{{ $t('更改登录密码') }}</span>
           </span>
           <img :src="iconGo" alt="go" class="right-icon">
         </button>
@@ -137,7 +137,7 @@
     <van-popup v-model:show="showGenderPopup" position="bottom" round class="selection-popup">
       <div class="selection-sheet">
         <div class="selection-sheet-header">
-          <div class="selection-sheet-title">性别</div>
+          <div class="selection-sheet-title">{{ $t('性别') }}</div>
           <div class="selection-close-btn" role="button" tabindex="0" @click="showGenderPopup = false">
             <img :src="iconClose" alt="close">
           </div>
@@ -178,8 +178,8 @@
     <van-popup v-model:show="showBirthdayPopup" position="bottom" round class="selection-popup">
       <div class="selection-sheet">
         <div class="selection-sheet-header">
-          <div class="selection-sheet-title">生日选择</div>
-          <button type="button" class="selection-confirm-btn" @click="confirmBirthday">确认</button>
+          <div class="selection-sheet-title">{{ $t('生日选择') }}</div>
+          <button type="button" class="selection-confirm-btn" @click="confirmBirthday">{{ $t('确认') }}</button>
         </div>
 
         <div class="birthday-picker-wrap">
@@ -197,6 +197,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'

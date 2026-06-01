@@ -19,7 +19,7 @@
           >
           <div class="text-group">
             <div class="login-text">{{ displayName }}</div>
-            <div class="sub-text">欢迎来到客服中心</div>
+            <div class="sub-text">{{ $t('欢迎来到客服中心') }}</div>
           </div>
         </div>
 
@@ -28,7 +28,7 @@
     </div>
 
     <div class="service-card">
-      <div v-if="loading" class="service-loading">加载中...</div>
+      <div v-if="loading" class="service-loading">{{ $t('加载中...') }}</div>
 
       <template v-else-if="serviceList.length">
         <div
@@ -55,7 +55,7 @@
         </div>
       </template>
 
-      <div v-else class="service-empty">暂无客服入口</div>
+      <div v-else class="service-empty">{{ $t('暂无客服入口') }}</div>
     </div>
 
     <div class="bottom-placeholder" />
@@ -63,6 +63,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchServiceList } from '@/api/content'
@@ -80,10 +82,10 @@ const isLogin = computed(() => userStore.isLogin)
 
 const displayName = computed(() => {
   if (!isLogin.value) {
-    return 'Hi，请登录/注册'
+    return t('Hi，请登录/注册')
   }
   const info = userStore.userInfo
-  return info?.username || info?.name || '用户'
+  return info?.username || info?.name || t('用户')
 })
 
 const goLogin = () => {
@@ -112,9 +114,9 @@ const loadServiceList = async () => {
   try {
     serviceList.value = await fetchServiceList()
   } catch (error) {
-    console.error('加载客服列表失败:', error)
+    console.error(t('加载客服列表失败:'), error)
     serviceList.value = []
-    toast.error('加载客服列表失败')
+    toast.error(t('加载客服列表失败'))
   } finally {
     loading.value = false
   }

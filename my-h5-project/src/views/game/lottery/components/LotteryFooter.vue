@@ -1,15 +1,19 @@
 <template>
-  <footer class="lottery-footer" aria-label="投注操作">
+  <footer class="lottery-footer" :aria-label="$t('投注操作')">
     <div class="lottery-footer__wide">
       <button type="button" class="lottery-footer__bet" @click="$emit('bet')">{{ primaryText }}</button>
-      <button type="button" class="lottery-footer__chase" @click="$emit('chase')">追号</button>
+      <button type="button" class="lottery-footer__chase" @click="$emit('chase')">{{ $t('追号') }}</button>
     </div>
   </footer>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 defineProps({
-  primaryText: { type: String, default: '立即投注' }
+  primaryText: { type: String, default: t('立即投注') }
 })
 defineEmits(['bet', 'chase'])
 </script>

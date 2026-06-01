@@ -1,7 +1,9 @@
+import { t } from '@/i18n'
 import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import BasicLayout from '@/layouts/BasicLayout.vue'
 import { scrollToTop } from '@/utils/scrollToTop'
+import i18n from '@/i18n'
 
 const routes = [
     {
@@ -121,6 +123,28 @@ const routes = [
                 }
             },
             {
+                path: 'lottery/room-select',
+                name: 'lotteryRoomSelect',
+                component: () => import('@/views/game/lottery/LotteryRoomSelect.vue'),
+                meta: {
+                    title: '选择房间',
+                    hideTabBar: true,
+                    keepAlive: false,
+                    requireAuth: false
+                }
+            },
+            {
+                path: 'lottery/game-rules',
+                name: 'lotteryGameRules',
+                component: () => import('@/views/game/lottery/LotteryGameRules.vue'),
+                meta: {
+                    title: '玩法说明',
+                    hideTabBar: true,
+                    keepAlive: false,
+                    requireAuth: false
+                }
+            },
+            {
                 path: 'lottery/pl5/room',
                 name: 'pl5Room',
                 component: () => import('@/views/game/lottery/index.vue'),
@@ -136,6 +160,16 @@ const routes = [
                 component: () => import('@/views/game/lottery/index.vue'),
                 meta: {
                     title: '六合彩',
+                    keepAlive: false,
+                    requireAuth: false
+                }
+            },
+            {
+                path: 'lottery/pc28/room',
+                name: 'pc28Room',
+                component: () => import('@/views/game/lottery/index.vue'),
+                meta: {
+                    title: '加拿大PC28',
                     keepAlive: false,
                     requireAuth: false
                 }
@@ -650,7 +684,8 @@ const preloadRoute = async (routeName) => {
 }
 
 router.beforeEach((to, from, next) => {
-    document.title = to.meta.title || 'PC28'
+    const titleKey = to.meta.title
+    document.title = titleKey ? t(String(titleKey)) : 'PC28'
 
     if (to.meta.requireAuth) {
         const token = localStorage.getItem('token')

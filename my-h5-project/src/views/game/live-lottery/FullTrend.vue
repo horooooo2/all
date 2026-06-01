@@ -6,7 +6,7 @@
           class="icon-btn"
           role="button"
           tabindex="0"
-          aria-label="返回"
+          :aria-label="$t('返回')"
           @click="goBack"
           @keydown.enter.prevent="goBack"
           @keydown.space.prevent="goBack"
@@ -16,7 +16,7 @@
         <div class="title">{{ pageTitle }}</div>
       </div>
 
-      <button type="button" class="bet-btn" @click="goBet">去投注</button>
+      <button type="button" class="bet-btn" @click="goBet">{{ $t('去投注') }}</button>
     </header>
 
     <div class="trend-sub">
@@ -24,17 +24,17 @@
     </div>
 
     <div class="trend-actions">
-      <button type="button" class="primary-tab">开奖号码</button>
+      <button type="button" class="primary-tab">{{ $t('开奖号码') }}</button>
     </div>
 
     <main class="trend-table-wrap" role="main">
       <div class="trend-table" role="table" aria-label="完整走势">
         <div class="trend-row trend-row--head" role="row">
-          <div class="col col-issue" role="columnheader">期号</div>
-          <div class="col col-nums" role="columnheader">开奖号码/总和</div>
-          <div class="col col-sum" role="columnheader">总和双面</div>
-          <div class="col col-ext1" role="columnheader">极值</div>
-          <div class="col col-ext2" role="columnheader">形态</div>
+          <div class="col col-issue" role="columnheader">{{ $t('期号') }}</div>
+          <div class="col col-nums" role="columnheader">{{ $t('开奖号码/总和') }}</div>
+          <div class="col col-sum" role="columnheader">{{ $t('总和双面') }}</div>
+          <div class="col col-ext1" role="columnheader">{{ $t('极值') }}</div>
+          <div class="col col-ext2" role="columnheader">{{ $t('形态') }}</div>
           <div class="col col-tail" role="columnheader">尾</div>
         </div>
 
@@ -51,13 +51,13 @@
           </div>
 
           <div class="col col-ext1" role="cell">
-            <span class="tag" :class="row.extreme === '极小' ? 'is-blue' : row.extreme ? 'is-red' : 'is-muted'">
+            <span class="tag" :class="row.extreme === t('极小') ? 'is-blue' : row.extreme ? 'is-red' : 'is-muted'">
               {{ row.extreme || '—' }}
             </span>
           </div>
 
           <div class="col col-ext2" role="cell">
-            <span class="tag" :class="row.shape === '对子' ? 'is-red' : row.shape ? 'is-green' : 'is-muted'">
+            <span class="tag" :class="row.shape === t('对子') ? 'is-red' : row.shape ? 'is-green' : 'is-muted'">
               {{ row.shape || '—' }}
             </span>
           </div>
@@ -70,6 +70,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.png'
@@ -77,7 +79,7 @@ import iconBack from '@/assets/icon_dack.png'
 const router = useRouter()
 const route = useRoute()
 
-const pageTitle = computed(() => String(route.query.gameName || '加拿大28'))
+const pageTitle = computed(() => String(route.query.gameName || t('加拿大28')))
 
 // TODO: 后续接真实接口；目前用静态数据走通样式与交互
 const currentIssue = ref('3415704')
@@ -115,10 +117,10 @@ onBeforeUnmount(() => {
 
 const trendRows = ref([
   { issue: '3333339', nums: [6, 2, 8], sum: 16, bigSmall: '大', oddEven: '双', extreme: '', shape: '', tail: 6 },
-  { issue: '3333338', nums: [0, 1, 0], sum: 1, bigSmall: '小', oddEven: '单', extreme: '极小', shape: '对子', tail: 1 },
-  { issue: '3333337', nums: [0, 1, 0], sum: 1, bigSmall: '小', oddEven: '单', extreme: '极小', shape: '对子', tail: 1 },
+  { issue: '3333338', nums: [0, 1, 0], sum: 1, bigSmall: '小', oddEven: '单', extreme: t('极小'), shape: t('对子'), tail: 1 },
+  { issue: '3333337', nums: [0, 1, 0], sum: 1, bigSmall: '小', oddEven: '单', extreme: t('极小'), shape: t('对子'), tail: 1 },
   { issue: '3333336', nums: [9, 1, 0], sum: 10, bigSmall: '小', oddEven: '双', extreme: '', shape: '顺子', tail: 0 },
-  { issue: '3333335', nums: [0, 1, 0], sum: 1, bigSmall: '小', oddEven: '单', extreme: '极小', shape: '对子', tail: 1 }
+  { issue: '3333335', nums: [0, 1, 0], sum: 1, bigSmall: '小', oddEven: '单', extreme: t('极小'), shape: t('对子'), tail: 1 }
 ])
 
 function goBack() {

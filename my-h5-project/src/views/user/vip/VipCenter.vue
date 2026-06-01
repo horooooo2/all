@@ -87,7 +87,7 @@
     <section class="vip-priv-section">
       <div class="vip-priv-title">
         <img class="vip-priv-title-side" :src="iconZsLeft" alt="">
-        <span class="vip-priv-title-text">VIP特权</span>
+        <span class="vip-priv-title-text">{{ $t('VIP特权') }}</span>
         <img class="vip-priv-title-side" :src="iconZsRight" alt="">
       </div>
 
@@ -102,7 +102,7 @@
           </div>
         </div>
       </div>
-      <p v-else class="vip-priv-empty">暂无该等级特权说明</p>
+      <p v-else class="vip-priv-empty">{{ $t('暂无该等级特权说明') }}</p>
     </section>
 
     <div class="vip-footer">
@@ -114,6 +114,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
@@ -137,6 +139,7 @@ import iconMrtx from '@/assets/icon_mrtx.svg'
 import iconTxk from '@/assets/icon_txk.svg'
 import iconJspl from '@/assets/icon_jspl.svg'
 
+const { t } = useI18n()
 const PRIVILEGE_ICON_BY_CODE = {
   daily_withdraw: iconMrtx,
   daily_withdraw_amount: iconMrtx,
@@ -174,7 +177,7 @@ const goBack = () => router.back()
 const goRecharge = () => router.push({ name: 'recharge', query: { tab: 'deposit' } })
 const goVipDetail = () => router.push({ name: 'vipDetail' })
 
-const nickname = computed(() => (userStore.isLogin ? (userStore.userInfo?.name || '昵称') : '昵称'))
+const nickname = computed(() => (userStore.isLogin ? (userStore.userInfo?.name || t('昵称') : t('昵称')
 const userId = computed(() => (userStore.isLogin ? (userStore.userInfo?.id || '000001') : '000001'))
 
 const onAvatarError = (e) => {
@@ -261,7 +264,7 @@ function buildPrivilegesFromRule(rule) {
     },
     {
       id: `${rule.levelNo}-upgrade-bonus`,
-      title: '升级礼金',
+      title: t('升级礼金'),
       desc: formatVipMoney(rule.upgradeBonus, rule.currencyCode),
       icon: iconMrtx
     }
@@ -272,7 +275,7 @@ function buildPrivilegesFromRule(rule) {
 function buildPrivilegesFromIndex(list) {
   return (list || []).map((item, index) => ({
     id: item.code || index,
-    title: item.name || 'VIP特权',
+    title: item.name || t('VIP特权'),
     desc: item.value || '—',
     icon: getPrivilegeIcon(item.code, index)
   })).filter((item) => item.desc && item.desc !== '—')
@@ -295,7 +298,7 @@ function buildCardProgress(lvl, info, rule) {
   const rate = info?.progressRate ?? 0
 
   if (lvl === cur && (cur >= maxLevel || next <= cur)) {
-    return { progressLabel: '已满级', progressPercent: 100 }
+    return { progressLabel: t('已满级'), progressPercent: 100 }
   }
 
   if (threshold <= 0) {
@@ -349,7 +352,7 @@ function cardState(lvl) {
 
   if (!info && !rule) {
     return {
-      statusText: '加载中...',
+      statusText: t('加载中...'),
       levelName,
       progressLabel: '—',
       progressPercent: 0,
@@ -398,7 +401,7 @@ function cardState(lvl) {
   }
 
   return {
-    statusText: '未解锁',
+    statusText: t('未解锁'),
     levelName,
     progressLabel,
     progressPercent,
@@ -465,7 +468,7 @@ const fetchVipData = async () => {
       : (indexData?.nextLevel || rules[0]?.levelNo || 1)
     syncSwipeToLevel(focusLevel)
   } catch (error) {
-    console.error('加载 VIP 数据失败:', error)
+    console.error(t('加载 VIP 数据失败:'), error)
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="lhc-hub">
-    <aside class="lhc-hub__tabs" aria-label="玩法分类">
+    <aside class="lhc-hub__tabs" :aria-label="$t('玩法分类')">
       <button
         v-for="t in sideTabs"
         :key="t.key"
@@ -13,7 +13,7 @@
       </button>
     </aside>
 
-    <main class="lhc-hub__content" aria-label="投注选项">
+    <main class="lhc-hub__content" :aria-label="$t('投注选项')">
       <LhcTeMa v-show="activeSide === 'tema'" ref="temaRef" @update:bet-count="onChildCount('tema', $event)" />
       <LhcZhengMa v-show="activeSide === 'zhengma'" ref="zhengmaRef" @update:bet-count="onChildCount('zhengma', $event)" />
       <LhcLianMa v-show="activeSide === 'lianma'" ref="lianmaRef" @update:bet-count="onChildCount('lianma', $event)" />
@@ -45,6 +45,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { reactive, ref, watch } from 'vue'
 import LhcTeMa from './LhcTeMa.vue'
 import LhcZhengMa from './LhcZhengMa.vue'
@@ -59,17 +61,17 @@ import LhcLianMa from './LhcLianMa.vue'
 const emit = defineEmits(['update:betCount'])
 
 const sideTabs = [
-  { key: 'tema', label: '特码' },
-  { key: 'zhengma', label: '正码' },
-  { key: 'lianma', label: '连码' },
-  { key: 'zhengmada', label: '正特码A' },
-  { key: 'zhengmadb', label: '正特码B' },
-  { key: 'zhengmadc', label: '正特码C' },
-  { key: 'banbo', label: '半波' },
-  { key: 'ptyx', label: '平特一尾数' },
-  { key: 'texiao', label: '特肖' },
-  { key: 'lianxiao', label: '连肖' },
-  { key: 'weishulian', label: '尾数连' }
+  { key: 'tema', label: t('特码') },
+  { key: 'zhengma', label: t('正码') },
+  { key: 'lianma', label: t('连码') },
+  { key: 'zhengmada', label: t('正特码A') },
+  { key: 'zhengmadb', label: t('正特码B') },
+  { key: 'zhengmadc', label: t('正特码C') },
+  { key: 'banbo', label: t('半波') },
+  { key: 'ptyx', label: t('平特一尾数') },
+  { key: 'texiao', label: t('特肖') },
+  { key: 'lianxiao', label: t('连肖') },
+  { key: 'weishulian', label: t('尾数连') }
 ]
 
 const activeSide = ref('tema')

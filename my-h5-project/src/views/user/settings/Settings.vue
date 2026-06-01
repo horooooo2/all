@@ -2,24 +2,24 @@
   <div class="settings-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>设置</h1>
+      <h1>{{ $t('设置') }}</h1>
     </header>
 
     <section class="settings-menu">
       <button type="button" class="settings-row" @click="goAboutUs">
-        <span>关于我们</span>
+        <span>{{ $t('关于我们') }}</span>
         <van-icon name="arrow" />
       </button>
       <button type="button" class="settings-row" @click="goUserAgreement">
-        <span>用户协议</span>
+        <span>{{ $t('用户协议') }}</span>
         <van-icon name="arrow" />
       </button>
       <button type="button" class="settings-row" @click="goPrivacyPolicy">
-        <span>隐私政策</span>
+        <span>{{ $t('隐私政策') }}</span>
         <van-icon name="arrow" />
       </button>
       <button type="button" class="settings-row" @click="goUserAgreement">
-        <span>当前版本</span>
+        <span>{{ $t('当前版本') }}</span>
         v{{ appVersion }}
       </button>
     </section>
@@ -31,13 +31,15 @@
         :disabled="isLoggingOut"
         @click="onLogout"
       >
-        <span>{{ isLoggingOut ? '退出中...' : '退出登录' }}</span>
+        <span>{{ isLoggingOut ? t('退出中...') : t('退出登录') }}</span>
       </button>
     </section>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { showConfirmDialog } from 'vant'
@@ -59,21 +61,21 @@ const goPrivacyPolicy = () => router.push({ name: 'privacyPolicy' })
 const onLogout = () => {
   if (isLoggingOut.value) return
   showConfirmDialog({
-    title: '温馨提示',
-    message: '退出后，您需要重新登录才能继续访问账户与相关功能。'
+    title: t('温馨提示'),
+    message: t('退出后，您需要重新登录才能继续访问账户与相关功能。')
   })
     .then(async () => {
       if (isLoggingOut.value) return
       isLoggingOut.value = true
-      toast.loading('退出中...')
+      toast.loading(t('退出中...'))
       try {
         await userStore.logout()
-        toast.success('已退出登录', 500)
+        toast.success(t('已退出登录'), 500)
         setTimeout(() => {
           router.replace({ name: 'home' })
         }, 500)
       } catch (error) {
-        console.error('退出失败:', error)
+        console.error(t('退出失败:'), error)
         toast.hideLoading()
         isLoggingOut.value = false
       }

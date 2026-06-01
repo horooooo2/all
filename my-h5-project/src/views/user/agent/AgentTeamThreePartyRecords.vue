@@ -2,7 +2,7 @@
   <div class="agent-subpage agent-team-third-party-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>团队三方游戏记录</h1>
+      <h1>{{ $t('团队三方游戏记录') }}</h1>
     </header>
 
     <div class="tp-toolbar">
@@ -36,9 +36,7 @@
             placeholder="全部玩家"
             autocomplete="off"
           >
-          <button type="button" class="tp-player-search__btn" @click="onPlayerSearchClick">
-            搜索
-          </button>
+          <button type="button" class="tp-player-search__btn" @click="onPlayerSearchClick">{{ $t('搜索') }}</button>
         </div>
       </div>
       <div class="tp-toolbar-row tp-drops">
@@ -75,7 +73,7 @@
 
       <div v-else class="tp-empty">
         <img :src="noDataImage" alt="">
-        <p>暂无数据</p>
+        <p>{{ $t('暂无数据') }}</p>
       </div>
     </div>
 
@@ -87,7 +85,7 @@
       :style="{ paddingBottom: 'env(safe-area-inset-bottom, 0)' }"
     >
       <div class="tp-filter-sheet">
-        <h3 class="tp-filter-title">筛选</h3>
+        <h3 class="tp-filter-title">{{ $t('筛选') }}</h3>
 
         <div class="tp-filter-quick">
           <button
@@ -114,8 +112,8 @@
         </div>
 
         <div class="tp-filter-actions">
-          <button type="button" class="tp-filter-reset" @click="resetFilter">重置</button>
-          <button type="button" class="tp-filter-search" @click="applyFilter">搜索</button>
+          <button type="button" class="tp-filter-reset" @click="resetFilter">{{ $t('重置') }}</button>
+          <button type="button" class="tp-filter-search" @click="applyFilter">{{ $t('搜索') }}</button>
         </div>
       </div>
     </van-popup>
@@ -129,7 +127,7 @@
     >
       <div class="popup-title-row">
         <span>{{ datePickerTitle }}</span>
-        <button type="button" class="picker-confirm" @click="confirmPickDate">确认</button>
+        <button type="button" class="picker-confirm" @click="confirmPickDate">{{ $t('确认') }}</button>
       </div>
       <van-date-picker
         v-model="pickerDateValues"
@@ -172,6 +170,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { threePartyRecordsMock, PLATFORM_OPTIONS, TYPE_TABS } from './agent-team-three-party-records.mock'
@@ -206,10 +206,10 @@ const showDatePickerPopup = ref(false)
 const pickerMode = ref('platform') // 'platform'
 
 const filterQuickOptions = [
-  { label: '今日', value: 'today' },
-  { label: '昨日', value: 'yesterday' },
-  { label: '本周', value: 'thisWeek' },
-  { label: '本月', value: 'thisMonth' }
+  { label: t('今日'), value: 'today' },
+  { label: t('昨日'), value: 'yesterday' },
+  { label: t('本周'), value: 'thisWeek' },
+  { label: t('本月'), value: 'thisMonth' }
 ]
 const filterQuick = ref('today')
 
@@ -227,9 +227,9 @@ const maxDate = new Date(2035, 11, 31)
 
 const datePickerTitle = computed(() => (datePickerMode.value === 'start' ? '开始日期' : '结束日期'))
 
-const platformLabel = computed(() => PLATFORM_OPTIONS.find((o) => o.value === platformValue.value)?.label ?? '所有')
+const platformLabel = computed(() => PLATFORM_OPTIONS.find((o) => o.value === platformValue.value)?.label ?? t('所有')
 
-const pickerTitle = computed(() => '平台选择')
+const pickerTitle = computed(() => t('平台选择')
 
 const activePickerOptions = computed(() => PLATFORM_OPTIONS)
 

@@ -4,13 +4,13 @@
       <div class="chase-header__back" role="button" tabindex="0" @click="goBack">
         <img :src="iconBack" alt="back">
       </div>
-      <div class="chase-header__title">我要追号</div>
+      <div class="chase-header__title">{{ $t('我要追号') }}</div>
     </header>
 
     <main class="chase-body">
       <section class="chase-card">
         <div class="chase-row">
-          <div class="chase-row__label">已追期数</div>
+          <div class="chase-row__label">{{ $t('已追期数') }}</div>
           <div class="stepper">
             <div class="stepper__btn" role="button" tabindex="0" @click="adjustPeriodCount(-1)">-</div>
             <div class="stepper__value">{{ periodCount }}</div>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="chase-row">
-          <div class="chase-row__label">已追期数</div>
+          <div class="chase-row__label">{{ $t('已追期数') }}</div>
           <div class="stepper">
             <div class="stepper__btn" role="button" tabindex="0" @click="adjustTimesCount(-1)">-</div>
             <div class="stepper__value">{{ timesCount }}</div>
@@ -30,9 +30,9 @@
         <div class="chase-actions">
           <div class="stop-win" role="button" tabindex="0" @click="stopOnWin = !stopOnWin">
             <van-icon name="success" class="stop-win__icon" />
-            <span>中奖即停</span>
+            <span>{{ $t('中奖即停') }}</span>
           </div>
-          <div class="build-btn" role="button" tabindex="0">生成追号</div>
+          <div class="build-btn" role="button" tabindex="0">{{ $t('生成追号') }}</div>
         </div>
       </section>
 
@@ -43,7 +43,7 @@
             <span>(1)34123121</span>
           </div>
           <div class="order-head__right">
-            <span>倍数</span>
+            <span>{{ $t('倍数') }}</span>
             <div class="stepper">
               <div class="stepper__btn" role="button" tabindex="0" @click="adjustOrderTimes(-1)">-</div>
               <div class="stepper__value">{{ orderTimes }}</div>
@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="order-foot">
-          <span>注额</span>
+          <span>{{ $t('注额') }}</span>
           <span>{{ orderAmount }}</span>
         </div>
       </section>
@@ -60,15 +60,16 @@
 
     <footer class="chase-footer">
       <div class="chase-summary">
-        <div>共追 <span class="em">{{ totalPeriods }}</span> 共计 <span class="em">{{ totalAmount }}</span></div>
-        <div>余额: <span class="balance">{{ balance }}</span></div>
+        <div>{{ $t('共追') }} <span class="em">{{ totalPeriods }}</span> {{ $t('共计') }} <span class="em">{{ totalAmount }}</span></div>
+        <div>{{ $t('余额:') }} <span class="balance">{{ balance }}</span></div>
       </div>
-      <div class="confirm-btn" role="button" tabindex="0">确认追号</div>
+      <div class="confirm-btn" role="button" tabindex="0">{{ $t('确认追号') }}</div>
     </footer>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'

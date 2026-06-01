@@ -2,7 +2,7 @@
   <div class="game-record-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>游戏记录</h1>
+      <h1>{{ $t('游戏记录') }}</h1>
     </header>
 
     <section class="record-filters">
@@ -18,19 +18,19 @@
 
     <section class="stat-grid">
       <div class="stat-item">
-        <span>订单数量</span>
+        <span>{{ $t('订单数量') }}</span>
         <strong>{{ summary.orderCount }}</strong>
       </div>
       <div class="stat-item">
-        <span>投注金额</span>
+        <span>{{ $t('投注金额') }}</span>
         <strong>¥{{ formatMoney(summary.betAmount) }}</strong>
       </div>
       <div class="stat-item">
-        <span>有效投注</span>
+        <span>{{ $t('有效投注') }}</span>
         <strong>¥{{ formatMoney(summary.validBet) }}</strong>
       </div>
       <div class="stat-item">
-        <span>输/赢金额</span>
+        <span>{{ $t('输/赢金额') }}</span>
         <strong :class="summary.profitAmount >= 0 ? 'positive' : 'negative'">
           {{ summary.profitAmount >= 0 ? '+' : '-' }}¥{{ formatMoney(Math.abs(summary.profitAmount)) }}
         </strong>
@@ -54,19 +54,19 @@
           <div class="card-main">
             <div class="game-title">{{ item.gameName }}</div>
             <div class="row">
-              <span class="row-label">平台:</span>
+              <span class="row-label">{{ $t('平台:') }}</span>
               <span class="row-value">{{ item.platform }}</span>
             </div>
             <div class="row">
-              <span class="row-label">金额:</span>
+              <span class="row-label">{{ $t('金额:') }}</span>
               <span class="row-value">¥{{ formatMoney(item.amount) }}</span>
             </div>
             <div class="row">
-              <span class="row-label">时间:</span>
+              <span class="row-label">{{ $t('时间:') }}</span>
               <span class="row-value">{{ item.orderTime }}</span>
             </div>
             <div class="row">
-              <span class="row-label">局号:</span>
+              <span class="row-label">{{ $t('局号:') }}</span>
               <span class="row-value">{{ item.roundNo || item.id }}</span>
               <button
                 v-if="item.roundNo || item.id"
@@ -85,8 +85,8 @@
               alt="status"
               @click.stop="openStatusPopup(item.status)"
             >
-            <div v-if="item.status === 'unsettled'" class="amount amount--unsettled">未结算</div>
-            <div v-else-if="item.status === 'revoked'" class="amount amount--revoked">已撤销</div>
+            <div v-if="item.status === 'unsettled'" class="amount amount--unsettled">{{ $t('未结算') }}</div>
+            <div v-else-if="item.status === 'revoked'" class="amount amount--revoked">{{ $t('已撤销') }}</div>
             <div v-else class="amount" :class="item.winLoss >= 0 ? 'positive' : 'negative'">
               <span>{{ item.winLoss >= 0 ? '' : '-' }}{{ formatMoney(Math.abs(item.winLoss)) }}</span>
               <img class="amount-currency" :src="iconCny" alt="">
@@ -97,13 +97,13 @@
 
       <div v-else-if="!loading && initialized" class="record-empty">
         <img :src="noDataImage" alt="no-data">
-        <p>暂无数据</p>
+        <p>{{ $t('暂无数据') }}</p>
       </div>
     </van-list>
 
     <van-popup v-model:show="showPlatformPopup" position="bottom" round class="custom-popup">
       <div class="popup-title-row">
-        <span>平台选择</span>
+        <span>{{ $t('平台选择') }}</span>
         <img :src="iconClose" alt="close" @click="showPlatformPopup = false">
       </div>
       <div class="option-list">
@@ -130,7 +130,7 @@
     <van-popup v-model:show="showStatusPopup" position="bottom" round class="custom-popup game-status-popup">
       <div class="game-status-sheet">
         <div class="popup-title-row">
-          <span>状态选择</span>
+          <span>{{ $t('状态选择') }}</span>
           <button type="button" class="popup-close" @click="showStatusPopup = false">
             <img :src="iconClose" alt="close">
           </button>
@@ -160,7 +160,7 @@
 
     <van-popup v-model:show="showTimePopup" position="bottom" round class="custom-popup">
       <div class="time-panel">
-        <h3>下单时间</h3>
+        <h3>{{ $t('下单时间') }}</h3>
         <div class="quick-row">
           <button
             v-for="item in quickOptions"
@@ -192,8 +192,8 @@
         </div>
 
         <div class="action-row">
-          <button type="button" class="btn-reset" @click="resetTime">重置</button>
-          <button type="button" class="btn-confirm" @click="confirmTime">确定</button>
+          <button type="button" class="btn-reset" @click="resetTime">{{ $t('重置') }}</button>
+          <button type="button" class="btn-confirm" @click="confirmTime">{{ $t('确定') }}</button>
         </div>
       </div>
     </van-popup>
@@ -202,7 +202,7 @@
       <div class="date-picker-sheet">
         <div class="popup-title-row">
           <span>{{ pickerTarget === 'start' ? '开始时间' : '结束时间' }}</span>
-          <button type="button" class="picker-confirm" @click="confirmPickDate">确认</button>
+          <button type="button" class="picker-confirm" @click="confirmPickDate">{{ $t('确认') }}</button>
         </div>
         <van-date-picker
           v-model="pickerDateValues"
@@ -217,6 +217,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -249,10 +251,10 @@ const showTimePopup = ref(false)
 const selectedStatus = ref('all')
 
 const statusOptions = [
-  { value: 'all', label: '全部', icon: iconSettled },
-  { value: 'settled', label: '已结算', icon: iconSettled },
-  { value: 'unsettled', label: '未结算', icon: iconUnsettled },
-  { value: 'revoked', label: '已撤销', icon: iconRevoked }
+  { value: 'all', label: t('全部'), icon: iconSettled },
+  { value: 'settled', label: t('已结算'), icon: iconSettled },
+  { value: 'unsettled', label: t('未结算'), icon: iconUnsettled },
+  { value: 'revoked', label: t('已撤销'), icon: iconRevoked }
 ]
 
 const statusIconMap = {
@@ -266,7 +268,7 @@ const statusIconByKey = (status) => statusIconMap[status] || iconUnsettled
 const showDatePickerPopup = ref(false)
 const pickerTarget = ref('start')
 const selectedPlatform = ref('all')
-const platformOptions = ref([{ label: '所有', value: 'all' }])
+const platformOptions = ref([{ label: t('所有'), value: 'all' }])
 
 const records = ref([])
 const summary = ref({
@@ -283,10 +285,10 @@ const finished = ref(false)
 const initialized = ref(false)
 
 const quickOptions = [
-  { label: '24小时内', value: '24h' },
-  { label: '48小时内', value: '48h' },
-  { label: '15天内', value: '15d' },
-  { label: '30天内', value: '30d' }
+  { label: t('24小时内'), value: '24h' },
+  { label: t('48小时内'), value: '48h' },
+  { label: t('15天内'), value: '15d' },
+  { label: t('30天内'), value: '30d' }
 ]
 const selectedQuick = ref('24h')
 
@@ -323,7 +325,7 @@ const currentDateText = computed(
 )
 
 const currentPlatformText = computed(
-  () => platformOptions.value.find((i) => i.value === selectedPlatform.value)?.label || '所有'
+  () => platformOptions.value.find((i) => i.value === selectedPlatform.value)?.label || t('所有')
 )
 
 const formatDate = (date) => `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
@@ -341,8 +343,8 @@ const loadPlatformOptions = async () => {
       selectedPlatform.value = 'all'
     }
   } catch (error) {
-    console.error('加载游戏平台失败:', error)
-    platformOptions.value = [{ label: '所有', value: 'all' }]
+    console.error(t('加载游戏平台失败:'), error)
+    platformOptions.value = [{ label: t('所有'), value: 'all' }]
     selectedPlatform.value = 'all'
   }
 }
@@ -397,7 +399,7 @@ const loadRecords = async () => {
       page.value += 1
     }
   } catch (error) {
-    console.error('加载游戏记录失败:', error)
+    console.error(t('加载游戏记录失败:'), error)
     finished.value = true
   } finally {
     loading.value = false
@@ -476,9 +478,9 @@ const goDetail = (item) => {
 const copyIssue = async (issueNo) => {
   const ok = await copyTextToClipboard(String(issueNo))
   if (ok) {
-    toast.success('已复制局号')
+    toast.success(t('已复制局号'))
   } else {
-    toast.error('复制失败')
+    toast.error(t('复制失败'))
   }
 }
 

@@ -2,12 +2,12 @@
   <div class="agent-subpage agent-support-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>代理扶持</h1>
+      <h1>{{ $t('代理扶持') }}</h1>
     </header>
 
     <div v-if="!displayList.length" class="support-empty">
       <img class="support-empty-img" :src="noDataImage" alt="">
-      <p class="support-empty-text">暂无数据</p>
+      <p class="support-empty-text">{{ $t('暂无数据') }}</p>
     </div>
     <section v-else class="support-list">
       <article v-for="item in displayList" :key="item.id" class="support-card">
@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'

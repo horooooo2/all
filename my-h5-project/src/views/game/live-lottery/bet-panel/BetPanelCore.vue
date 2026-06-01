@@ -1,7 +1,7 @@
 <template>
   <div class="bet-panel-core">
     <div class="bet-panel__body">
-      <aside class="bet-panel__tabs" aria-label="玩法分类">
+      <aside class="bet-panel__tabs" :aria-label="$t('玩法分类')">
         <button
           v-for="t in tabs"
           :key="t.key"
@@ -17,7 +17,7 @@
         </button>
       </aside>
 
-      <main class="bet-panel__content" aria-label="投注选项">
+      <main class="bet-panel__content" :aria-label="$t('投注选项')">
         <div v-for="g in activeGroups" :key="g.key" class="group">
           <div class="group__title">{{ g.title }}</div>
           <div class="grid">
@@ -37,7 +37,7 @@
       </main>
     </div>
 
-    <footer class="bet-panel__foot" aria-label="投注操作">
+    <footer class="bet-panel__foot" :aria-label="$t('投注操作')">
       <transition name="bet-stats-fade">
         <div
           v-if="showBetStats"
@@ -50,11 +50,11 @@
       </transition>
 
       <div class="op-top">
-        <div class="op-btn op-btn--delete" role="button" tabindex="0" aria-label="删除" @click="onClear">
+        <div class="op-btn op-btn--delete" role="button" tabindex="0" :aria-label="$t('删除')" @click="onClear">
           <img class="op-icon" :src="iconDel" alt="" aria-hidden="true" />
         </div>
 
-        <div class="quick-wrap" aria-label="快捷金额">
+        <div class="quick-wrap" :aria-label="$t('快捷金额')">
           <img class="quick-bg" :src="quickBgImg" alt="" aria-hidden="true" />
           <div class="quick-single" role="button" tabindex="0" @click="onChipClick(activeChip)">
             {{ formatChip(activeChip) }}
@@ -75,7 +75,7 @@
       </div>
 
       <div class="op-bottom">
-        <div class="bottom-btn bottom-btn--ghost" role="button" tabindex="0" @click="emit('open-recent')">近期投注</div>
+        <div class="bottom-btn bottom-btn--ghost" role="button" tabindex="0" @click="emit('open-recent')">{{ $t('近期投注') }}</div>
         <div
           class="bottom-btn bottom-btn--primary"
           role="button"
@@ -84,10 +84,10 @@
           :class="{ 'is-disabled': submitDisabled }"
           @click="!submitDisabled && onSubmit()"
         >
-          <div class="primary__title">立即投注</div>
+          <div class="primary__title">{{ $t('立即投注') }}</div>
           <div class="primary__sub">余额:{{ formatMoney(balance) }}</div>
         </div>
-        <div class="bottom-btn bottom-btn--ghost" role="button" tabindex="0" @click="emit('chase')">追号</div>
+        <div class="bottom-btn bottom-btn--ghost" role="button" tabindex="0" @click="emit('chase')">{{ $t('追号') }}</div>
       </div>
 
       <transition name="quick-fade">
@@ -122,10 +122,10 @@
         :z-index="99999"
         :safe-area-inset-bottom="true"
       >
-        <section class="chip-editor" role="dialog" aria-modal="true" aria-label="个性化筹码">
+        <section class="chip-editor" role="dialog" aria-modal="true" :aria-label="$t('个性化筹码')">
           <header class="chip-editor__head">
-            <div class="chip-editor__title">个性化筹码</div>
-            <div class="chip-editor__close" role="button" tabindex="0" aria-label="关闭" @click="chipEditorOpen = false">
+            <div class="chip-editor__title">{{ $t('个性化筹码') }}</div>
+            <div class="chip-editor__close" role="button" tabindex="0" :aria-label="$t('关闭')" @click="chipEditorOpen = false">
               <img class="chip-editor__close-icon" :src="iconX" alt="" aria-hidden="true" />
             </div>
           </header>
@@ -143,10 +143,8 @@
           </div>
 
           <footer class="chip-editor__foot">
-            <div class="chip-editor__btn chip-editor__btn--ghost" role="button" tabindex="0" @click="restoreDefaultChips">
-              恢复默认
-            </div>
-            <div class="chip-editor__btn chip-editor__btn--primary" role="button" tabindex="0" @click="saveCustomChips">保存</div>
+            <div class="chip-editor__btn chip-editor__btn--ghost" role="button" tabindex="0" @click="restoreDefaultChips">{{ $t('恢复默认') }}</div>
+            <div class="chip-editor__btn chip-editor__btn--primary" role="button" tabindex="0" @click="saveCustomChips">{{ $t('保存') }}</div>
           </footer>
         </section>
       </van-popup>
@@ -155,6 +153,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, defineExpose, ref, watch } from 'vue'
 import {
   getSessionJSON,
@@ -174,7 +174,7 @@ import iconSwitch from '@/assets/icon_qh_sel.png'
 import iconX from '@/assets/icon_x.png'
 import quickBgImg from '@/assets/kuaijie_money_back.png'
 
-const props = defineProps({
+defineProps({
   balance: { type: [String, Number], default: 0 }
 })
 
@@ -298,7 +298,7 @@ function saveCustomChips() {
   if (!out.some((x) => Number(x) === Number(activeChip.value))) activeChip.value = out[0] ?? 1
   setSessionJSON(STORAGE_KEY, out)
   chipEditorOpen.value = false
-  toast.success('已保存')
+  toast.success(t('已保存'))
 }
 
 function normalizeFive(arr) {

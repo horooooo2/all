@@ -4,13 +4,13 @@
     <header class="login-header">
       <div class="login-header-row">
         <BrandLogo class="logo" alt="LOGO" />
-        <div class="icon-btn" aria-label="关闭" @click="goBack">
-          <img src="@/assets/icon_x.svg" alt="关闭" />
+        <div class="icon-btn" :aria-label="$t('关闭')" @click="goBack">
+          <img src="@/assets/icon_x.svg" :alt="$t('关闭')" />
         </div>
       </div>
       <div class="login-header-row">
-        <div class="title">用户注册</div>
-        <div class="icon-btn" aria-label="语言" @click="showLangPopup = true">
+        <div class="title">{{ $t('用户注册') }}</div>
+        <div class="icon-btn" :aria-label="$t('语言')" @click="showLangPopup = true">
           <img src="@/assets/icon_en.svg" alt="language" />
         </div>
       </div>
@@ -19,37 +19,37 @@
     <form class="login-form" @submit.prevent="handleRegister">
       <div class="login-field-wrap">
         <div class="icon-placeholder">
-          <img src="@/assets/icon_login_account.svg" alt="账号" />
+          <img src="@/assets/icon_login_account.svg" :alt="$t('账号')" />
         </div>
         <input
           v-model="username"
           type="text"
-          placeholder="输入账号"
+          :placeholder="$t('输入账号')"
           autocomplete="username"
         />
       </div>
 
       <div class="login-field-wrap">
         <div class="icon-placeholder">
-          <img src="@/assets/icon_login_password.svg" alt="密码" />
+          <img src="@/assets/icon_login_password.svg" :alt="$t('密码')" />
         </div>
         <input
           v-model="password"
           :type="showPassword ? 'text' : 'password'"
-          placeholder="输入密码"
+          :placeholder="$t('输入密码')"
           autocomplete="new-password"
         />
-        <div class="toggle-pwd" aria-label="切换密码可见" @click="showPassword = !showPassword">
+        <div class="toggle-pwd" :aria-label="$t('切换密码可见')" @click="showPassword = !showPassword">
           <div class="icon-placeholder">
             <img
               v-if="showPassword"
               src="@/assets/icon_login_invisible_dark.svg"
-              alt="隐藏密码"
+              :alt="$t('隐藏密码')"
             />
             <img
               v-else
               src="@/assets/icon_login_visible.svg"
-              alt="查看密码"
+              :alt="$t('查看密码')"
             />
           </div>
         </div>
@@ -58,25 +58,25 @@
       <div class="login-field-group">
         <div class="login-field-wrap">
           <div class="icon-placeholder">
-            <img src="@/assets/icon_login_passwordy.svg" alt="确认密码" />
+            <img src="@/assets/icon_login_passwordy.svg" :alt="$t('确认密码')" />
           </div>
           <input
             v-model="confirmPassword"
             :type="showConfirmPassword ? 'text' : 'password'"
-            placeholder="确认密码"
+            :placeholder="$t('确认密码')"
             autocomplete="new-password"
           />
-          <div class="toggle-pwd" aria-label="切换确认密码可见" @click="showConfirmPassword = !showConfirmPassword">
+          <div class="toggle-pwd" :aria-label="$t('切换确认密码可见')" @click="showConfirmPassword = !showConfirmPassword">
             <div class="icon-placeholder">
               <img
                 v-if="showConfirmPassword"
                 src="@/assets/icon_login_invisible_dark.svg"
-                alt="隐藏密码"
+                :alt="$t('隐藏密码')"
               />
               <img
                 v-else
                 src="@/assets/icon_login_visible.svg"
-                alt="查看密码"
+                :alt="$t('查看密码')"
               />
             </div>
           </div>
@@ -87,7 +87,7 @@
           role="alert"
         >
           <img src="@/assets/icon_exclamation_red.svg" alt="" />
-          <span>两次密码不一致，请检查</span>
+          <span>{{ $t('两次密码不一致，请检查') }}</span>
         </div>
       </div>
 
@@ -130,7 +130,7 @@
     </div>
 
     <div class="login-divider">
-      <span>快捷登录</span>
+      <span>{{ $t('快捷登录') }}</span>
     </div>
     <div class="login-quick-wrap">
       <div class="quick-icon">
@@ -141,15 +141,15 @@
     <div class="login-actions">
       <button type="button" @click="goService">
         <div class="icon-placeholder">
-          <img src="@/assets/icon_zxkf.svg" alt="在线客服" />
+          <img src="@/assets/icon_zxkf.svg" :alt="$t('在线客服')" />
         </div>
-        <span>在线客服</span>
+        <span>{{ $t('在线客服') }}</span>
       </button>
       <button type="button" @click="goLogin">
         <div class="icon-placeholder">
-          <img src="@/assets/icon_zc.svg" alt="前往登录" />
+          <img src="@/assets/icon_zc.svg" :alt="$t('前往登录')" />
         </div>
-        <span>前往登录</span>
+        <span>{{ $t('前往登录') }}</span>
       </button>
     </div>
 
@@ -169,9 +169,9 @@
       </span>
       <span class="text">
         登录/注册表示您已同步本平台的
-        <a class="link" href="#">用户协议</a>
+        <a class="link" href="#">{{ $t('用户协议') }}</a>
         和
-        <a class="link" href="#">隐私协议</a>
+        <a class="link" href="#">{{ $t('隐私协议') }}</a>
       </span>
     </label>
 
@@ -180,6 +180,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import LangPopup from '@/components/LangPopup.vue'

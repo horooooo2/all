@@ -58,6 +58,7 @@ const showTabBar = computed(() => {
     '/lottery/pl5/room',
     '/lottery/pl5/trend',
     '/lottery/lhc/room',
+    '/lottery/pc28/room',
     '/agent-center',
     '/agent-apply',
     '/agent-promotion',
@@ -75,6 +76,8 @@ const showTabBar = computed(() => {
     '/help-center',
     '/help-center/questions'
   ]
+  if (hidePages.includes(route.path)) return false
+  if (route.meta?.hideTabBar) return false
   return !hidePages.includes(route.path)
 })
 </script>

@@ -1,4 +1,6 @@
+import { t } from '@/i18n'
 import tab01Nor from '@/assets/tabbar/icon_tab_01_nor_day.svg'
+import i18n from '@/i18n'
 import tab01Sel from '@/assets/tabbar/icon_tab_01_sel_day.svg'
 import tab02Nor from '@/assets/tabbar/icon_tab_02_nor_day.svg'
 import tab02Sel from '@/assets/tabbar/icon_tab_02_sel_day.svg'
@@ -20,7 +22,7 @@ export const tabBarConfig = [
             active: tab01Sel
         },
         meta: {
-            title: '首页',
+            title: t('首页'),
             keepAlive: true
         }
     },
@@ -36,7 +38,7 @@ export const tabBarConfig = [
 
         },
         meta: {
-            title: '客服中心',
+            title: t('客服中心'),
             keepAlive: false
         }
     },
@@ -50,7 +52,7 @@ export const tabBarConfig = [
             active: tab03Sel
         },
         meta: {
-            title: '充值',
+            title: t('充值'),
             keepAlive: false
         }
     },
@@ -64,7 +66,7 @@ export const tabBarConfig = [
             active: tab04Sel
         },
         meta: {
-            title: '优惠活动',
+            title: t('优惠活动'),
             keepAlive: true
         }
     },
@@ -78,7 +80,7 @@ export const tabBarConfig = [
             active: tab05Sel
         },
         meta: {
-            title: '个人中心',
+            title: t('个人中心'),
             keepAlive: false,
             requireAuth: true
         }

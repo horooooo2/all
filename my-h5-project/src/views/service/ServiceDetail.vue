@@ -36,12 +36,14 @@
     </div>
 
     <p class="detail-tip">
-      温馨提示: <span class="detail-tip__highlight">长按</span>号码可以复制到剪贴板
+      温馨提示: <span class="detail-tip__highlight">{{ $t('长按') }}</span>号码可以复制到剪贴板
     </p>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -53,9 +55,9 @@ const route = useRoute()
 
 const AGENT_MAP = {
   online: {
-    title: '在线客服',
+    title: t('在线客服'),
     agents: [
-      { id: 1, name: '28在线客服(01)', icon: '', contact: '88880001', status: 'active' },
+      { id: 1, name: t('28在线客服(01)'), icon: '', contact: '88880001', status: 'active' },
       { id: 2, name: '28在线客服(02)', icon: '', contact: '88880002', status: 'active' },
       { id: 3, name: '28在线客服(03)', icon: '', contact: '88880003', status: 'active' },
       { id: 4, name: '28在线客服(04)', icon: '', contact: '88880004', status: 'maintenance' }
@@ -87,7 +89,7 @@ const pageTitle = computed(() => {
     return queryTitle
   }
   const type = route.query.type
-  return AGENT_MAP[type]?.title || '在线客服'
+  return AGENT_MAP[type]?.title || t('在线客服')
 })
 
 const loadAgents = () => {
@@ -129,28 +131,28 @@ async function copyContact(text) {
       document.execCommand('copy')
       document.body.removeChild(input)
     }
-    toast.success('已复制到剪贴板')
+    toast.success(t('已复制到剪贴板'))
   } catch {
-    toast.error('复制失败')
+    toast.error(t('复制失败'))
   }
 }
 
 const getBtnText = (item, index) => {
-  if (item.status === 'maintenance') return '维护中'
-  return index === 0 ? '复制号码' : '立即洽谈'
+  if (item.status === 'maintenance') return t('维护中')
+  return index === 0 ? t('复制号码') : t('立即洽谈')
 }
 
 const onAgentAction = (item, index) => {
   if (item.status === 'maintenance') return
   if (index === 0) {
     if (!item.contact) {
-      toast.error('暂无号码')
+      toast.error(t('暂无号码'))
       return
     }
     copyContact(item.contact)
     return
   }
-  toast.success('正在接入客服…')
+  toast.success(t('正在接入客服…'))
 }
 </script>
 

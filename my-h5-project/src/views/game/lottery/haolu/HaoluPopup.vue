@@ -11,13 +11,13 @@
       title-active-color="#1D1D1F"
       :animated="false"
     >
-      <van-tab name="unopened" title="未开咨询">
-        <section class="haolu-body" role="tabpanel" aria-label="未开咨询">
+      <van-tab name="unopened" :title="$t('未开咨询')">
+        <section class="haolu-body" role="tabpanel" :aria-label="$t('未开咨询')">
           <UnopenedConsult />
         </section>
       </van-tab>
-      <van-tab name="roadmap" title="路子图">
-        <section class="haolu-body" role="tabpanel" aria-label="路子图">
+      <van-tab name="roadmap" :title="$t('路子图')">
+        <section class="haolu-body" role="tabpanel" :aria-label="$t('路子图')">
           <Roadmap />
         </section>
       </van-tab>
@@ -27,7 +27,7 @@
           class="haolu-tabs__trailing"
           role="button"
           tabindex="0"
-          aria-label="收起"
+          :aria-label="$t('收起')"
           @click="$emit('close')"
           @keydown.enter.prevent="$emit('close')"
           @keydown.space.prevent="$emit('close')"
@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import UnopenedConsult from './UnopenedConsult.vue'
 import Roadmap from './Roadmap.vue'

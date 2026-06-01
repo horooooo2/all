@@ -2,10 +2,10 @@
   <div class="unopened-consult">
     <div class="table">
       <div class="row head">
-        <div class="cell">项目</div>
-        <div class="cell">未开期数</div>
-        <div class="cell">项目</div>
-        <div class="cell">未开期数</div>
+        <div class="cell">{{ $t('项目') }}</div>
+        <div class="cell">{{ $t('未开期数') }}</div>
+        <div class="cell">{{ $t('项目') }}</div>
+        <div class="cell">{{ $t('未开期数') }}</div>
       </div>
 
       <div v-for="r in rows" :key="r.left.key" class="row">
@@ -17,64 +17,66 @@
 
       <div class="row foot">
         <div class="cell cell--k k-red">大</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.big }}</span> 期</div>
-        <div class="cell cell--k k-red">大单</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.bigOdd }}</span> 期</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.big }}</span> 期</div>
+        <div class="cell cell--k k-red">{{ $t('大单') }}</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.bigOdd }}</span> 期</div>
       </div>
       <div class="row foot">
         <div class="cell cell--k k-green">小</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.small }}</span> 期</div>
-        <div class="cell cell--k k-blue">大双</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.bigEven }}</span> 期</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.small }}</span> 期</div>
+        <div class="cell cell--k k-blue">{{ $t('大双') }}</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.bigEven }}</span> 期</div>
       </div>
       <div class="row foot">
         <div class="cell cell--k k-blue">单</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.odd }}</span> 期</div>
-        <div class="cell cell--k k-green">小单</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.smallOdd }}</span> 期</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.odd }}</span> 期</div>
+        <div class="cell cell--k k-green">{{ $t('小单') }}</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.smallOdd }}</span> 期</div>
       </div>
       <div class="row foot">
         <div class="cell cell--k k-blue">双</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.even }}</span> 期</div>
-        <div class="cell cell--k k-blue">小双</div>
-        <div class="cell cell--v">连续 <span class="num">{{ streak.smallEven }}</span> 期</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.even }}</span> 期</div>
+        <div class="cell cell--k k-blue">{{ $t('小双') }}</div>
+        <div class="cell cell--v">{{ $t('连续') }} <span class="num">{{ streak.smallEven }}</span> 期</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 const items = [
-  { label: '0', value: '1200期' },
-  { label: '1', value: '111期' },
-  { label: '2', value: '21期' },
-  { label: '3', value: '1200期' },
-  { label: '4', value: '1200期' },
-  { label: '5', value: '121期' },
-  { label: '6', value: '420期' },
-  { label: '7', value: '121期' },
-  { label: '8', value: '1200期' },
-  { label: '9', value: '1200期' },
-  { label: '10', value: '1200期' },
-  { label: '11', value: '121期' },
-  { label: '12', value: '66期' },
-  { label: '13', value: '86期' },
-  { label: '14', value: '131期' },
-  { label: '15', value: '211期' },
-  { label: '16', value: '534期' },
-  { label: '17', value: '42期' },
-  { label: '18', value: '2期' },
-  { label: '19', value: '53期' },
-  { label: '20', value: '523期' },
-  { label: '21', value: '53期' },
-  { label: '22', value: '211期' },
-  { label: '23', value: '123期' },
-  { label: '24', value: '250期' },
-  { label: '25', value: '310期' },
-  { label: '26', value: '121期' },
-  { label: '27', value: '900期' }
+  { label: '0', value: t('1200期') },
+  { label: '1', value: t('111期') },
+  { label: '2', value: t('21期') },
+  { label: '3', value: t('1200期') },
+  { label: '4', value: t('1200期') },
+  { label: '5', value: t('121期') },
+  { label: '6', value: t('420期') },
+  { label: '7', value: t('121期') },
+  { label: '8', value: t('1200期') },
+  { label: '9', value: t('1200期') },
+  { label: '10', value: t('1200期') },
+  { label: '11', value: t('121期') },
+  { label: '12', value: t('66期') },
+  { label: '13', value: t('86期') },
+  { label: '14', value: t('131期') },
+  { label: '15', value: t('211期') },
+  { label: '16', value: t('534期') },
+  { label: '17', value: t('42期') },
+  { label: '18', value: t('2期') },
+  { label: '19', value: t('53期') },
+  { label: '20', value: t('523期') },
+  { label: '21', value: t('53期') },
+  { label: '22', value: t('211期') },
+  { label: '23', value: t('123期') },
+  { label: '24', value: t('250期') },
+  { label: '25', value: t('310期') },
+  { label: '26', value: t('121期') },
+  { label: '27', value: t('900期') }
 ]
 
 const rows = computed(() => {

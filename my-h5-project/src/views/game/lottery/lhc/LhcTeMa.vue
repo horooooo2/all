@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-tema" aria-label="特码">
-    <div class="lhc-tema__mode" role="tablist" aria-label="特码玩法">
+  <div class="lhc-tema" :aria-label="$t('特码')">
+    <div class="lhc-tema__mode" role="tablist" :aria-label="$t('特码玩法')">
       <div class="lhc-tema__mode-row">
         <button
           type="button"
@@ -9,9 +9,7 @@
           :class="{ active: subMode === 'a' }"
           :aria-selected="subMode === 'a' ? 'true' : 'false'"
           @click="subMode = 'a'"
-        >
-          特A
-        </button>
+        >{{ $t('特A') }}</button>
         <button
           type="button"
           role="tab"
@@ -19,9 +17,7 @@
           :class="{ active: subMode === 'b' }"
           :aria-selected="subMode === 'b' ? 'true' : 'false'"
           @click="subMode = 'b'"
-        >
-          特B
-        </button>
+        >{{ $t('特B') }}</button>
         <button
           type="button"
           role="tab"
@@ -29,9 +25,7 @@
           :class="{ active: subMode === 'c' }"
           :aria-selected="subMode === 'c' ? 'true' : 'false'"
           @click="subMode = 'c'"
-        >
-          特C
-        </button>
+        >{{ $t('特C') }}</button>
       </div>
     </div>
 
@@ -57,6 +51,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { initModePickSets, isLhcPickActive, toggleLhcPick } from './lhc-multi-pick.js'
 import { labelsFromNumSet, labelsFromTextKeys } from '../lottery-basket-collect.js'
@@ -93,9 +89,9 @@ const gridItems = computed(() => {
 
 const modeTitle = computed(() => {
   const m = subMode.value
-  if (m === 'a') return '特A'
-  if (m === 'b') return '特B'
-  return '特C'
+  if (m === 'a') return t('特A')
+  if (m === 'b') return t('特B')
+  return t('特C')
 })
 
 function itemLabel(item) {

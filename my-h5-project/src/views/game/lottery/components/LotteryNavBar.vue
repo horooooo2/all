@@ -71,25 +71,34 @@
         role="button"
         tabindex="0"
         aria-label="menu"
-        @click="$emit('menu')"
-        @keydown.enter.prevent="$emit('menu')"
-        @keydown.space.prevent="$emit('menu')"
+        :aria-expanded="rightMenuOpen ? 'true' : 'false'"
+        @click="toggleRightMenu"
+        @keydown.enter.prevent="toggleRightMenu"
+        @keydown.space.prevent="toggleRightMenu"
       >
         <img class="icon-img" :src="iconMenu" alt="" aria-hidden="true" />
       </div>
     </div>
+
+    <LotteryRightMenu v-model:show="rightMenuOpen" @select="onRightMenuSelect" />
   </header>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { toast } from '@/components/Toast'
+import { goLotteryGameRules } from '@/utils/lotteryGameRulesNavigate'
+import LotteryRightMenu from './LotteryRightMenu.vue'
 import iconBack from '@/assets/icon_dack.svg'
 import iconMenu from '@/assets/menu_icon.svg'
 import iconYh from '@/assets/icon_yh.svg'
 import iconDown from '@/assets/down_icon.svg'
 
 const props = defineProps({
-  title: { type: String, default: '彩票' },
+  title: { type: String, default: t('彩票') },
   roomText: { type: String, default: '' },
   timeText: { type: String, default: '00:00:00' },
   issueNo: { type: String, default: '' },
@@ -102,7 +111,10 @@ const props = defineProps({
   showTimerIssue: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['back', 'toggleGameList', 'menu'])
+const emit = defineEmits(['back', 'toggleGameList', 'menu', 'bet-record'])
+const router = useRouter()
+const route = useRoute()
+const rightMenuOpen = ref(false)
 
 const titleViewportRef = ref(null)
 const titleTextRef = ref(null)
@@ -183,8 +195,39 @@ watch(
   }
 )
 
+function toggleRightMenu() {
+  rightMenuOpen.value = !rightMenuOpen.value
+  emit('menu', rightMenuOpen.value)
+}
+
+function closeRightMenu() {
+  rightMenuOpen.value = false
+}
+
+function onRightMenuSelect(key) {
+  if (key === 'bet') {
+    emit('bet-record')
+    return
+  }
+  if (key === 'settings') {
+    router.push('/settings')
+    return
+  }
+  if (key === 'intro') {
+    goLotteryGameRules(router, {
+      gameId: route.query.gameId,
+      gameName: props.title
+    })
+    return
+  }
+  if (key === 'limit') {
+    toast('游戏限红（待接入）')
+  }
+}
+
 function onTitleClick() {
   if (!props.showDropdown) return
+  closeRightMenu()
   emit('toggleGameList')
 }
 

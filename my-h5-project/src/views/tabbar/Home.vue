@@ -242,11 +242,11 @@
             tabindex="0"
             @click="onServiceLinkClick(item)"
             @keydown.enter.prevent="onServiceLinkClick(item)"
-          >{{ item.title }}</span>
+          >{{ $t(getServiceLinkTitle(item)) }}</span>
           <span v-if="index < serviceLinks.length - 1" class="dot">·</span>
         </template>
       </div>
-      <div class="company-name">28娱乐</div>
+      <div class="company-name">{{ $t('28娱乐') }}</div>
       <div class="company-desc">
         {{ $t('company.description') }}
       </div>
@@ -256,6 +256,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import LangPopup from '@/components/LangPopup.vue'
 import { toast } from '@/components/Toast'
@@ -307,7 +309,7 @@ const onWinnerAvatarError = (e) => {
   el.src = avatarDefault
 }
 
-const NOTICE_FALLBACK = '马年迎新春，电子老虎机最高领取888元，更有现金'
+const NOTICE_FALLBACK = t('马年迎新春，电子老虎机最高领取888元，更有现金')
 
 const notices = ref([])
 
@@ -351,6 +353,21 @@ const fetchNotices = async () => {
     console.error('加载公告失败:', error)
     notices.value = []
   }
+}
+
+/** 服务中心链接 code → 中文 i18n key（模板里用 $t 翻译，切换语言会生效） */
+const SERVICE_LINK_TITLE_KEYS = {
+  privacy_policy: '隐私政策',
+  user_agreement: '用户协议',
+  help_center: '帮助中心',
+  about_us: '关于我们'
+}
+
+function getServiceLinkTitle(item) {
+  const code = String(item?.code || '').toLowerCase()
+  if (SERVICE_LINK_TITLE_KEYS[code]) return SERVICE_LINK_TITLE_KEYS[code]
+  const title = String(item?.title || '').trim()
+  return title || code
 }
 
 const DEFAULT_SERVICE_LINKS = [
@@ -404,19 +421,19 @@ const fetchData = async () => {
   ])
 
   gameList.value = [
-    { id: 1, name: '比特币28', key: 'btc', bg: homeBtcIcon, remaining: 176, status: 'playing', room: 'pl5' },
-    { id: 2, name: '台湾宾果28', key: 'tw28', bg: homeTw28Icon, remaining: 0, status: 'waiting', room: 'lhc' },
-    { id: 3, name: '加拿大28', key: 'jnd28', bg: homeJnd28Icon, remaining: 122, status: 'playing', room: 'pl5' },
-    { id: 4, name: '加拿大西28', key: 'jndx28', bg: homeJndx28Icon, remaining: 113, status: 'playing', room: 'lhc' }
+    { id: 1, name: t('比特币28'), key: 'btc', bg: homeBtcIcon, remaining: 176, status: 'playing', room: 'pl5' },
+    { id: 2, name: t('台湾宾果28'), key: 'tw28', bg: homeTw28Icon, remaining: 0, status: 'waiting', room: 'lhc' },
+    { id: 3, name: t('加拿大28'), key: 'jnd28', bg: homeJnd28Icon, remaining: 122, status: 'playing', room: 'pl5' },
+    { id: 4, name: t('加拿大西28'), key: 'jndx28', bg: homeJndx28Icon, remaining: 113, status: 'playing', room: 'lhc' }
   ]
 
   categoryList.value = [
-    { id: 1, name: '体育', key: 'ty', icon: iconTy },
-    { id: 2, name: '视讯', key: 'sx', icon: iconSx },
-    { id: 3, name: '电子', key: 'dz', icon: iconDz },
-    { id: 4, name: '彩票', key: 'cp', icon: iconCp },
-    { id: 5, name: '捕鱼', key: 'by', icon: iconBy },
-    { id: 6, name: '棋牌', key: 'qp', icon: iconQp }
+    { id: 1, name: t('体育'), key: 'ty', icon: iconTy },
+    { id: 2, name: t('视讯'), key: 'sx', icon: iconSx },
+    { id: 3, name: t('电子'), key: 'dz', icon: iconDz },
+    { id: 4, name: t('彩票'), key: 'cp', icon: iconCp },
+    { id: 5, name: t('捕鱼'), key: 'by', icon: iconBy },
+    { id: 6, name: t('棋牌'), key: 'qp', icon: iconQp }
   ]
 
   loading.value = {
@@ -441,14 +458,14 @@ const onServiceLinkClick = (item) => {
 const banners = ref([])
 const categoryList = ref([])
 const actions = ref([
-  { name: '存款', icon: iconDeposit },
-  { name: '取款', icon: iconWithdrawal },
-  { name: '代理', icon: iconActing }
+  { name: t('存款'), icon: iconDeposit },
+  { name: t('取款'), icon: iconWithdrawal },
+  { name: t('代理'), icon: iconActing }
 ])
 const gameList = ref([])
 const helpList = ref([
-  { id: 1, name: '在线客服', icon: iconKefu },
-  { id: 2, name: 'USDT教程', icon: iconUsdtjc },
+  { id: 1, name: t('在线客服'), icon: iconKefu },
+  { id: 2, name: t('USDT教程'), icon: iconUsdtjc },
 ])
 const communityList = ref([])
 const partnerList = ref([])
@@ -467,12 +484,13 @@ const goRegister = () => router.push('/register')
 const goGameHall = (key) => router.push({ path: '/game-hall', query: { category: key } })
 
 function goSelfLottery(item) {
-  const query = { gameId: item.key, gameName: item.name }
-  if (item.room === 'lhc') {
-    router.push({ name: 'lhcRoom', query })
-    return
-  }
-  router.push({ name: 'pl5Room', query })
+  router.push({
+    name: 'lotteryRoomSelect',
+    query: {
+      gameId: item.key,
+      gameName: item.name
+    }
+  })
 }
 
 let timer

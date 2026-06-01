@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-zm" aria-label="正码">
-    <div class="lhc-zm__mode" role="tablist" aria-label="正码玩法">
+  <div class="lhc-zm" :aria-label="$t('正码')">
+    <div class="lhc-zm__mode" role="tablist" :aria-label="$t('正码玩法')">
       <div class="lhc-zm__mode-row">
         <button
           type="button"
@@ -9,9 +9,7 @@
           :class="{ active: subMode === 'a' }"
           :aria-selected="subMode === 'a' ? 'true' : 'false'"
           @click="subMode = 'a'"
-        >
-          正码A
-        </button>
+        >{{ $t('正码A') }}</button>
         <button
           type="button"
           role="tab"
@@ -19,9 +17,7 @@
           :class="{ active: subMode === 'b' }"
           :aria-selected="subMode === 'b' ? 'true' : 'false'"
           @click="subMode = 'b'"
-        >
-          正码B
-        </button>
+        >{{ $t('正码B') }}</button>
         <div class="lhc-zm__mode-slot" aria-hidden="true" />
       </div>
     </div>
@@ -47,6 +43,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { initModePickSets, isLhcPickActive, toggleLhcPick } from './lhc-multi-pick.js'
 import { labelsFromNumSet, labelsFromTextKeys } from '../lottery-basket-collect.js'
@@ -79,7 +77,7 @@ const gridItems = computed(() => {
   return [...nums, ...texts]
 })
 
-const modeTitle = computed(() => (subMode.value === 'a' ? '正码A' : '正码B'))
+const modeTitle = computed(() => (subMode.value === 'a' ? t('正码A') : t('正码B')))
 
 function itemLabel(item) {
   return item.type === 'num' ? String(item.value).padStart(2, '0') : item.label

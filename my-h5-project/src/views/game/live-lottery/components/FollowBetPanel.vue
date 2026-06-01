@@ -1,7 +1,7 @@
 <template>
   <div class="follow-bet">
     <div class="follow-bet__list-wrap">
-      <ul class="follow-bet__list" aria-label="可跟投注项">
+      <ul class="follow-bet__list" :aria-label="$t('可跟投注项')">
         <li v-for="row in rows" :key="row.id" class="follow-card">
           <div class="follow-card__upper">
             <div class="follow-card__upper-row follow-card__upper-row--head">
@@ -9,20 +9,20 @@
                 <span class="follow-card__avatar" aria-hidden="true">{{ row.avatarChar }}</span>
                 <span class="follow-card__name">{{ row.maskName }}</span>
               </div>
-              <div class="follow-card__total" aria-label="下注总额">
-                <span class="follow-card__total-label">下注总额</span>
+              <div class="follow-card__total" :aria-label="$t('下注总额')">
+                <span class="follow-card__total-label">{{ $t('下注总额') }}</span>
                 <span class="follow-card__total-num">¥{{ formatMoney(row.totalBet) }}</span>
               </div>
             </div>
             <div class="follow-card__upper-row follow-card__upper-row--status">
-              <span class="follow-card__status">{{ row.statusText || '投注成功' }}</span>
+              <span class="follow-card__status">{{ row.statusText || t('投注成功') }}</span>
             </div>
           </div>
 
           <div class="follow-card__divider" aria-hidden="true" />
 
           <div class="follow-card__lower">
-            <div class="follow-card__lower-rows" aria-label="投注明细">
+            <div class="follow-card__lower-rows" :aria-label="$t('投注明细')">
               <div
                 v-for="(nums, ri) in row.ballsRows || []"
                 :key="`${row.id}-nums-${ri}`"
@@ -38,7 +38,7 @@
                     {{ n }}
                   </span>
                 </div>
-                <div class="follow-card__line-right follow-card__line-right--money" aria-label="该行投注金额">
+                <div class="follow-card__line-right follow-card__line-right--money" :aria-label="$t('该行投注金额')">
                   ¥{{ formatMoney(lineStake(row, ri)) }}
                 </div>
               </div>
@@ -48,7 +48,7 @@
                   <span class="follow-card__issue-text">{{ row.issue }}</span>
                 </div>
                 <div class="follow-card__line-right">
-                  <button type="button" class="follow-card__btn" @click="onFollow(row)">跟投</button>
+                  <button type="button" class="follow-card__btn" @click="onFollow(row)">{{ $t('跟投') }}</button>
                 </div>
               </div>
             </div>
@@ -60,6 +60,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 
 defineProps({
@@ -72,11 +74,11 @@ const rows = ref([
   {
     id: 'f1',
     avatarChar: '玩',
-    maskName: '玩家***821',
+    maskName: t('玩家***821'),
     totalBet: 2000,
-    statusText: '投注成功',
+    statusText: t('投注成功'),
     issue: '123111109',
-    playLabel: '大小单双 · 大',
+    playLabel: t('大小单双 · 大'),
     odds: 1.98,
     stake: 200,
     playKey: 'big',
@@ -87,9 +89,9 @@ const rows = ref([
     avatarChar: 'L',
     maskName: 'L***06',
     totalBet: 350,
-    statusText: '投注成功',
+    statusText: t('投注成功'),
     issue: '123111109',
-    playLabel: '大小单双 · 小单',
+    playLabel: t('大小单双 · 小单'),
     odds: 3.6,
     stake: 50,
     playKey: 'small-odd',
@@ -102,11 +104,11 @@ const rows = ref([
   {
     id: 'f3',
     avatarChar: '匿',
-    maskName: '玩家***',
+    maskName: t('玩家***'),
     totalBet: 5000,
-    statusText: '投注成功',
+    statusText: t('投注成功'),
     issue: '123111108',
-    playLabel: '总和 · 双',
+    playLabel: t('总和 · 双'),
     odds: 1.98,
     stake: 500,
     playKey: 'even',
@@ -117,9 +119,9 @@ const rows = ref([
     avatarChar: 'K',
     maskName: 'K***88',
     totalBet: 888,
-    statusText: '投注成功',
+    statusText: t('投注成功'),
     issue: '123111108',
-    playLabel: '第一球 · 大',
+    playLabel: t('第一球 · 大'),
     odds: 1.98,
     stake: 100,
     playKey: 'b1-big',

@@ -2,7 +2,7 @@
   <div class="my-rebate-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>我的返水</h1>
+      <h1>{{ $t('我的返水') }}</h1>
     </header>
 
     <section class="top-tabs">
@@ -26,21 +26,21 @@
 
     <section v-if="activeMainTab === 'record'" class="record-tab-panel">
       <div class="income-card">
-        <span>今日返水收入</span>
+        <span>{{ $t('今日返水收入') }}</span>
         <strong>¥{{ formatMoney(summary.todayRebateAmount) }}</strong>
       </div>
 
       <div class="overview-card">
         <div class="overview-row">
-          <span>昨天个人有效投注</span>
+          <span>{{ $t('昨天个人有效投注') }}</span>
           <strong>¥{{ formatMoney(summary.yesterdayValidBet) }}</strong>
         </div>
         <div class="overview-row">
-          <span>有效结算投注返水</span>
+          <span>{{ $t('有效结算投注返水') }}</span>
           <strong>¥{{ formatMoney(summary.settledValidBetRebate) }}</strong>
         </div>
         <div class="overview-row">
-          <span>本月累计返水量</span>
+          <span>{{ $t('本月累计返水量') }}</span>
           <strong>¥{{ formatMoney(summary.monthRebateAmount) }}</strong>
         </div>
       </div>
@@ -63,12 +63,12 @@
         </div>
 
         <div class="table-head">
-          <span>时间</span>
-          <span>返水有效投注</span>
-          <span>返水</span>
+          <span>{{ $t('时间') }}</span>
+          <span>{{ $t('返水有效投注') }}</span>
+          <span>{{ $t('返水') }}</span>
         </div>
 
-        <div v-if="loading && !recordGroups.length" class="record-loading">加载中...</div>
+        <div v-if="loading && !recordGroups.length" class="record-loading">{{ $t('加载中...') }}</div>
 
         <template v-else-if="recordGroups.length">
           <template v-for="group in recordGroups" :key="group.date">
@@ -99,7 +99,7 @@
 
         <div v-else-if="!loading" class="record-empty record-empty--inline">
           <img :src="noDataImage" alt="no-data">
-          <p>暂无数据</p>
+          <p>{{ $t('暂无数据') }}</p>
         </div>
 
         <div v-if="recordGroups.length" class="summary-row">
@@ -120,9 +120,7 @@
         <div
           v-else-if="!loading && finished && recordGroups.length"
           class="record-finished-tip"
-        >
-          没有更多了
-        </div>
+        >{{ $t('没有更多了') }}</div>
       </div>
     </section>
 
@@ -140,14 +138,14 @@
         </button>
       </div>
 
-      <div v-if="treatmentLoading" class="record-loading">加载中...</div>
+      <div v-if="treatmentLoading" class="record-loading">{{ $t('加载中...') }}</div>
 
       <template v-else-if="currentTreatmentRows.length">
         <div class="treatment-table">
           <div class="table-head">
-            <span>类型</span>
-            <span>最低有效投注</span>
-            <span>返水比例(%)</span>
+            <span>{{ $t('类型') }}</span>
+            <span>{{ $t('最低有效投注') }}</span>
+            <span>{{ $t('返水比例(%)') }}</span>
           </div>
 
           <template v-for="item in currentTreatmentRows" :key="item.type">
@@ -177,13 +175,13 @@
 
       <div v-else-if="!treatmentLoading" class="record-empty">
         <img :src="noDataImage" alt="no-data">
-        <p>暂无数据</p>
+        <p>{{ $t('暂无数据') }}</p>
       </div>
     </section>
 
     <van-popup v-model:show="showTimePopup" position="bottom" round class="custom-popup">
       <div class="time-panel">
-        <h3>下单时间</h3>
+        <h3>{{ $t('下单时间') }}</h3>
         <div class="quick-row">
           <button
             v-for="item in quickOptions"
@@ -211,8 +209,8 @@
         </div>
 
         <div class="action-row">
-          <button type="button" class="btn-reset" @click="resetTime">重置</button>
-          <button type="button" class="btn-confirm" @click="confirmTime">确定</button>
+          <button type="button" class="btn-reset" @click="resetTime">{{ $t('重置') }}</button>
+          <button type="button" class="btn-confirm" @click="confirmTime">{{ $t('确定') }}</button>
         </div>
       </div>
     </van-popup>
@@ -221,7 +219,7 @@
       <div class="date-picker-sheet">
         <div class="popup-title-row">
           <span>{{ datePickerTitle }}</span>
-          <button type="button" class="picker-confirm" @click="confirmPickDate">确认</button>
+          <button type="button" class="picker-confirm" @click="confirmPickDate">{{ $t('确认') }}</button>
         </div>
         <van-date-picker
           v-model="pickerDateValues"
@@ -236,6 +234,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -261,16 +261,16 @@ const PAGE_SIZE = 20
 
 const activeMainTab = ref('record')
 const recordTimeTabs = [
-  { label: '今天', value: 'today' },
-  { label: '昨天', value: 'yesterday' },
-  { label: '本周', value: 'week' }
+  { label: t('今天'), value: 'today' },
+  { label: t('昨天'), value: 'yesterday' },
+  { label: t('本周'), value: 'week' }
 ]
 const activeRecordTimeTab = ref('today')
 const showTimePopup = ref(false)
 const quickOptions = [
-  { label: '今天', value: 'today' },
-  { label: '本月', value: 'month' },
-  { label: '上月', value: 'lastMonth' }
+  { label: t('今天'), value: 'today' },
+  { label: t('本月'), value: 'month' },
+  { label: t('上月'), value: 'lastMonth' }
 ]
 const selectedQuick = ref('today')
 const draftQuick = ref('today')
@@ -362,13 +362,13 @@ const loadRecords = async () => {
       page.value += 1
     }
   } catch (error) {
-    console.error('加载返水记录失败:', error)
+    console.error(t('加载返水记录失败:'), error)
     if (page.value === 1) {
       recordList.value = []
       expandedGroups.value = []
     }
     finished.value = true
-    toast.error('加载返水记录失败')
+    toast.error(t('加载返水记录失败'))
   } finally {
     loading.value = false
   }
@@ -468,7 +468,7 @@ const minDate = new Date(2020, 0, 1)
 const maxDate = new Date()
 const pickerDateValues = ref(['2026', '03', '08'])
 const pickerTarget = ref('start')
-const datePickerTitle = computed(() => (pickerTarget.value === 'start' ? '开始时间' : '结束时间'))
+const datePickerTitle = computed(() => (pickerTarget.value === 'start' ? t('开始时间') : t('结束时间')
 const formatSlashDate = (date) => {
   const mm = `${date.getMonth() + 1}`.padStart(2, '0')
   const dd = `${date.getDate()}`.padStart(2, '0')

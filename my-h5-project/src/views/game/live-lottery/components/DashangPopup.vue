@@ -9,11 +9,11 @@
     @update:show="$emit('update:show', $event)"
   >
     <div class="dashang-panel" role="dialog" aria-modal="true" aria-labelledby="dashang-title" @click.stop>
-      <h2 id="dashang-title" class="dashang-panel__title">打赏主播</h2>
+      <h2 id="dashang-title" class="dashang-panel__title">{{ $t('打赏主播') }}</h2>
 
-      <div class="dashang-panel__label">打赏金额</div>
+      <div class="dashang-panel__label">{{ $t('打赏金额') }}</div>
 
-      <div class="dashang-panel__chips" role="group" aria-label="快捷金额">
+      <div class="dashang-panel__chips" role="group" :aria-label="$t('快捷金额')">
         <button
           v-for="n in presets"
           :key="n"
@@ -32,19 +32,20 @@
         type="text"
         inputmode="decimal"
         autocomplete="off"
-        placeholder="自定义金额"
-        aria-label="自定义金额"
+        :placeholder="$t('自定义金额')"
+        :aria-label="$t('自定义金额')"
       />
 
       <div class="dashang-panel__actions">
-        <button type="button" class="btn btn--ghost" @click="onCancel">取消</button>
-        <button type="button" class="btn btn--primary" @click="onConfirm">确认打赏</button>
+        <button type="button" class="btn btn--ghost" @click="onCancel">{{ $t('取消') }}</button>
+        <button type="button" class="btn btn--primary" @click="onConfirm">{{ $t('确认打赏') }}</button>
       </div>
     </div>
   </van-popup>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ref, watch } from 'vue'
 import { toast } from '@/components/Toast'
 

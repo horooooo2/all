@@ -2,7 +2,7 @@
   <div class="transaction-record-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>交易记录</h1>
+      <h1>{{ $t('交易记录') }}</h1>
     </header>
 
     <section class="record-tabs">
@@ -62,13 +62,13 @@
 
       <div v-else-if="!loading && initialized" class="record-empty">
         <img :src="noDataImage" alt="no-data">
-        <p>暂无数据</p>
+        <p>{{ $t('暂无数据') }}</p>
       </div>
     </van-list>
 
     <van-calendar
       v-model:show="showDatePopup"
-      title="日期选择"
+      :title="$t('日期选择')"
       type="range"
       :show-confirm="true"
       switch-mode="month"
@@ -80,7 +80,7 @@
 
     <van-popup v-model:show="showCategoryPopup" position="bottom" round class="custom-popup">
       <div class="popup-title-row">
-        <span>分类选择</span>
+        <span>{{ $t('分类选择') }}</span>
         <button type="button" class="popup-close" @click="showCategoryPopup = false">
           <img :src="iconClose" alt="close">
         </button>
@@ -109,6 +109,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -125,17 +127,17 @@ const userStore = useUserStore()
 const PAGE_SIZE = 20
 
 const typeTabs = [
-  { label: '所有', value: 'all' },
-  { label: '充值', value: 'recharge' },
-  { label: '提现', value: 'withdraw' },
-  { label: '活动', value: 'activity' }
+  { label: t('所有'), value: 'all' },
+  { label: t('充值'), value: 'recharge' },
+  { label: t('提现'), value: 'withdraw' },
+  { label: t('活动'), value: 'activity' }
 ]
 
 const categories = [
-  { label: '所有', value: 'all' },
-  { label: '充值', value: 'recharge' },
-  { label: '提现', value: 'withdraw' },
-  { label: '活动', value: 'activity' }
+  { label: t('所有'), value: 'all' },
+  { label: t('充值'), value: 'recharge' },
+  { label: t('提现'), value: 'withdraw' },
+  { label: t('活动'), value: 'activity' }
 ]
 
 const activeType = ref('all')
@@ -172,7 +174,7 @@ const currentDateText = computed(() => {
 })
 
 const currentCategoryText = computed(
-  () => categories.find((i) => i.value === selectedCategory.value)?.label || '所有'
+  () => categories.find((i) => i.value === selectedCategory.value)?.label || t('所有')
 )
 
 const formatAmount = (value) => {
@@ -231,7 +233,7 @@ const loadRecords = async () => {
       page.value += 1
     }
   } catch (error) {
-    console.error('加载交易记录失败:', error)
+    console.error(t('加载交易记录失败:'), error)
     finished.value = true
   } finally {
     loading.value = false

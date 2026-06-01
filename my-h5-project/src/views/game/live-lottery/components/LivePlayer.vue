@@ -16,7 +16,7 @@
         @error="onVideoError"
       />
 
-      <div v-if="buffering" class="live-player__center-hint">加载中…</div>
+      <div v-if="buffering" class="live-player__center-hint">{{ $t('加载中…') }}</div>
       <div v-else-if="errorText" class="live-player__center-hint error">{{ errorText }}</div>
 
       <div v-if="danmakuOn" class="danmaku-layer" aria-hidden="true">
@@ -32,7 +32,7 @@
           class="icon-btn"
           role="button"
           tabindex="0"
-          :aria-label="danmakuOn ? '关闭弹幕' : '开启弹幕'"
+          :aria-label="danmakuOn ? t('关闭弹幕') : t('开启弹幕')"
           @click="toggleDanmaku"
           @keydown.enter.prevent="toggleDanmaku"
           @keydown.space.prevent="toggleDanmaku"
@@ -43,7 +43,7 @@
           class="icon-btn"
           role="button"
           tabindex="0"
-          :aria-label="muted ? '取消静音' : '静音'"
+          :aria-label="muted ? t('取消静音') : t('静音')"
           @click="toggleMute"
           @keydown.enter.prevent="toggleMute"
           @keydown.space.prevent="toggleMute"
@@ -54,7 +54,7 @@
           class="icon-btn"
           role="button"
           tabindex="0"
-          :aria-label="isFullscreen ? '退出全屏' : '全屏'"
+          :aria-label="isFullscreen ? t('退出全屏') : t('全屏')"
           @click="toggleFullscreen"
           @keydown.enter.prevent="toggleFullscreen"
           @keydown.space.prevent="toggleFullscreen"
@@ -69,6 +69,7 @@
 <script setup>
 import Hls from 'hls.js'
 import { computed, defineExpose, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { t } from '@/i18n'
 import iconFullscreen from '@/assets/icon_quanping.svg'
 import iconFullscreenExit from '@/assets/icon_quanping_s.svg'
 import iconMuteOn from '@/assets/icon_m_s.png'
@@ -113,7 +114,7 @@ async function ensurePlay() {
 }
 
 function onVideoError() {
-  errorText.value = '播放失败'
+  errorText.value = t('播放失败')
 }
 
 function destroyHls() {
@@ -158,7 +159,7 @@ function attachSource(src) {
     })
     hls.on(Hls.Events.ERROR, (_, data) => {
       if (data?.fatal) {
-        errorText.value = '播放失败'
+        errorText.value = t('播放失败')
         buffering.value = false
         destroyHls()
       }
@@ -167,7 +168,7 @@ function attachSource(src) {
     return
   }
 
-  errorText.value = '当前浏览器不支持该直播流'
+  errorText.value = t('当前浏览器不支持该直播流')
   buffering.value = false
 }
 

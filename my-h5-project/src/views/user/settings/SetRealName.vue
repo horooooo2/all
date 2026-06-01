@@ -2,17 +2,17 @@
   <div class="profile-form-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>设置姓名</h1>
+      <h1>{{ $t('设置姓名') }}</h1>
     </header>
 
     <main class="content">
-      <div class="label">姓名</div>
+      <div class="label">{{ $t('姓名') }}</div>
       <input
         v-model.trim="realName"
         class="input"
         type="text"
         maxlength="20"
-        placeholder="请输入真实姓名"
+        :placeholder="$t('请输入真实姓名')"
       >
 
       <button
@@ -28,6 +28,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -48,7 +50,7 @@ const onSubmit = async () => {
   const value = realName.value.trim()
 
   if (!value) {
-    toast.warning('请输入真实姓名')
+    toast.warning(t('请输入真实姓名'))
     return
   }
   if (!/^[\u4e00-\u9fa5A-Za-z·\s]{2,20}$/.test(value)) {

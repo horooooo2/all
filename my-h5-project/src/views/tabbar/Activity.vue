@@ -1,11 +1,11 @@
 <template>
   <div class="activity-page">
     <header class="activity-header">
-      <h1 class="activity-title">活动中心</h1>
+      <h1 class="activity-title">{{ $t('活动中心') }}</h1>
     </header>
 
     <div class="activity-list">
-      <div v-if="loading" class="activity-loading">加载中...</div>
+      <div v-if="loading" class="activity-loading">{{ $t('加载中...') }}</div>
 
       <template v-else-if="activityList.length">
         <button
@@ -30,13 +30,15 @@
 
       <div v-else class="activity-empty">
         <img :src="noDataImage" alt="no-data">
-        <p>暂无活动</p>
+        <p>{{ $t('暂无活动') }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchActivityList } from '@/api/activity'
@@ -45,7 +47,6 @@ import noDataImage from '@/assets/no_data.svg'
 import toast from '@/components/Toast'
 
 const router = useRouter()
-
 const loading = ref(false)
 const activityList = ref([])
 const brokenImageIds = ref(new Set())
@@ -68,9 +69,9 @@ const loadActivities = async () => {
   try {
     activityList.value = await fetchActivityList()
   } catch (error) {
-    console.error('加载活动列表失败:', error)
+    console.error(t('加载活动列表失败:'), error)
     activityList.value = []
-    toast.error('加载活动列表失败')
+    toast.error(t('加载活动列表失败'))
   } finally {
     loading.value = false
   }

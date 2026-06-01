@@ -2,7 +2,7 @@
   <div class="agent-subpage agent-team-lottery-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>团队彩票注单记录</h1>
+      <h1>{{ $t('团队彩票注单记录') }}</h1>
     </header>
 
     <div class="lottery-toolbar">
@@ -35,9 +35,7 @@
             placeholder="全部玩家"
             autocomplete="off"
           >
-          <button type="button" class="lottery-player-search__btn" @click="onPlayerSearchClick">
-            搜索
-          </button>
+          <button type="button" class="lottery-player-search__btn" @click="onPlayerSearchClick">{{ $t('搜索') }}</button>
         </div>
       </div>
       <div class="lottery-toolbar-row lottery-drops lottery-drops--two">
@@ -64,10 +62,10 @@
           </div>
           <div class="lottery-card-mid">
             <p class="lottery-card-bet">
-              <span class="lottery-card-bet-label">投注：</span>
+              <span class="lottery-card-bet-label">{{ $t('投注：') }}</span>
               <span class="lottery-card-bet-val">{{ item.betContent }}</span>
             </p>
-            <button type="button" class="lottery-card-detail" @click="onViewDetail(item)">查看详情</button>
+            <button type="button" class="lottery-card-detail" @click="onViewDetail(item)">{{ $t('查看详情') }}</button>
           </div>
           <div class="lottery-card-foot">
             <span class="lottery-card-time">{{ item.orderTime }}</span>
@@ -77,7 +75,7 @@
       </section>
       <div v-else class="lottery-empty">
         <img :src="noDataImage" alt="">
-        <p>暂无数据</p>
+        <p>{{ $t('暂无数据') }}</p>
       </div>
     </div>
 
@@ -89,7 +87,7 @@
       :style="{ paddingBottom: 'env(safe-area-inset-bottom, 0)' }"
     >
       <div class="time-panel">
-        <h3>下单时间</h3>
+        <h3>{{ $t('下单时间') }}</h3>
         <div class="quick-row">
           <button
             v-for="item in quickOptions"
@@ -119,8 +117,8 @@
         >
 
         <div class="action-row">
-          <button type="button" class="btn-reset" @click="resetTimePopup">重置</button>
-          <button type="button" class="btn-confirm" @click="confirmTime">确定</button>
+          <button type="button" class="btn-reset" @click="resetTimePopup">{{ $t('重置') }}</button>
+          <button type="button" class="btn-confirm" @click="confirmTime">{{ $t('确定') }}</button>
         </div>
       </div>
     </van-popup>
@@ -134,7 +132,7 @@
     >
       <div class="popup-title-row">
         <span>{{ datePickerTitle }}</span>
-        <button type="button" class="picker-confirm" @click="confirmPickDate">确认</button>
+        <button type="button" class="picker-confirm" @click="confirmPickDate">{{ $t('确认') }}</button>
       </div>
       <van-date-picker
         v-model="pickerDateValues"
@@ -154,7 +152,7 @@
     >
       <div class="lottery-picker-head">
         <span class="lottery-picker-title">{{ listPickerTitle }}</span>
-        <button type="button" class="lottery-picker-close" aria-label="关闭" @click="listPickerVisible = false">
+        <button type="button" class="lottery-picker-close" :aria-label="$t('关闭')" @click="listPickerVisible = false">
           <img :src="iconClose" alt="">
         </button>
       </div>
@@ -177,6 +175,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -192,9 +192,9 @@ const router = useRouter()
 const goBack = () => router.back()
 
 const periodTabs = [
-  { value: 'today', label: '今日' },
-  { value: 'yesterday', label: '昨日' },
-  { value: 'week', label: '本周' }
+  { value: 'today', label: t('今日') },
+  { value: 'yesterday', label: t('昨日') },
+  { value: 'week', label: t('本周') }
 ]
 
 /** tab：今日/昨日/本周；custom：筛选弹窗确定的区间 */
@@ -214,10 +214,10 @@ const popupSelectedQuick = ref('')
 const issueNoKeyword = ref('')
 
 const quickOptions = [
-  { label: '24小时内', value: '24h' },
-  { label: '48小时内', value: '48h' },
-  { label: '15天内', value: '15d' },
-  { label: '30天内', value: '30d' }
+  { label: t('24小时内'), value: '24h' },
+  { label: t('48小时内'), value: '48h' },
+  { label: t('15天内'), value: '15d' },
+  { label: t('30天内'), value: '30d' }
 ]
 
 const minDate = new Date(2023, 0, 1)
@@ -239,22 +239,22 @@ const listPickerKind = ref('game')
 
 const GAME_OPTIONS = [
   { value: 'all', label: '全部游戏' },
-  { value: '加拿大28', label: '加拿大PC28(4.2-4.6)特' }
+  { value: t('加拿大28'), label: '加拿大PC28(4.2-4.6)特' }
 ]
 
 const STATUS_OPTIONS = [
   { value: 'all', label: '全部状态' },
-  { value: 'pending', label: '未开奖' },
-  { value: 'won', label: '已中奖' },
-  { value: 'lost', label: '未中奖' }
+  { value: 'pending', label: t('未开奖') },
+  { value: 'won', label: t('已中奖') },
+  { value: 'lost', label: t('未中奖') }
 ]
 
 const gameLabel = computed(() => GAME_OPTIONS.find((o) => o.value === gameValue.value)?.label ?? '全部游戏')
 const statusLabel = computed(() => STATUS_OPTIONS.find((o) => o.value === statusValue.value)?.label ?? '全部状态')
 
 const listPickerTitle = computed(() => {
-  if (listPickerKind.value === 'game') return '平台选择'
-  return '状态选择'
+  if (listPickerKind.value === 'game') return t('平台选择')
+  return t('状态选择')
 })
 
 const listPickerOptions = computed(() => {
@@ -334,7 +334,7 @@ const syncPickerFromDate = (date) => {
   ]
 }
 
-const datePickerTitle = computed(() => (pickerTarget.value === 'start' ? '开始时间' : '结束时间'))
+const datePickerTitle = computed(() => (pickerTarget.value === 'start' ? t('开始时间') : t('结束时间')
 
 const formatSlashDate = (date) => {
   const mm = `${date.getMonth() + 1}`.padStart(2, '0')
@@ -411,9 +411,9 @@ const filteredRecords = computed(() =>
 )
 
 const resultLabel = (r) => {
-  if (r === 'pending') return '未开奖'
-  if (r === 'won') return '已中奖'
-  return '未中奖'
+  if (r === 'pending') return t('未开奖')
+  if (r === 'won') return t('已中奖')
+  return t('未中奖')
 }
 
 const resultTagClass = (r) => {

@@ -26,13 +26,15 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 const props = defineProps({
   show: { type: Boolean, default: false },
   top: { type: [String, Number], default: 0 },
   showFooter: { type: Boolean, default: true },
-  cancelText: { type: String, default: '返回' },
+  cancelText: { type: String, default: t('返回') },
   primaryText: { type: String, default: '' }
 })
 

@@ -2,7 +2,7 @@
   <div class="deposit-withdraw-record-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>交易记录</h1>
+      <h1>{{ $t('交易记录') }}</h1>
     </header>
 
     <main class="content">
@@ -39,11 +39,11 @@
               <span v-else class="tag" :class="item.channel">{{ item.channelLabel }}</span>
             </div>
             <div class="cell-sub">
-              <span class="cell-sub__label">时间：</span>
+              <span class="cell-sub__label">{{ $t('时间：') }}</span>
               <span class="cell-sub__value">{{ item.time }}</span>
             </div>
             <div class="cell-sub cell-sub--order">
-              <span class="cell-sub__label">订单号：</span>
+              <span class="cell-sub__label">{{ $t('订单号：') }}</span>
               <span class="cell-sub__value">{{ item.orderNo }}</span>
               <button type="button" class="copy-icon" @click.stop="copy(item.orderNo)">
                 <img :src="iconCopy" alt="copy">
@@ -60,14 +60,14 @@
 
       <section v-else class="empty">
         <img :src="noDataImage" alt="no-data" />
-        <div class="empty-text">暂无数据</div>
+        <div class="empty-text">{{ $t('暂无数据') }}</div>
       </section>
     </main>
 
     <van-popup v-model:show="showTimePopup" position="bottom" round class="sheet-popup">
       <div class="sheet">
         <div class="sheet-header">
-          <div class="sheet-title">时间选择</div>
+          <div class="sheet-title">{{ $t('时间选择') }}</div>
           <button type="button" class="sheet-close" @click="showTimePopup = false">
             <img :src="iconClose" alt="close">
           </button>
@@ -90,7 +90,7 @@
     <van-popup v-model:show="showCategoryPopup" position="bottom" round class="sheet-popup">
       <div class="sheet">
         <div class="sheet-header">
-          <div class="sheet-title">分类选择</div>
+          <div class="sheet-title">{{ $t('分类选择') }}</div>
           <button type="button" class="sheet-close" @click="showCategoryPopup = false">
             <img :src="iconClose" alt="close">
           </button>
@@ -113,6 +113,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import toast from '@/components/Toast'
@@ -124,25 +126,24 @@ import noDataImage from '@/assets/no_data.svg'
 import { depositWithdrawRecords } from '@/views/recharge/deposit-withdraw-record.mock'
 
 const router = useRouter()
-
 const showTimePopup = ref(false)
 const showCategoryPopup = ref(false)
 
 const timeOptions = [
-  { label: '所有', value: 'all' },
-  { label: '24小时内', value: '24h' },
-  { label: '7天内', value: '7d' },
-  { label: '15天内', value: '15d' },
-  { label: '30天内', value: '30d' }
+  { label: t('所有'), value: 'all' },
+  { label: t('24小时内'), value: '24h' },
+  { label: t('7天内'), value: '7d' },
+  { label: t('15天内'), value: '15d' },
+  { label: t('30天内'), value: '30d' }
 ]
 
 const categoryOptions = [
-  { label: '所有', value: 'all' },
-  { label: '存款', value: 'deposit' },
-  { label: '取款', value: 'withdraw' },
-  { label: '成功', value: 'success' },
-  { label: '失败', value: 'failed' },
-  { label: '处理中', value: 'processing' }
+  { label: t('所有'), value: 'all' },
+  { label: t('存款'), value: 'deposit' },
+  { label: t('取款'), value: 'withdraw' },
+  { label: t('成功'), value: 'success' },
+  { label: t('失败'), value: 'failed' },
+  { label: t('处理中'), value: 'processing' }
 ]
 
 const selectedTime = ref('all')
@@ -150,8 +151,8 @@ const selectedCategory = ref('all')
 
 const list = ref(depositWithdrawRecords)
 
-const timeText = computed(() => timeOptions.find(x => x.value === selectedTime.value)?.label || '所有')
-const categoryText = computed(() => categoryOptions.find(x => x.value === selectedCategory.value)?.label || '所有')
+const timeText = computed(() => timeOptions.find(x => x.value === selectedTime.value)?.label || t('所有'))
+const categoryText = computed(() => categoryOptions.find(x => x.value === selectedCategory.value)?.label || t('所有'))
 
 const filteredList = computed(() => {
   const now = Date.now()
@@ -199,7 +200,7 @@ const selectCategory = (value) => {
 const copy = async (text) => {
   try {
     await navigator.clipboard.writeText(text)
-    toast.success('已复制')
+    toast.success(t('已复制'))
   } catch (e) {
     toast.warning(text)
   }

@@ -2,12 +2,12 @@
   <div class="vip-detail-page">
     <header class="vip-detail-nav">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>VIP详情</h1>
+      <h1>{{ $t('VIP详情') }}</h1>
     </header>
 
-    <section class="vip-explain-card" aria-label="VIP等级说明">
+    <section class="vip-explain-card" :aria-label="$t('VIP等级说明')">
       <div class="vip-explain-head-row">
-        <h2 class="vip-explain-title">VIP等级说明</h2>
+        <h2 class="vip-explain-title">{{ $t('VIP等级说明') }}</h2>
         <img class="vip-explain-deco" :src="iconVipxq" alt="" aria-hidden="true">
       </div>
       <p class="vip-explain-text">
@@ -17,11 +17,11 @@
 
     <div class="vip-priv-title vip-detail-section-head">
       <img class="vip-priv-title-side" :src="iconZsLeft" alt="">
-      <span class="vip-priv-title-text">VIP升级条件</span>
+      <span class="vip-priv-title-text">{{ $t('VIP升级条件') }}</span>
       <img class="vip-priv-title-side" :src="iconZsRight" alt="">
     </div>
 
-    <div v-if="loading" class="vip-condition-loading">加载中...</div>
+    <div v-if="loading" class="vip-condition-loading">{{ $t('加载中...') }}</div>
     <div v-else class="vip-condition-table-wrap">
       <table class="vip-condition-table">
         <colgroup>
@@ -34,33 +34,33 @@
         </colgroup>
         <thead>
           <tr>
-            <th rowspan="2">VIP等级</th>
+            <th rowspan="2">{{ $t('VIP等级') }}</th>
             <th colspan="2">
               <div class="vip-condition-group-head">
-                <span>升级条件</span>
-                <span class="vip-condition-group-time">近30天</span>
+                <span>{{ $t('升级条件') }}</span>
+                <span class="vip-condition-group-time">{{ $t('近30天') }}</span>
               </div>
             </th>
             <th colspan="2">
               <div class="vip-condition-group-head">
-                <span>保级条件</span>
-                <span class="vip-condition-group-time">近30天</span>
+                <span>{{ $t('保级条件') }}</span>
+                <span class="vip-condition-group-time">{{ $t('近30天') }}</span>
               </div>
             </th>
-            <th rowspan="2">升级礼金</th>
+            <th rowspan="2">{{ $t('升级礼金') }}</th>
           </tr>
           <tr>
             <th>
-              <div class="vip-condition-subhead">有效投注</div>
+              <div class="vip-condition-subhead">{{ $t('有效投注') }}</div>
             </th>
             <th>
-              <div class="vip-condition-subhead">充值</div>
+              <div class="vip-condition-subhead">{{ $t('充值') }}</div>
             </th>
             <th>
-              <div class="vip-condition-subhead">有效投注</div>
+              <div class="vip-condition-subhead">{{ $t('有效投注') }}</div>
             </th>
             <th>
-              <div class="vip-condition-subhead">充值</div>
+              <div class="vip-condition-subhead">{{ $t('充值') }}</div>
             </th>
           </tr>
         </thead>
@@ -80,6 +80,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getVipRules, formatVipThreshold, formatVipMoney } from '@/api/vip'
@@ -100,7 +102,7 @@ const mapRuleToRow = (rule, maxLevel) => {
     id: rule.id,
     levelLabel: rule.levelName || `VIP${rule.levelNo}`,
     upBet: isMax && rule.upgradeValidBetAmount <= 0
-      ? '已达最高'
+      ? t('已达最高')
       : formatVipThreshold(rule.upgradeValidBetAmount, rule.currencyCode),
     upRecharge: formatVipThreshold(rule.upgradeRechargeAmount, rule.currencyCode),
     downBet: formatVipThreshold(rule.retainValidBetAmount, rule.currencyCode),
@@ -116,7 +118,7 @@ const fetchVipRules = async () => {
     const maxLevel = rules.reduce((max, item) => Math.max(max, item.levelNo), 0)
     conditionRows.value = rules.map((rule) => mapRuleToRow(rule, maxLevel))
   } catch (error) {
-    console.error('加载 VIP 规则失败:', error)
+    console.error(t('加载 VIP 规则失败:'), error)
     conditionRows.value = []
   } finally {
     loading.value = false

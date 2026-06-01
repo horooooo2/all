@@ -6,7 +6,7 @@
           <div class="mipai-panel__head">
             <img class="mipai-qiu mipai-qiu--left" :src="miQiu1Src" alt="" aria-hidden="true" />
             <div class="mipai-head-pill">
-              <div class="mipai-head-text"><span class="issue">{{ issue }}</span> 期开奖结果</div>
+              <div class="mipai-head-text"><span class="issue">{{ issue }}</span> {{ $t('期开奖结果') }}</div>
             </div>
             <img class="mipai-qiu mipai-qiu--right" :src="miQiu2Src" alt="" aria-hidden="true" />
           </div>
@@ -70,7 +70,7 @@
           class="mipai-close"
           role="button"
           tabindex="0"
-          aria-label="关闭"
+          :aria-label="$t('关闭')"
           @click="close"
           @keydown.enter.prevent="close"
           @keydown.space.prevent="close"
@@ -83,6 +83,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, nextTick, ref, watch } from 'vue'
 import miCloseSrc from '@/assets/mipai_close.svg'
 import miQiu1Src from '@/assets/mipai_qiu1.png'
@@ -175,7 +177,7 @@ function setupScratch() {
   ctx.font = '700 18px sans-serif'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText('已有结果，请刮涂层', w / 2, h / 2)
+  ctx.fillText(t('已有结果，请刮涂层'), w / 2, h / 2)
 
   ctx.globalCompositeOperation = 'destination-out'
   const radius = 18

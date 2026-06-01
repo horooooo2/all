@@ -30,16 +30,14 @@
             @keydown.enter.prevent="goEditProfile"
             @keydown.space.prevent="goEditProfile"
           >
-            <img :src="iconBj" alt="编辑">
+            <img :src="iconBj" :alt="$t('编辑')">
           </div>
           <button
             type="button"
             class="edit-btn"
             v-if="!isLogin"
             @click="goLogin()"
-          >
-            登录
-          </button>
+          >{{ $t('登录') }}</button>
         </div>
       </div>
 
@@ -88,7 +86,7 @@
             @keydown.space.prevent="goRecharge"
           >
             <img :src="iconDeposit2" alt="deposit">
-            <span>存款</span>
+            <span>{{ $t('存款') }}</span>
           </div>
           <div
             class="wallet-action"
@@ -99,7 +97,7 @@
             @keydown.space.prevent="goWithdraw"
           >
             <img :src="iconWithdrawal" alt="withdraw">
-            <span>取款</span>
+            <span>{{ $t('取款') }}</span>
           </div>
           <div
             class="wallet-action"
@@ -110,7 +108,7 @@
             @keydown.space.prevent="goAgentCenter"
           >
             <img :src="iconActing" alt="acting">
-            <span>代理</span>
+            <span>{{ $t('代理') }}</span>
           </div>
         </div>
       </div>
@@ -126,7 +124,7 @@
         @keydown.space.prevent="goMemberManage"
       >
         <img class="quick-icon-img" :src="iconHuiyuan" alt="">
-        <span>会员管理</span>
+        <span>{{ $t('会员管理') }}</span>
       </div>
       <div
         class="quick-item"
@@ -137,7 +135,7 @@
         @keydown.space.prevent="goTransactionRecord"
       >
         <img class="quick-icon-img" :src="iconJyjl" alt="">
-        <span>交易记录</span>
+        <span>{{ $t('交易记录') }}</span>
       </div>
       <div
         class="quick-item"
@@ -148,7 +146,7 @@
         @keydown.space.prevent="goGameRecord"
       >
         <img class="quick-icon-img" :src="iconYxjl" alt="">
-        <span>游戏记录</span>
+        <span>{{ $t('游戏记录') }}</span>
       </div>
       <div
         class="quick-item"
@@ -159,7 +157,7 @@
         @keydown.space.prevent="goTodayProfitLoss"
       >
         <img class="quick-icon-img" :src="iconJryk" alt="">
-        <span>今日赢亏</span>
+        <span>{{ $t('今日赢亏') }}</span>
       </div>
     </section>
 
@@ -174,7 +172,7 @@
       >
         <span class="menu-row-inner">
           <img class="menu-icon" :src="iconFs" alt="">
-          <span>我的返水</span>
+          <span>{{ $t('我的返水') }}</span>
         </span>
         <van-icon name="arrow" />
       </div>
@@ -188,7 +186,7 @@
       >
         <span class="menu-row-inner">
           <img class="menu-icon" :src="iconApp" alt="">
-          <span>下载应用程序</span>
+          <span>{{ $t('下载应用程序') }}</span>
         </span>
         <van-icon name="arrow" />
       </div>
@@ -202,7 +200,7 @@
       >
         <span class="menu-row-inner">
           <img class="menu-icon" :src="iconHlepc" alt="">
-          <span>帮助中心</span>
+          <span>{{ $t('帮助中心') }}</span>
         </span>
         <van-icon name="arrow" />
       </div>
@@ -216,7 +214,7 @@
       >
         <span class="menu-row-inner">
           <img class="menu-icon" :src="iconZxkf" alt="">
-          <span>联系我们</span>
+          <span>{{ $t('联系我们') }}</span>
         </span>
         <van-icon name="arrow" />
       </div>
@@ -230,7 +228,7 @@
       >
         <span class="menu-row-inner">
           <img class="menu-icon" :src="iconSetting" alt="">
-          <span>设置</span>
+          <span>{{ $t('设置') }}</span>
         </span>
         <van-icon name="arrow" />
       </div>
@@ -247,7 +245,7 @@
       >
         <span class="menu-row-inner">
           <img class="menu-icon" :src="iconEn" alt="">
-          <span>语言设置</span>
+          <span>{{ $t('语言设置') }}</span>
         </span>
         <span class="right-text">{{ currentLangLabel }} <van-icon name="arrow" /></span>
       </div>
@@ -255,7 +253,7 @@
 
 <!--    <section class="single-card">-->
 <!--      <div class="mode-row">-->
-<!--        <span>夜间模式</span>-->
+<!--        <span>{{ $t('夜间模式') }}</span>-->
 <!--        <van-switch v-model="isDark" size="22px" />-->
 <!--      </div>-->
 <!--    </section>-->
@@ -265,6 +263,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -392,8 +391,8 @@ onMounted(() => {
 })
 
 const LANG_LABELS = {
-  zh: '简体中文',
-  zht: '繁体中文',
+  zh: t('简体中文'),
+  zht: t('繁体中文'),
   en: 'English'
 }
 const currentLangLabel = computed(() => LANG_LABELS[locale.value] || LANG_LABELS.zh)

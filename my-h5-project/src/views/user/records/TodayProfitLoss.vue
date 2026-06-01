@@ -2,12 +2,12 @@
   <div class="today-profit-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>今日赢亏</h1>
+      <h1>{{ $t('今日赢亏') }}</h1>
     </header>
 
     <section class="total-card">
       <div class="total-left">
-        <span class="label">赢亏金额</span>
+        <span class="label">{{ $t('赢亏金额') }}</span>
         <strong :class="summary.profitAmount >= 0 ? 'positive' : 'negative'">
           {{ summary.profitAmount >= 0 ? '+' : '-' }}¥{{ formatMoney(Math.abs(summary.profitAmount)) }}
         </strong>
@@ -18,9 +18,9 @@
       </button>
     </section>
 
-    <p class="formula-text">赢亏金额 = 派彩金额 - 投注金额</p>
+    <p class="formula-text">{{ $t('赢亏金额 = 派彩金额 - 投注金额') }}</p>
 
-    <section v-if="loading" class="loading-tip">加载中...</section>
+    <section v-if="loading" class="loading-tip">{{ $t('加载中...') }}</section>
 
     <section v-else class="stat-grid">
       <div
@@ -34,7 +34,7 @@
     </section>
 
     <section v-if="!loading && platforms.length" class="platform-section">
-      <h3 class="platform-title">各平台明细</h3>
+      <h3 class="platform-title">{{ $t('各平台明细') }}</h3>
       <article
         v-for="item in platforms"
         :key="item.platformName"
@@ -43,19 +43,19 @@
         <div class="platform-name">{{ item.platformName }}</div>
         <div class="platform-grid">
           <div class="platform-stat">
-            <span>投注</span>
+            <span>{{ $t('投注') }}</span>
             <strong>¥{{ formatMoney(item.betAmount) }}</strong>
           </div>
           <div class="platform-stat">
-            <span>有效投注</span>
+            <span>{{ $t('有效投注') }}</span>
             <strong>¥{{ formatMoney(item.validBet) }}</strong>
           </div>
           <div class="platform-stat">
-            <span>派彩</span>
+            <span>{{ $t('派彩') }}</span>
             <strong>¥{{ formatMoney(item.payoutAmount) }}</strong>
           </div>
           <div class="platform-stat">
-            <span>盈亏</span>
+            <span>{{ $t('盈亏') }}</span>
             <strong :class="item.profitAmount >= 0 ? 'positive' : 'negative'">
               {{ item.profitAmount >= 0 ? '+' : '-' }}¥{{ formatMoney(Math.abs(item.profitAmount)) }}
             </strong>
@@ -66,7 +66,7 @@
 
     <van-popup v-model:show="showTimePopup" position="bottom" round class="custom-popup">
       <div class="popup-title-row">
-        <span>时间选择</span>
+        <span>{{ $t('时间选择') }}</span>
         <img :src="iconClose" alt="close" @click="showTimePopup = false">
       </div>
       <div class="time-list">
@@ -93,6 +93,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -118,27 +120,27 @@ const platforms = ref([])
 const loading = ref(false)
 
 const timeOptions = [
-  { label: '今天', value: 'today' },
-  { label: '昨天', value: 'yesterday' },
-  { label: '最近七天', value: 'week' },
-  { label: '本周', value: 'thisWeek' },
-  { label: '上周', value: 'lastWeek' },
-  { label: '本月', value: 'thisMonth' }
+  { label: t('今天'), value: 'today' },
+  { label: t('昨天'), value: 'yesterday' },
+  { label: t('最近七天'), value: 'week' },
+  { label: t('本周'), value: 'thisWeek' },
+  { label: t('上周'), value: 'lastWeek' },
+  { label: t('本月'), value: 'thisMonth' }
 ]
 
 const selectedTime = ref('today')
 const showTimePopup = ref(false)
 
 const currentTimeText = computed(
-  () => timeOptions.find((i) => i.value === selectedTime.value)?.label || '今天'
+  () => timeOptions.find((i) => i.value === selectedTime.value)?.label || t('今天')
 )
 
 const statItems = computed(() => [
-  { key: 'orderCount', label: '订单数量', value: summary.value.orderCount, isCount: true },
-  { key: 'bet', label: '投注金额', value: summary.value.betAmount },
-  { key: 'validBet', label: '有效投注', value: summary.value.validBet },
-  { key: 'payout', label: '派彩金额', value: summary.value.payoutAmount },
-  { key: 'profit', label: '盈亏金额', value: summary.value.profitAmount }
+  { key: 'orderCount', label: t('订单数量'), value: summary.value.orderCount, isCount: true },
+  { key: 'bet', label: t('投注金额'), value: summary.value.betAmount },
+  { key: 'validBet', label: t('有效投注'), value: summary.value.validBet },
+  { key: 'payout', label: t('派彩金额'), value: summary.value.payoutAmount },
+  { key: 'profit', label: t('盈亏金额'), value: summary.value.profitAmount }
 ])
 
 const formatMoney = (value) => {
@@ -159,10 +161,10 @@ const loadProfit = async () => {
     summary.value = res.summary
     platforms.value = res.platforms
   } catch (error) {
-    console.error('加载盈亏数据失败:', error)
+    console.error(t('加载盈亏数据失败:'), error)
     summary.value = emptySummary()
     platforms.value = []
-    toast.error('加载盈亏数据失败')
+    toast.error(t('加载盈亏数据失败'))
   } finally {
     loading.value = false
   }
