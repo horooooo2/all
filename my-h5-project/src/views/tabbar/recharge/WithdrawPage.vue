@@ -17,7 +17,7 @@
     <template v-else>
       <div class="balance-card">
         <div class="balance-header">
-          <div class="balance-title">账户余额</div>
+          <div class="balance-title">{{ $t('账户余额') }}</div>
           <button
             class="recycle-btn"
             type="button"
@@ -35,7 +35,7 @@
         <div class="divider" />
 
         <div class="sub-balance">
-          <div class="sub-label">余额</div>
+          <div class="sub-label">{{ $t('余额') }}</div>
           <div class="sub-amount">¥ 0.00&nbsp;&nbsp;¥ 0.00</div>
         </div>
 
@@ -46,7 +46,7 @@
       </div>
 
       <div class="section">
-        <div class="section-title">取款方式</div>
+        <div class="section-title">{{ $t('取款方式') }}</div>
         <div class="method-grid">
           <div
             v-for="m in methods"
@@ -83,7 +83,7 @@
             placeholder="请输入取款金额"
             v-model="amount"
           />
-          <button class="all-btn" type="button" @click="amount = '89685.50'">全部</button>
+          <button class="all-btn" type="button" @click="amount = '89685.50'">{{ $t('全部') }}</button>
         </div>
       </div>
 
@@ -133,9 +133,9 @@
         <div v-if="showTipPopup" class="tip-popup-mask" @click.self="showTipPopup = false">
           <div class="tip-popup">
             <div class="tip-popup-header">
-              <h3 class="tip-popup-title">提示</h3>
-              <button type="button" class="tip-popup-close" aria-label="关闭" @click="showTipPopup = false">
-                <img src="@/assets/icon_x.svg" alt="关闭" />
+              <h3 class="tip-popup-title">{{ $t('提示') }}</h3>
+              <button type="button" class="tip-popup-close" :aria-label="$t('关闭')" @click="showTipPopup = false">
+                <img src="@/assets/icon_x.svg" :alt="$t('关闭')" />
               </button>
             </div>
             <div class="tip-popup-body">
@@ -152,6 +152,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchWithdrawalAccounts, maskAccountDisplay } from '@/utils/withdrawalAccounts'
@@ -161,13 +163,12 @@ import iconDzqb from '@/assets/icon_dzqb.svg'
 import iconCheck from '@/assets/icon_recharge_confirm_icon.svg'
 
 const router = useRouter()
-
 const loading = ref(true)
 const isRecycling = ref(false)
 const methods = [
   { key: 'usdt', name: 'USDT', icon: iconUsdtsm },
-  { key: 'bank', name: '银行卡', icon: iconWyzf },
-  { key: 'wallet', name: '电子钱包', icon: iconDzqb }
+  { key: 'bank', name: t('银行卡'), icon: iconWyzf },
+  { key: 'wallet', name: t('电子钱包'), icon: iconDzqb }
 ]
 
 const selectedMethod = ref('usdt')
@@ -181,7 +182,7 @@ const refreshAccounts = async () => {
   try {
     accounts.value = await fetchWithdrawalAccounts()
   } catch (error) {
-    console.error('加载提款账户失败:', error)
+    console.error(t('加载提款账户失败:'), error)
     accounts.value = []
   }
 }

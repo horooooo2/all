@@ -5,7 +5,7 @@
       <div v-if="show" class="lang-popup">
         <div class="popup-header">
           <span class="header-title">{{ $t('语言设置') }}</span>
-          <img class="close-btn" src="@/assets/icon_x.svg" alt="关闭" @click="close" />
+          <img class="close-btn" src="@/assets/icon_x.svg" :alt="$t('关闭')" @click="close" />
         </div>
         <div class="lang-list">
           <div
@@ -26,6 +26,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { loadLanguageAsync } from '@/i18n'
@@ -40,8 +41,8 @@ const { locale } = useI18n()
 const currentLang = computed(() => locale.value)
 
 const languages = [
-  { code: 'zh', name: '简体中文' },
-  { code: 'zht', name: '繁体中文' },
+  { code: 'zh', name: t('简体中文') },
+  { code: 'zht', name: t('繁体中文') },
   { code: 'en', name: 'English' },
 ]
 

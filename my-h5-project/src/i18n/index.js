@@ -63,4 +63,9 @@ export function loadLanguageAsync(lang) {
 const initialLocale = getInitialLocale()
 loadLanguageAsync(initialLocale)
 
+/** 脚本/模块顶层可用的翻译函数（不依赖 setup 内 useI18n） */
+export function t(key, ...args) {
+    return i18n.global.t(key, ...args)
+}
+
 export default i18n

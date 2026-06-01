@@ -26,7 +26,7 @@
         </li>
       </ul>
 
-      <p v-else class="long-empty">暂无符合条件的长龙</p>
+      <p v-else class="long-empty">{{ $t('暂无符合条件的长龙') }}</p>
     </div>
 
     <button
@@ -35,10 +35,10 @@
       class="long-streak-fab"
       aria-haspopup="dialog"
       :aria-expanded="streakPopupOpen ? 'true' : 'false'"
-      aria-label="选择连出期数"
+      :aria-label="$t('选择连出期数')"
       @click="streakPopupOpen = true"
     >
-      <span class="long-streak-fab__label">连出期数</span>
+      <span class="long-streak-fab__label">{{ $t('连出期数') }}</span>
       <span class="long-streak-fab__value">{{ streakFabText }}</span>
     </button>
 
@@ -53,14 +53,14 @@
       teleport="body"
     >
       <div class="long-streak-popup__head">
-        <span class="long-streak-popup__title">选择连出期数</span>
+        <span class="long-streak-popup__title">{{ $t('选择连出期数') }}</span>
         <img
           class="long-streak-popup__close"
           :src="iconX"
           alt=""
           role="button"
           tabindex="0"
-          aria-label="关闭"
+          :aria-label="$t('关闭')"
           @click="streakPopupOpen = false"
           @keydown.enter.prevent="streakPopupOpen = false"
           @keydown.space.prevent="streakPopupOpen = false"
@@ -68,7 +68,7 @@
       </div>
       <div class="long-streak-popup__body">
         <div class="long-streak-popup__rate-row">
-          <span>预出率</span>
+          <span>{{ $t('预出率') }}</span>
           <span>{{ streakRateRight }}</span>
         </div>
         <div class="long-streak-slider-wrap">
@@ -89,12 +89,8 @@
           </div>
         </div>
         <div class="long-streak-popup__actions">
-          <button type="button" class="long-streak-popup__btn long-streak-popup__btn--ghost" @click="resetTempRangeDefault">
-            恢复默认
-          </button>
-          <button type="button" class="long-streak-popup__btn long-streak-popup__btn--primary" @click="confirmStreakRange">
-            确定
-          </button>
+          <button type="button" class="long-streak-popup__btn long-streak-popup__btn--ghost" @click="resetTempRangeDefault">{{ $t('恢复默认') }}</button>
+          <button type="button" class="long-streak-popup__btn long-streak-popup__btn--primary" @click="confirmStreakRange">{{ $t('确定') }}</button>
         </div>
       </div>
     </van-popup>
@@ -102,6 +98,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import iconX from '@/assets/icon_x.svg'
 import {
@@ -123,7 +121,7 @@ import {
  */
 
 const props = defineProps({
-  pageTitle: { type: String, default: '长龙' },
+  pageTitle: { type: String, default: t('长龙') },
   /** @type {import('vue').PropType<LongDragonRow[]>} */
   rows: { type: Array, default: () => [] },
   streakStorageKey: { type: String, default: 'lottery.longDragon.streakPeriods.v1' },

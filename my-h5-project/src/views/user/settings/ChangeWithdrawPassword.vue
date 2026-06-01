@@ -11,7 +11,7 @@
           <div class="hero-figure">
             <img :src="heroIcon" alt="password" class="hero-icon">
           </div>
-          <div class="hero-title">修改取款密码</div>
+          <div class="hero-title">{{ $t('修改取款密码') }}</div>
         </section>
 
         <div class="field">
@@ -64,13 +64,13 @@
       </div>
 
       <template v-if="!hasWithdrawPassword">
-        <div class="label">联系方式</div>
+        <div class="label">{{ $t('联系方式') }}</div>
         <div class="field">
           <img :src="phoneIcon" alt="" class="field-icon">
           <input
             v-model="form.contact"
             class="field-input"
-            placeholder="请输入联系方式"
+            :placeholder="$t('请输入联系方式')"
           >
         </div>
 
@@ -92,6 +92,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -117,7 +119,7 @@ const { isSubmitting, submitPasswordChange } = usePasswordChange(changeWithdrawP
 
 const hasWithdrawPassword = computed(() => !!userStore.userInfo?.hasWithdrawPassword)
 const pageTitle = computed(() =>
-  hasWithdrawPassword.value ? '更改取款密码' : '提款密码设置'
+  hasWithdrawPassword.value ? t('更改取款密码') : t('提款密码设置')
 )
 
 const form = reactive({

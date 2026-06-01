@@ -1,7 +1,7 @@
 <template>
-  <div class="lhc-tx" aria-label="特肖">
+  <div class="lhc-tx" :aria-label="$t('特肖')">
     <div class="lhc-tx__head">
-      <span class="lhc-tx__title">特肖</span>
+      <span class="lhc-tx__title">{{ $t('特肖') }}</span>
     </div>
 
     <ul class="lhc-tx__list">
@@ -41,6 +41,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { LHC_ZODIACS } from './lhc-zodiac-data.js'
 import { waveKey } from './lhc-ptyx-data.js'

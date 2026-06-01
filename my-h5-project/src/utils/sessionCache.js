@@ -1,7 +1,7 @@
 /**
  * 会话级缓存：关闭标签页后自动清空。
  * 登录态（Pinia persist）、语言偏好等需跨会话持久化的数据仍用 localStorage。
- * 「记住密码」见 loginRemember.js（sessionStorage）。
+ * 「记住密码」见 loginRemember.js（localStorage，跨标签页保留）。
  */
 
 function getStorage() {

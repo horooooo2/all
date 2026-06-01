@@ -10,15 +10,15 @@
   >
     <div class="gdp" @click.stop>
       <header class="gdp__head">
-        <h2 class="gdp__title">存款</h2>
-        <button type="button" class="gdp__collapse" aria-label="收起" @click="close">
+        <h2 class="gdp__title">{{ $t('存款') }}</h2>
+        <button type="button" class="gdp__collapse" :aria-label="$t('收起')" @click="close">
           <img class="gdp__collapse-icon" :src="iconClose" alt="" aria-hidden="true" />
         </button>
       </header>
 
       <div class="gdp__scroll">
         <section class="gdp__section">
-          <h3 class="gdp__section-title">支付方式</h3>
+          <h3 class="gdp__section-title">{{ $t('支付方式') }}</h3>
           <div class="gdp__pay-grid">
             <button
               v-for="item in payMethods"
@@ -43,7 +43,7 @@
         </section>
 
         <section v-if="showProtocol" class="gdp__section">
-          <h3 class="gdp__section-title">网络协议</h3>
+          <h3 class="gdp__section-title">{{ $t('网络协议') }}</h3>
           <div class="gdp__chip-row">
             <button
               v-for="item in protocols"
@@ -63,14 +63,14 @@
             <img class="gdp__qr-img" :src="qrSrc" alt="" />
           </div>
           <div class="gdp__address-main">
-            <div class="gdp__address-label">存款地址</div>
+            <div class="gdp__address-label">{{ $t('存款地址') }}</div>
             <p class="gdp__address-text">{{ depositAddress }}</p>
-            <button type="button" class="gdp__copy-btn" @click="copyAddress">复制地址</button>
+            <button type="button" class="gdp__copy-btn" @click="copyAddress">{{ $t('复制地址') }}</button>
           </div>
         </section>
 
         <section v-else class="gdp__section gdp__section--channel">
-          <h3 class="gdp__section-title">存款渠道</h3>
+          <h3 class="gdp__section-title">{{ $t('存款渠道') }}</h3>
           <div class="gdp__chip-row">
             <button
               v-for="item in channels"
@@ -87,10 +87,10 @@
 
         <section class="gdp__tip">
           <p class="gdp__tip-text">
-            输入金额后点击确认，扫码/跳转支付成功后<span class="gdp__tip-em">自动到账</span>，若遇充值失败请及时咨询客服！
+            输入金额后点击确认，扫码/跳转支付成功后<span class="gdp__tip-em">{{ $t('自动到账') }}</span>，若遇充值失败请及时咨询客服！
           </p>
           <p v-if="showAddressBlock" class="gdp__tip-text gdp__tip-text--sub">
-            大额1万U起，请<span class="gdp__tip-em">获取专属VIP地址</span>，百万U存U取
+            大额1万U起，请<span class="gdp__tip-em">{{ $t('获取专属VIP地址') }}</span>，百万U存U取
           </p>
         </section>
       </div>
@@ -98,15 +98,17 @@
       <footer class="gdp__foot">
         <div class="gdp__support">
           <img class="gdp__support-icon" :src="iconSupport" alt="" aria-hidden="true" />
-          <span class="gdp__support-text">联系支持</span>
+          <span class="gdp__support-text">{{ $t('联系支持') }}</span>
         </div>
-        <button type="button" class="gdp__consult-btn" @click="onConsult">咨询</button>
+        <button type="button" class="gdp__consult-btn" @click="onConsult">{{ $t('咨询') }}</button>
       </footer>
     </div>
   </van-popup>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from '@/components/Toast'
@@ -123,23 +125,22 @@ import iconClose from '@/assets/icon_dack_down.svg'
 const show = defineModel('show', { type: Boolean, default: false })
 
 const router = useRouter()
-
 const selectedPay = ref('usdt')
 const selectedProtocol = ref('trc20')
 const selectedChannel = ref(1)
 
 const payMethods = [
-  { id: 'zfb', name: '支付宝', icon: iconZfb, cornerIcon: cornerPopular },
+  { id: 'zfb', name: t('支付宝'), icon: iconZfb, cornerIcon: cornerPopular },
   { id: 'usdt', name: 'USDT', icon: iconUsdt },
-  { id: 'bank', name: '银行卡', icon: iconBank },
+  { id: 'bank', name: t('银行卡'), icon: iconBank },
   { id: '988pay', name: '988pay', icon: icon988pay, cornerIcon: cornerStable }
 ]
 
 const protocols = [{ id: 'trc20', name: 'TRC-20' }]
 
 const channels = [
-  { id: 1, name: '通道一' },
-  { id: 2, name: '通道二' }
+  { id: 1, name: t('通道一') },
+  { id: 2, name: t('通道二') }
 ]
 
 const depositAddress = 'TS19uGx6bG39P86rHy3oP5oG8fJ8G8x6J7E'
@@ -160,7 +161,7 @@ async function copyAddress() {
   try {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(depositAddress)
-      toast.success('已复制地址')
+      toast.success(t('已复制地址'))
       return
     }
     const textarea = document.createElement('textarea')
@@ -172,10 +173,10 @@ async function copyAddress() {
     textarea.select()
     const ok = document.execCommand('copy')
     document.body.removeChild(textarea)
-    if (ok) toast.success('已复制地址')
-    else toast.error('复制失败')
+    if (ok) toast.success(t('已复制地址'))
+    else toast.error(t('复制失败'))
   } catch {
-    toast.error('复制失败')
+    toast.error(t('复制失败'))
   }
 }
 

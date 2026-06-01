@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-zmt" aria-label="正特码A">
-    <div class="lhc-zmt__mode" role="tablist" aria-label="正特码A玩法">
+  <div class="lhc-zmt" :aria-label="$t('正特码A')">
+    <div class="lhc-zmt__mode" role="tablist" :aria-label="$t('正特码A玩法')">
       <div class="lhc-zmt__mode-grid">
         <button
           v-for="m in PLAY_MODES"
@@ -38,6 +38,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { initModePickSets, isLhcPickActive, toggleLhcPick } from './lhc-multi-pick.js'
 import { labelsFromNumSet, labelsFromTextKeys } from '../lottery-basket-collect.js'
@@ -48,12 +50,12 @@ const emit = defineEmits(['update:betCount'])
 const ZMT_NUMS = Object.freeze(Array.from({ length: 49 }, (_, i) => i + 1))
 
 const PLAY_MODES = Object.freeze([
-  { key: 'z1', label: '正一A' },
-  { key: 'z2', label: '正二A' },
-  { key: 'z3', label: '正三A' },
-  { key: 'z4', label: '正四A' },
-  { key: 'z5', label: '正五A' },
-  { key: 'z6', label: '正六A' }
+  { key: 'z1', label: t('正一A') },
+  { key: 'z2', label: t('正二A') },
+  { key: 'z3', label: t('正三A') },
+  { key: 'z4', label: t('正四A') },
+  { key: 'z5', label: t('正五A') },
+  { key: 'z6', label: t('正六A') }
 ])
 
 const NUM_ODDS = '48.015'

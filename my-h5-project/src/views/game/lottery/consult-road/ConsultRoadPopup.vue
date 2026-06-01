@@ -10,22 +10,23 @@
         title-active-color="#1D1D1F"
         :animated="false"
       >
-        <van-tab name="unopened" title="未开咨询">
+        <van-tab name="unopened" :title="$t('未开咨询')">
           <UnopenedConsult />
         </van-tab>
-        <van-tab name="roadmap" title="路子图">
-          <div class="placeholder">路子图后续放到这里实现</div>
+        <van-tab name="roadmap" :title="$t('路子图')">
+          <div class="placeholder">{{ $t('路子图后续放到这里实现') }}</div>
         </van-tab>
       </van-tabs>
     </div>
 
     <div class="footer">
-      <button type="button" class="btn btn-ghost" @click="$emit('close')">返回</button>
+      <button type="button" class="btn btn-ghost" @click="$emit('close')">{{ $t('返回') }}</button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import UnopenedConsult from './UnopenedConsult.vue'
 

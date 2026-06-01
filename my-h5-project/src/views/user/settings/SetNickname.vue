@@ -2,17 +2,17 @@
   <div class="profile-form-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>设置昵称</h1>
+      <h1>{{ $t('设置昵称') }}</h1>
     </header>
 
     <main class="content">
-      <div class="label">昵称</div>
+      <div class="label">{{ $t('昵称') }}</div>
       <input
         v-model.trim="nickname"
         class="input"
         type="text"
         maxlength="10"
-        placeholder="请输入昵称"
+        :placeholder="$t('请输入昵称')"
       >
 
       <button
@@ -28,6 +28,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -48,7 +50,7 @@ const onSubmit = async () => {
   const value = nickname.value.trim()
 
   if (!value) {
-    toast.warning('请输入昵称')
+    toast.warning(t('请输入昵称'))
     return
   }
   if (value.length > 10) {

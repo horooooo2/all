@@ -1,13 +1,13 @@
 <template>
   <div class="roadmap">
-    <div class="top-modes" role="tablist" aria-label="路子图模式">
-      <button type="button" class="mode-btn" :class="{ active: mode === 'sum' }" @click="mode = 'sum'">总和</button>
-      <button type="button" class="mode-btn" :class="{ active: mode === 'size' }" @click="mode = 'size'">大小</button>
-      <button type="button" class="mode-btn" :class="{ active: mode === 'oddeven' }" @click="mode = 'oddeven'">单双</button>
+    <div class="top-modes" role="tablist" :aria-label="$t('路子图模式')">
+      <button type="button" class="mode-btn" :class="{ active: mode === 'sum' }" @click="mode = 'sum'">{{ $t('总和') }}</button>
+      <button type="button" class="mode-btn" :class="{ active: mode === 'size' }" @click="mode = 'size'">{{ $t('大小') }}</button>
+      <button type="button" class="mode-btn" :class="{ active: mode === 'oddeven' }" @click="mode = 'oddeven'">{{ $t('单双') }}</button>
     </div>
 
     <div class="layout">
-      <aside class="roadmap__tabs" aria-label="第几球">
+      <aside class="roadmap__tabs" :aria-label="$t('第几球')">
         <button
           v-for="t in ballTabs"
           :key="t.key"
@@ -24,13 +24,13 @@
       </aside>
 
       <div class="boards">
-        <div v-show="activeBall === 1" class="board" aria-label="第一球路子图">
+        <div v-show="activeBall === 1" class="board" :aria-label="$t('第一球路子图')">
           <div class="grid grid--text">
             <div v-for="(c, idx) in board1" :key="`b1-${idx}`" class="cell" :class="c.cls">{{ c.text }}</div>
           </div>
         </div>
 
-        <div v-show="activeBall === 2" class="board" aria-label="第二球路子图">
+        <div v-show="activeBall === 2" class="board" :aria-label="$t('第二球路子图')">
           <div class="grid grid--circle">
             <div v-for="(c, idx) in board2" :key="`b2-${idx}`" class="cell" :class="c.cls">
               <span v-if="c.kind === 'ring'" class="ring" />
@@ -39,7 +39,7 @@
           </div>
         </div>
 
-        <div v-show="activeBall === 3" class="board" aria-label="第三球路子图">
+        <div v-show="activeBall === 3" class="board" :aria-label="$t('第三球路子图')">
           <div class="grid grid--slash">
             <div v-for="(c, idx) in board3" :key="`b3-${idx}`" class="cell" :class="c.cls">
               <span v-if="c.kind === 'slash'" class="slash" />
@@ -48,12 +48,12 @@
         </div>
       </div>
 
-      <aside class="right-info" aria-label="统计信息">
+      <aside class="right-info" :aria-label="$t('统计信息')">
         <div class="ratio">
           <div class="ratio-item">
-            <div class="ratio-title">大(62%)</div>
+            <div class="ratio-title">{{ $t('大(62%)') }}</div>
             <div class="next-card">
-              <div class="next-title">下期大</div>
+              <div class="next-title">{{ $t('下期大') }}</div>
               <div class="next-icons">
                 <span class="ring red" />
                 <span class="dot red" />
@@ -63,9 +63,9 @@
           </div>
 
           <div class="ratio-item">
-            <div class="ratio-title">小(38%)</div>
+            <div class="ratio-title">{{ $t('小(38%)') }}</div>
             <div class="next-card">
-              <div class="next-title">下期大</div>
+              <div class="next-title">{{ $t('下期大') }}</div>
               <div class="next-icons">
                 <span class="ring blue" />
                 <span class="dot blue" />
@@ -80,14 +80,16 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 
 const mode = ref('size') // sum | size | oddeven
 
 const ballTabs = [
-  { key: 1, label: '第一球' },
-  { key: 2, label: '第二球' },
-  { key: 3, label: '第三球' }
+  { key: 1, label: t('第一球') },
+  { key: 2, label: t('第二球') },
+  { key: 3, label: t('第三球') }
 ]
 const activeBall = ref(1)
 

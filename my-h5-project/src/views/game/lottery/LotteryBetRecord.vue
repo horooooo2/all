@@ -3,7 +3,7 @@
     <!-- 顶栏与 Tab 样式对齐 /my-rebate（MyRebate.vue + my-rebate.less） -->
     <header class="record-header">
       <img :src="iconBack" alt="" class="back-btn" @click="goBack" />
-      <h1>投注记录</h1>
+      <h1>{{ $t('投注记录') }}</h1>
       <div
         class="record-header__filter"
         role="button"
@@ -47,7 +47,7 @@
     <!-- 与 .top-tabs 同宽双列：左列对齐「普通记录」，右列对齐「追号记录」 -->
     <div class="lbr-subbar">
       <div class="lbr-subbar__col lbr-subbar__col--left">
-        <span class="lbr-subbar__game">加拿大28</span>
+        <span class="lbr-subbar__game">{{ $t('加拿大28') }}</span>
       </div>
       <div class="lbr-subbar__col lbr-subbar__col--right">
         <div
@@ -93,14 +93,14 @@
               {{ row.betPrefix }}<span class="hl">{{ row.betPick }}</span> <span class="num">{{ row.betStake }}</span>
             </div>
             <div class="lbr-card__bonus">
-              <span class="lbr-card__bonus-label">奖金:</span>
+              <span class="lbr-card__bonus-label">{{ $t('奖金:') }}</span>
               <span class="lbr-card__bonus-val">{{ row.bonus }}</span>
               <van-icon name="arrow" class="lbr-card__chev" />
             </div>
           </div>
           <div class="lbr-card__row2">
             <span class="lbr-card__time">{{ row.time }}</span>
-            <span class="lbr-card__rebate"><em>返水:</em> {{ row.rebate }}</span>
+            <span class="lbr-card__rebate"><em>{{ $t('返水:') }}</em> {{ row.rebate }}</span>
           </div>
         </div>
       </template>
@@ -116,7 +116,7 @@
       :style="{ paddingBottom: 'env(safe-area-inset-bottom, 0)' }"
     >
       <div class="time-panel">
-        <h3>下单时间</h3>
+        <h3>{{ $t('下单时间') }}</h3>
         <div class="quick-row">
           <button
             v-for="item in timePeriodOptions"
@@ -144,8 +144,8 @@
         </div>
 
         <div class="action-row">
-          <button type="button" class="btn-reset" @click="resetTimePopup">重置</button>
-          <button type="button" class="btn-confirm" @click="confirmTime">确定</button>
+          <button type="button" class="btn-reset" @click="resetTimePopup">{{ $t('重置') }}</button>
+          <button type="button" class="btn-confirm" @click="confirmTime">{{ $t('确定') }}</button>
         </div>
       </div>
     </van-popup>
@@ -153,8 +153,8 @@
     <van-popup v-model:show="statusFilterOpen" position="bottom" round teleport="body" class="lbr-status-popup">
       <div class="lbr-status-sheet">
         <div class="lbr-status-sheet__head">
-          <span class="lbr-status-sheet__title">状态选择</span>
-          <button type="button" class="lbr-status-sheet__close" aria-label="关闭" @click="statusFilterOpen = false">
+          <span class="lbr-status-sheet__title">{{ $t('状态选择') }}</span>
+          <button type="button" class="lbr-status-sheet__close" :aria-label="$t('关闭')" @click="statusFilterOpen = false">
             <van-icon name="cross" />
           </button>
         </div>
@@ -184,6 +184,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getDemoBetRecordsBundle } from './lottery-bet-records.mock'
@@ -193,22 +195,21 @@ import iconSelected from '@/assets/icon_sel.svg'
 import noDataImage from '@/assets/no_data.svg'
 
 const router = useRouter()
-
 const mainTab = ref('normal')
 
 /** 列表上方：订单状态 */
 const statusFilterOpen = ref(false)
 const statusFilter = ref('all')
 const statusFilterOptions = [
-  { value: 'all', label: '所有' },
-  { value: 'pending', label: '未开奖' },
-  { value: 'loss', label: '未中奖' },
-  { value: 'win', label: '已中奖' },
-  { value: 'canceled', label: '已撤单' }
+  { value: 'all', label: t('所有') },
+  { value: 'pending', label: t('未开奖') },
+  { value: 'loss', label: t('未中奖') },
+  { value: 'win', label: t('已中奖') },
+  { value: 'canceled', label: t('已撤单') }
 ]
 
 const statusFilterLabel = computed(
-  () => statusFilterOptions.find((o) => o.value === statusFilter.value)?.label ?? '所有'
+  () => statusFilterOptions.find((o) => o.value === statusFilter.value)?.label ?? t('所有')
 )
 
 const startOfDay = (d) => {
@@ -234,9 +235,9 @@ const inRange = (timeText, start, end) => {
 /** 右上角：今天 / 昨天 / 本周 / 本月 + 期号（无具体日期点选） */
 const timePeriodOptions = [
   { label: '今天', value: 'today' },
-  { label: '昨天', value: 'yesterday' },
-  { label: '本周', value: 'week' },
-  { label: '本月', value: 'month' }
+  { label: t('昨天'), value: 'yesterday' },
+  { label: t('本周'), value: 'week' },
+  { label: t('本月'), value: 'month' }
 ]
 
 const appliedTimePeriod = ref('today')

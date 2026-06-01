@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-lm" aria-label="连码">
-    <div class="lhc-lm__mode" role="tablist" aria-label="连码玩法">
+  <div class="lhc-lm" :aria-label="$t('连码')">
+    <div class="lhc-lm__mode" role="tablist" :aria-label="$t('连码玩法')">
       <div class="lhc-lm__mode-grid">
         <button
           v-for="m in PLAY_MODES"
@@ -38,6 +38,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { LIANMA_PLAY_MODES, lianmaBetCount, lianmaOddsText } from './lhc-lianma-bet-count.js'
 import { labelsFromNumSet } from '../lottery-basket-collect.js'

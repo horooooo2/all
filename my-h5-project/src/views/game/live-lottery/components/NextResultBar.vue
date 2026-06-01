@@ -1,27 +1,27 @@
 <template>
-  <section class="next-result-bar" role="group" aria-label="下期开奖号码">
+  <section class="next-result-bar" role="group" :aria-label="$t('下期开奖号码')">
     <div class="issue">{{ issue }}</div>
 
-    <div class="nums" aria-label="开奖号码">
-      <span class="ball-wrap" aria-label="号码1">
+    <div class="nums" :aria-label="$t('开奖号码')">
+      <span class="ball-wrap" :aria-label="$t('号码1')">
         <span class="ball-track" :class="{ rolling: rolling[0] }" :style="trackStyle(0)" @transitionend="onTrackEnd(0)">
           <span v-for="(v, i) in trackItems1" :key="`b1-${i}-${v}`" class="ball red">{{ v }}</span>
         </span>
       </span>
       <span class="op" aria-hidden="true">+</span>
-      <span class="ball-wrap" aria-label="号码2">
+      <span class="ball-wrap" :aria-label="$t('号码2')">
         <span class="ball-track" :class="{ rolling: rolling[1] }" :style="trackStyle(1)" @transitionend="onTrackEnd(1)">
           <span v-for="(v, i) in trackItems2" :key="`b2-${i}-${v}`" class="ball blue">{{ v }}</span>
         </span>
       </span>
       <span class="op" aria-hidden="true">+</span>
-      <span class="ball-wrap" aria-label="号码3">
+      <span class="ball-wrap" :aria-label="$t('号码3')">
         <span class="ball-track" :class="{ rolling: rolling[2] }" :style="trackStyle(2)" @transitionend="onTrackEnd(2)">
           <span v-for="(v, i) in trackItems3" :key="`b3-${i}-${v}`" class="ball red">{{ v }}</span>
         </span>
       </span>
       <span class="op" aria-hidden="true">=</span>
-      <span class="ball-wrap" aria-label="和值">
+      <span class="ball-wrap" :aria-label="$t('和值')">
         <span class="ball-track" :class="{ rolling: rolling[3] }" :style="trackStyle(3)" @transitionend="onTrackEnd(3)">
           <span v-for="(v, i) in trackItemsSum" :key="`bs-${i}-${v}`" class="ball sum">{{ v }}</span>
         </span>
@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import iconBack from '@/assets/icon_dack.png'
 

@@ -78,21 +78,23 @@
     </div>
 
     <div class="op-bottom">
-      <div class="bottom-btn bottom-btn--stack bottom-btn--recent" role="button" tabindex="0" @click="emit('recent')">
-        <img v-if="recentIcon" class="bottom-btn__icon" :src="recentIcon" alt="" aria-hidden="true" />
-        <div>近期投注</div>
-      </div>
+      <template v-if="showMenuButtons">
+        <div class="bottom-btn bottom-btn--stack bottom-btn--recent" role="button" tabindex="0" @click="emit('recent')">
+          <img v-if="recentIcon" class="bottom-btn__icon" :src="recentIcon" alt="" aria-hidden="true" />
+          <div>近期投注</div>
+        </div>
 
-      <div class="bottom-btn bottom-btn--stack bottom-btn--basket" role="button" tabindex="0" @click="emit('basket')">
-        <span v-if="basketBadgeText" class="bottom-btn__badge" aria-label="购彩篮注单数">{{ basketBadgeText }}</span>
-        <img v-if="basketIcon" class="bottom-btn__icon" :src="basketIcon" alt="" aria-hidden="true" />
-        <div>购彩篮</div>
-      </div>
+        <div class="bottom-btn bottom-btn--stack bottom-btn--basket" role="button" tabindex="0" @click="emit('basket')">
+          <span v-if="basketBadgeText" class="bottom-btn__badge" aria-label="购彩篮注单数">{{ basketBadgeText }}</span>
+          <img v-if="basketIcon" class="bottom-btn__icon" :src="basketIcon" alt="" aria-hidden="true" />
+          <div>购彩篮</div>
+        </div>
 
-      <div class="bottom-btn bottom-btn--stack bottom-btn--add" role="button" tabindex="0" @click="emit('add-pick')">
-        <img v-if="addIcon" class="bottom-btn__icon" :src="addIcon" alt="" aria-hidden="true" />
-        <div>新增选号</div>
-      </div>
+        <div class="bottom-btn bottom-btn--stack bottom-btn--add" role="button" tabindex="0" @click="emit('add-pick')">
+          <img v-if="addIcon" class="bottom-btn__icon" :src="addIcon" alt="" aria-hidden="true" />
+          <div>新增选号</div>
+        </div>
+      </template>
 
       <div
         class="bottom-btn bottom-btn--primary"
@@ -126,7 +128,8 @@ const props = defineProps({
   recentIcon: { type: String, default: '' },
   basketIcon: { type: String, default: '' },
   addIcon: { type: String, default: '' },
-  basketCount: { type: Number, default: 0 }
+  basketCount: { type: Number, default: 0 },
+  showMenuButtons: { type: Boolean, default: true }
 })
 
 const emit = defineEmits(['update:amount', 'clear', 'recent', 'basket', 'add-pick', 'bet', 'chase', 'chip', 'prize'])

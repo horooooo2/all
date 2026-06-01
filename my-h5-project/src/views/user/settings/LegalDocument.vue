@@ -9,13 +9,14 @@
       <div v-if="loading" class="legal-loading">
         <van-loading type="spinner" size="24px" />
       </div>
-      <div v-else-if="!html" class="legal-empty">暂无内容</div>
+      <div v-else-if="!html" class="legal-empty">{{ $t('暂无内容') }}</div>
       <div v-else class="legal-rich" v-html="html" />
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'

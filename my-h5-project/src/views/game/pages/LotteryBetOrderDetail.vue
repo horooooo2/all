@@ -2,7 +2,7 @@
   <div v-if="order" class="lbod">
     <header class="lbod-header">
       <img :src="iconBack" alt="" class="lbod-header__back" @click="goBack" />
-      <h1 class="lbod-header__title">订单详情</h1>
+      <h1 class="lbod-header__title">{{ $t('订单详情') }}</h1>
       <span class="lbod-header__pad" aria-hidden="true" />
     </header>
 
@@ -13,29 +13,29 @@
           <p class="lbod-summary__title">{{ order.betTitle }}</p>
         </div>
         <div class="lbod-summary__grid">
-          <div class="lbod-kv"><span class="lbod-kv__k">倍数:</span> <span class="lbod-kv__v">{{ order.multiplier }}</span></div>
-          <div class="lbod-kv"><span class="lbod-kv__k">奖金:</span> <span class="lbod-kv__v">{{ order.bonus }}</span></div>
-          <div class="lbod-kv"><span class="lbod-kv__k">返水:</span> <span class="lbod-kv__v">{{ order.rebate }}</span></div>
-          <div class="lbod-kv"><span class="lbod-kv__k">下注:</span> <span class="lbod-kv__v">{{ order.betStake }}</span></div>
-          <div class="lbod-kv lbod-kv--span2"><span class="lbod-kv__k">赔率:</span> <span class="lbod-kv__v">{{ order.odds }}</span></div>
+          <div class="lbod-kv"><span class="lbod-kv__k">{{ $t('倍数:') }}</span> <span class="lbod-kv__v">{{ order.multiplier }}</span></div>
+          <div class="lbod-kv"><span class="lbod-kv__k">{{ $t('奖金:') }}</span> <span class="lbod-kv__v">{{ order.bonus }}</span></div>
+          <div class="lbod-kv"><span class="lbod-kv__k">{{ $t('返水:') }}</span> <span class="lbod-kv__v">{{ order.rebate }}</span></div>
+          <div class="lbod-kv"><span class="lbod-kv__k">{{ $t('下注:') }}</span> <span class="lbod-kv__v">{{ order.betStake }}</span></div>
+          <div class="lbod-kv lbod-kv--span2"><span class="lbod-kv__k">{{ $t('赔率:') }}</span> <span class="lbod-kv__v">{{ order.odds }}</span></div>
         </div>
       </section>
 
       <section class="lbod-card lbod-card--detail">
         <div class="lbod-row">
-          <span class="lbod-row__k">开奖号码</span>
+          <span class="lbod-row__k">{{ $t('开奖号码') }}</span>
           <span class="lbod-row__v">{{ order.drawNumbers }}</span>
         </div>
         <div class="lbod-row">
-          <span class="lbod-row__k">开奖时间</span>
+          <span class="lbod-row__k">{{ $t('开奖时间') }}</span>
           <span class="lbod-row__v">{{ order.drawTime }}</span>
         </div>
         <div class="lbod-row">
-          <span class="lbod-row__k">下单时间</span>
+          <span class="lbod-row__k">{{ $t('下单时间') }}</span>
           <span class="lbod-row__v">{{ order.orderTime }}</span>
         </div>
         <div class="lbod-row lbod-row--copy">
-          <span class="lbod-row__k">下单账户</span>
+          <span class="lbod-row__k">{{ $t('下单账户') }}</span>
           <span class="lbod-row__r">
             <span class="lbod-row__v">{{ order.account }}</span>
             <button type="button" class="lbod-copy" aria-label="复制账户" @click="copyText(order.account)">
@@ -44,7 +44,7 @@
           </span>
         </div>
         <div class="lbod-row lbod-row--copy">
-          <span class="lbod-row__k">订单编号</span>
+          <span class="lbod-row__k">{{ $t('订单编号') }}</span>
           <span class="lbod-row__r">
             <span class="lbod-row__v lbod-row__v--mono">{{ order.orderNo }}</span>
             <button type="button" class="lbod-copy" aria-label="复制订单编号" @click="copyText(order.orderNo)">
@@ -53,7 +53,7 @@
           </span>
         </div>
         <div class="lbod-row lbod-row--copy">
-          <span class="lbod-row__k">投注期号</span>
+          <span class="lbod-row__k">{{ $t('投注期号') }}</span>
           <span class="lbod-row__r">
             <span class="lbod-row__v">{{ order.issue }}</span>
             <button type="button" class="lbod-copy" aria-label="复制期号" @click="copyText(order.issue)">
@@ -62,7 +62,7 @@
           </span>
         </div>
         <div class="lbod-row lbod-row--copy lbod-row--last">
-          <span class="lbod-row__k">投注内容</span>
+          <span class="lbod-row__k">{{ $t('投注内容') }}</span>
           <span class="lbod-row__r">
             <span class="lbod-row__v">{{ order.betContent }}</span>
             <button type="button" class="lbod-copy" aria-label="复制投注内容" @click="copyText(order.betContent)">
@@ -76,6 +76,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from '@/components/Toast'
@@ -123,9 +125,9 @@ async function copyText(text) {
       document.execCommand('copy')
       document.body.removeChild(input)
     }
-    toast.success('已复制')
+    toast.success(t('已复制'))
   } catch {
-    toast.error('复制失败')
+    toast.error(t('复制失败'))
   }
 }
 </script>

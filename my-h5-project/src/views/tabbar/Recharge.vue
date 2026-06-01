@@ -6,12 +6,12 @@
             class="tab-item"
             :class="{ active: activeTab === 'deposit' }"
             @click="switchTab('deposit')"
-        >充值</span>
+        >{{ $t('充值') }}</span>
         <span
             class="tab-item"
             :class="{ active: activeTab === 'withdraw' }"
             @click="switchTab('withdraw')"
-        >取款</span>
+        >{{ $t('取款') }}</span>
       </div>
 
       <div class="header-right" role="button" tabindex="0" @click="goDepositWithdrawRecord" @keydown.enter.prevent="goDepositWithdrawRecord">
@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DepositPage from './recharge/DepositPage.vue'

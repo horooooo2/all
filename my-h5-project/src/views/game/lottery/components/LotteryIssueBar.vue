@@ -13,11 +13,13 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 const props = defineProps({
   issue: { type: [String, Number], default: '' },
-  statusText: { type: String, default: '投注中' },
+  statusText: { type: String, default: t('投注中') },
   countdownText: { type: String, default: '00:00:00' }
 })
 

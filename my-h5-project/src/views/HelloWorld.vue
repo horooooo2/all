@@ -13,15 +13,16 @@
     </div>
 
     <div class="theme-test card">
-      <p class="text-primary">主色文字</p>
-      <p class="text-secondary">辅助文字</p>
+      <p class="text-primary">{{ $t('主色文字') }}</p>
+      <p class="text-secondary">{{ $t('辅助文字') }}</p>
 
-      <van-button type="primary">主要按钮</van-button>
+      <van-button type="primary">{{ $t('主要按钮') }}</van-button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import LangSwitcher from '@/components/LangSwitcher.vue'
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 </script>

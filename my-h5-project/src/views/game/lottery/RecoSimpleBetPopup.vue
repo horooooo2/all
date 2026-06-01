@@ -15,7 +15,7 @@
           class="rsb__close"
           role="button"
           tabindex="0"
-          aria-label="关闭"
+          :aria-label="$t('关闭')"
           @click="close"
           @keydown.enter.prevent="close"
           @keydown.space.prevent="close"
@@ -61,19 +61,20 @@
           <span class="rsb__summary-gap" />
           <span>单数: {{ betCount }}</span>
           <span class="rsb__summary-gap" />
-          <span>可盈金额: <em class="rsb__profit">{{ profitTextFixed }}</em></span>
+          <span>{{ $t('可盈金额:') }} <em class="rsb__profit">{{ profitTextFixed }}</em></span>
         </p>
       </div>
 
       <div class="rsb__foot">
-        <button type="button" class="rsb__foot-btn rsb__foot-btn--chase" @click="onChase">我要追号</button>
-        <button type="button" class="rsb__foot-btn rsb__foot-btn--bet" :disabled="submitDisabled" @click="onBet">投注</button>
+        <button type="button" class="rsb__foot-btn rsb__foot-btn--chase" @click="onChase">{{ $t('我要追号') }}</button>
+        <button type="button" class="rsb__foot-btn rsb__foot-btn--bet" :disabled="submitDisabled" @click="onBet">{{ $t('投注') }}</button>
       </div>
     </div>
   </van-popup>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import iconX from '@/assets/icon_x.svg'
 

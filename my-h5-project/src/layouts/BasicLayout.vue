@@ -4,7 +4,7 @@
         class="main-content"
         :class="{
           'main-content--no-tabbar': !showTabBar,
-          'main-content--with-download-bar': showTabBar && downloadBarVisible
+          'main-content--with-download-bar': showDownloadBar && downloadBarVisible
         }"
     >
       <router-view v-slot="{ Component }">
@@ -24,7 +24,7 @@
     </main>
 
     <AppDownloadBar
-        v-if="showTabBar"
+        v-if="showDownloadBar"
         @visible-change="onDownloadBarVisibleChange"
     />
     <TabBar v-if="showTabBar" />
@@ -44,6 +44,8 @@ const onDownloadBarVisibleChange = (visible) => {
   downloadBarVisible.value = visible
 }
 
+const showDownloadBar = computed(() => route.name === 'home')
+
 const showTabBar = computed(() => {
   const hidePages = [
     '/login',
@@ -58,6 +60,7 @@ const showTabBar = computed(() => {
     '/lottery/pl5/room',
     '/lottery/pl5/trend',
     '/lottery/lhc/room',
+    '/lottery/pc28/room',
     '/agent-center',
     '/agent-apply',
     '/agent-promotion',
@@ -75,6 +78,8 @@ const showTabBar = computed(() => {
     '/help-center',
     '/help-center/questions'
   ]
+  if (hidePages.includes(route.path)) return false
+  if (route.meta?.hideTabBar) return false
   return !hidePages.includes(route.path)
 })
 </script>

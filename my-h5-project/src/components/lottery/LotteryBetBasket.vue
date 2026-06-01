@@ -11,10 +11,10 @@
     :overlay-style="{ background: 'rgba(0, 0, 0, 0.45)' }"
     @update:show="$emit('update:show', $event)"
   >
-    <section class="lbb" role="dialog" aria-modal="true" aria-label="购彩篮" @click.stop>
+    <section class="lbb" role="dialog" aria-modal="true" :aria-label="$t('购彩篮')" @click.stop>
       <header class="lbb__head">
         <div class="lbb__title">{{ title }}</div>
-        <button type="button" class="lbb__close" aria-label="关闭" @click="close">
+        <button type="button" class="lbb__close" :aria-label="$t('关闭')" @click="close">
           <img :src="iconX" alt="" aria-hidden="true" />
         </button>
       </header>
@@ -23,7 +23,7 @@
         <template v-if="!items.length">
           <div class="lbb__empty">
             <img class="lbb__empty-img" :src="noDataImg" alt="" aria-hidden="true" />
-            <p class="lbb__empty-text">购彩篮为空，请前去选号</p>
+            <p class="lbb__empty-text">{{ $t('购彩篮为空，请前去选号') }}</p>
           </div>
         </template>
         <ul v-else class="lbb__list" aria-label="投注条目">
@@ -36,10 +36,10 @@
                 type="text"
                 inputmode="decimal"
                 autocomplete="off"
-                aria-label="金额"
+                :aria-label="$t('金额')"
                 @input="onAmountInput(item.id, $event)"
               />
-              <button type="button" class="lbb-row__del" aria-label="删除" @click="$emit('remove', item.id)">
+              <button type="button" class="lbb-row__del" :aria-label="$t('删除')" @click="$emit('remove', item.id)">
                 <img :src="iconDel" alt="" aria-hidden="true" />
               </button>
             </div>
@@ -56,7 +56,7 @@
               <span class="lbb__foot-stat-txt">注</span>
             </div>
             <div class="lbb__foot-stat-line">
-              <span class="lbb__foot-stat-txt">余额</span>
+              <span class="lbb__foot-stat-txt">{{ $t('余额') }}</span>
               <span class="lbb__foot-stat-num">¥{{ balanceFooterDisplay }}</span>
             </div>
           </div>
@@ -66,16 +66,14 @@
             <span class="lbb__btn--clear-text">清空</span>
           </button>
 
-          <button type="button" class="lbb__btn lbb__btn--chase" :disabled="!items.length" @click="onChase">追号</button>
+          <button type="button" class="lbb__btn lbb__btn--chase" :disabled="!items.length" @click="onChase">{{ $t('追号') }}</button>
 
           <button
             type="button"
             class="lbb__btn lbb__btn--submit"
             :disabled="!items.length || submitDisabled"
             @click="onSubmit"
-          >
-            立即投注
-          </button>
+          >{{ $t('立即投注') }}</button>
         </div>
       </footer>
     </section>
@@ -83,6 +81,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, reactive, watch } from 'vue'
 import iconX from '@/assets/icon_x.svg'
 import iconDel from '@/assets/icon_del.svg'

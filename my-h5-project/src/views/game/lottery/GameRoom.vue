@@ -503,8 +503,9 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { toast } from '@/components/Toast'
+import { goLotteryGameRules } from '@/utils/lotteryGameRulesNavigate'
 import GameNavBar from './components/GameNavBar.vue'
 import NextResultBar from './components/NextResultBar.vue'
 import BetPanel from './bet-panel/BetPanel.vue'
@@ -536,6 +537,7 @@ import miQiu1Src from '@/assets/mipai_qiu1.png'
 import miQiu2Src from '@/assets/mipai_qiu2.png'
 
 const router = useRouter()
+const route = useRoute()
 const betPanelRef = ref(null)
 
 const gameListOpen = ref(false)
@@ -549,6 +551,41 @@ const sideMenuExpanded = ref(false)
 const anonymousEnabled = ref(false)
 /** 专业模式 ↔ 群投模式（仅 UI 状态，后续可接业务） */
 const groupVoteMode = ref(false)
+
+const SELF_GAME_KEY_TO_GROUP = Object.freeze({
+  btc: 'g-1',
+  tw28: 'g-2',
+  jnd28: 'g-3',
+  jndx28: 'g-4'
+})
+
+const SELF_ROOM_KEY_TO_SUFFIX = Object.freeze({
+  normal: 'r-1',
+  vip: 'r-2',
+  high: 'r-3'
+})
+
+function syncActiveGameFromRoute() {
+  const qGameId = String(route.query.gameId || '')
+  const qRoomId = String(route.query.roomId || '')
+  const roomKey = String(route.query.room || '')
+
+  if (qGameId.startsWith('g-')) {
+    activeGameId.value = qGameId
+  } else if (SELF_GAME_KEY_TO_GROUP[qGameId]) {
+    activeGameId.value = SELF_GAME_KEY_TO_GROUP[qGameId]
+  }
+
+  if (qRoomId.startsWith('g-')) {
+    activeRoomId.value = qRoomId
+    return
+  }
+
+  const roomSuffix = SELF_ROOM_KEY_TO_SUFFIX[roomKey]
+  if (roomSuffix) {
+    activeRoomId.value = `${activeGameId.value}-${roomSuffix}`
+  }
+}
 
 // TODO: 后续接接口数据；当前用静态数据把交互/样式跑通
 const gameGroups = ref([
@@ -746,6 +783,7 @@ function preloadMenuIcons(urls) {
 }
 
 onMounted(() => {
+  syncActiveGameFromRoute()
   preloadMenuIcons([
     iconTouzhu,
     iconJieshao,
@@ -847,7 +885,14 @@ function onRightMenuClick(item) {
     router.push('/settings')
     return
   }
-  // intro / limit：后续接弹窗或页面
+  if (item.key === 'intro') {
+    goLotteryGameRules(router, {
+      gameId: activeGameId.value,
+      gameName: currentGameTitle.value
+    })
+    return
+  }
+  // limit：后续接弹窗或页面
 }
 
 const haoluPopupTop = ref(0)

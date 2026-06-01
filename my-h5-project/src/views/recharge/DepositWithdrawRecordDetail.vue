@@ -32,7 +32,7 @@
                 v-if="row.copyable"
                 type="button"
                 class="detail-copy"
-                aria-label="复制"
+                :aria-label="$t('复制')"
                 @click="copyText(row.value)"
               >
                 <img :src="iconCopy" alt="copy">
@@ -46,10 +46,10 @@
                 v-if="detail.qrCodeUrl"
                 class="detail-qr__img"
                 :src="detail.qrCodeUrl"
-                alt="支付二维码"
+                :alt="$t('支付二维码')"
               >
             </div>
-            <button type="button" class="detail-qr__save" @click="onSaveQr">保存二维码</button>
+            <button type="button" class="detail-qr__save" @click="onSaveQr">{{ $t('保存二维码') }}</button>
           </div>
         </section>
       </main>
@@ -65,12 +65,14 @@
     </template>
 
     <div v-else class="detail-empty">
-      <p>记录不存在或已删除</p>
+      <p>{{ $t('记录不存在或已删除') }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -89,9 +91,9 @@ const isPaymentPending = computed(
 )
 
 const pageTitle = computed(() => {
-  if (!detail.value) return '详情'
-  if (detail.value.kind === 'deposit' && isPaymentPending.value) return '存款信息'
-  return detail.value.kind === 'withdraw' ? '取款详情' : '存款详情'
+  if (!detail.value) return t('详情')
+  if (detail.value.kind === 'deposit' && isPaymentPending.value) return t('存款信息')
+  return detail.value.kind === 'withdraw' ? t('取款详情') : t('存款详情')
 })
 
 const displayAmount = computed(() => {
@@ -127,7 +129,7 @@ const infoRows = computed(() => {
     ]
   }
   return [
-    { key: 'orderNo', label: '订单号：', value: d.orderNo, copyable: true },
+    { key: 'orderNo', label: t('订单号：'), value: d.orderNo, copyable: true },
     { key: 'payMethod', label: '支付方式：', value: d.payMethod || '—', copyable: false },
     { key: 'time', label: '下单时间：', value: d.time, copyable: false },
     { key: 'completedAt', label: '完成时间：', value: d.completedAt || '—', copyable: false },
@@ -169,7 +171,7 @@ const copyText = async (text) => {
   if (!text || text === '—') return
   try {
     await navigator.clipboard.writeText(text)
-    toast.success('已复制')
+    toast.success(t('已复制'))
   } catch {
     toast.warning(text)
   }
@@ -177,14 +179,14 @@ const copyText = async (text) => {
 
 const onSaveQr = () => {
   if (!detail.value?.qrCodeUrl) {
-    toast.success('保存二维码（待对接）')
+    toast.success(t('保存二维码（待对接）'))
     return
   }
-  toast.success('保存二维码（待对接）')
+  toast.success(t('保存二维码（待对接）'))
 }
 
 const onCancelDeposit = () => {
-  toast.success('取消存款（待对接）')
+  toast.success(t('取消存款（待对接）'))
 }
 
 const onUploadProof = () => {

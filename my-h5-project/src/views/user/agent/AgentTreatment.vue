@@ -2,16 +2,16 @@
   <div class="agent-subpage agent-treatment-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>我的待遇</h1>
+      <h1>{{ $t('我的待遇') }}</h1>
     </header>
 
     <div class="record-table-card">
-      <div class="treat-section-head">我的返佣</div>
+      <div class="treat-section-head">{{ $t('我的返佣') }}</div>
 
       <div class="table-head">
-        <span>类型</span>
-        <span>最低有效投注</span>
-        <span>返水比例(%)</span>
+        <span>{{ $t('类型') }}</span>
+        <span>{{ $t('最低有效投注') }}</span>
+        <span>{{ $t('返水比例(%)') }}</span>
       </div>
 
       <template v-for="cat in categories" :key="cat.id">
@@ -43,17 +43,18 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import iconDetailsDown from '@/assets/icon_details_down.svg'
 
 const router = useRouter()
-
 const categories = ref([
   {
     id: 'dz',
-    name: '电子',
+    name: t('电子'),
     minBet: '¥1',
     rate: '0.8%',
     children: [
@@ -62,11 +63,11 @@ const categories = ref([
       { level: '5', minBet: '¥2000000', rate: '0.9%' }
     ]
   },
-  { id: 'qp', name: '棋牌', minBet: '¥1', rate: '0.8%', children: [] },
-  { id: 'sx', name: '视讯', minBet: '¥1', rate: '0.8%', children: [] },
-  { id: 'by', name: '捕鱼', minBet: '¥1', rate: '0.8%', children: [] },
-  { id: 'ty', name: '体育', minBet: '¥1', rate: '0.8%', children: [] },
-  { id: 'cp', name: '彩票', minBet: '¥1', rate: '0.8%', children: [] }
+  { id: 'qp', name: t('棋牌'), minBet: '¥1', rate: '0.8%', children: [] },
+  { id: 'sx', name: t('视讯'), minBet: '¥1', rate: '0.8%', children: [] },
+  { id: 'by', name: t('捕鱼'), minBet: '¥1', rate: '0.8%', children: [] },
+  { id: 'ty', name: t('体育'), minBet: '¥1', rate: '0.8%', children: [] },
+  { id: 'cp', name: t('彩票'), minBet: '¥1', rate: '0.8%', children: [] }
 ])
 
 const expandedIds = ref(['dz'])

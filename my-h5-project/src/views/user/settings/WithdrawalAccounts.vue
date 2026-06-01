@@ -2,19 +2,19 @@
   <div class="withdrawal-accounts-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>提款账户</h1>
-      <button type="button" class="service-btn" @click="goService" aria-label="客服">
+      <h1>{{ $t('提款账户') }}</h1>
+      <button type="button" class="service-btn" @click="goService" :aria-label="$t('客服')">
         <img :src="iconService" alt="">
       </button>
     </header>
 
     <main class="content">
-      <div v-if="loading" class="loading-state">加载中...</div>
+      <div v-if="loading" class="loading-state">{{ $t('加载中...') }}</div>
 
       <template v-else-if="accounts.length === 0">
         <div class="empty-state">
           <img :src="imgEmpty" class="empty-img" alt="">
-          <div class="empty-text">暂无提款账户，去添加</div>
+          <div class="empty-text">{{ $t('暂无提款账户，去添加') }}</div>
         </div>
       </template>
 
@@ -42,12 +42,14 @@
     </main>
 
     <div class="bottom-bar">
-      <button type="button" class="add-btn" @click="goAdd">添加提款账户</button>
+      <button type="button" class="add-btn" @click="goAdd">{{ $t('添加提款账户') }}</button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onActivated, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import toast from '@/components/Toast'
@@ -91,9 +93,9 @@ const loadAccounts = async () => {
   try {
     accounts.value = await fetchWithdrawalAccounts()
   } catch (error) {
-    console.error('加载提款账户失败:', error)
+    console.error(t('加载提款账户失败:'), error)
     accounts.value = []
-    toast.error('加载提款账户失败')
+    toast.error(t('加载提款账户失败'))
   } finally {
     loading.value = false
   }

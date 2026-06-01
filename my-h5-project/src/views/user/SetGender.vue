@@ -2,7 +2,7 @@
   <div class="selection-sheet-page" @click.self="goBack">
     <div class="sheet">
       <div class="sheet-header">
-        <div class="sheet-title">性别</div>
+        <div class="sheet-title">{{ $t('性别') }}</div>
         <button type="button" class="close-btn" @click="goBack">
           <img :src="iconClose" alt="close">
         </button>
@@ -24,6 +24,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -42,7 +44,7 @@ const selectGender = (value) => {
   gender.value = value
   const current = userStore.userInfo || {}
   userStore.userInfo = { ...current, gender: value }
-  toast.success('设置成功')
+  toast.success(t('设置成功'))
   router.back()
 }
 </script>

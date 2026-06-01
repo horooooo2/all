@@ -19,7 +19,7 @@
 
     <template v-else>
       <div class="section">
-        <div class="section-title">支付方式</div>
+        <div class="section-title">{{ $t('支付方式') }}</div>
         <div class="pay-grid">
           <div
               class="pay-card"
@@ -37,7 +37,7 @@
       </div>
 
       <div class="section">
-        <div class="section-title">存款渠道</div>
+        <div class="section-title">{{ $t('存款渠道') }}</div>
         <div class="channel-row">
           <div
               class="channel-item"
@@ -111,7 +111,7 @@
 
       <div class="tip-box">
         <span class="tip-text">
-          输入金额后点击确认，扫码/跳转支付成功后<span class="tip-text__emphasis">自动到账</span>，若遇充值失败请及时咨询客服！
+          输入金额后点击确认，扫码/跳转支付成功后<span class="tip-text__emphasis">{{ $t('自动到账') }}</span>，若遇充值失败请及时咨询客服！
         </span>
       </div>
 
@@ -128,6 +128,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref, computed, onMounted } from 'vue'
 import iconZfb from '@/assets/icon_zfb.svg'
 import iconUsdtsm from '@/assets/icon_usdtsm.svg'
@@ -160,15 +162,15 @@ const calculatedAmount = computed(() => {
 })
 
 const payMethods = ref([
-  { id: 1, name: '支付宝', icon: iconZfb },
+  { id: 1, name: t('支付宝'), icon: iconZfb },
   { id: 2, name: 'USDT', icon: iconUsdtsm },
   { id: 3, name: '网银支付', icon: iconWyzf },
   { id: 4, name: '988pay', icon: icon988pay, cornerIcon: cornerPopular }
 ])
 
 const channels = ref([
-  { id: 1, name: '通道一' },
-  { id: 2, name: '通道二' }
+  { id: 1, name: t('通道一') },
+  { id: 2, name: t('通道二') }
 ])
 
 const depositTypes = ref([

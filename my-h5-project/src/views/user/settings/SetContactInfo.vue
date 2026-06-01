@@ -2,7 +2,7 @@
   <div class="profile-form-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>设置联系方式</h1>
+      <h1>{{ $t('设置联系方式') }}</h1>
     </header>
 
     <main class="content">
@@ -10,7 +10,7 @@
         <div class="hero-figure">
           <img :src="heroIcon" alt="contact" class="hero-icon">
         </div>
-        <div class="hero-title">联系方式</div>
+        <div class="hero-title">{{ $t('联系方式') }}</div>
       </section>
 
       <input
@@ -18,7 +18,7 @@
         class="input"
         type="tel"
         maxlength="11"
-        placeholder="请输入联系方式"
+        :placeholder="$t('请输入联系方式')"
       >
 
       <button
@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'

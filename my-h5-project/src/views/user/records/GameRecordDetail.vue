@@ -2,19 +2,15 @@
   <div class="game-record-detail-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>游戏记录详情</h1>
+      <h1>{{ $t('游戏记录详情') }}</h1>
     </header>
 
     <section v-if="detail" class="detail-list">
       <article class="detail-card">
         <div class="detail-right">
           <img class="status-image" :src="statusIconByKey(detail.status)" alt="status">
-          <div v-if="detail.status === 'unsettled'" class="result-amount result-amount--unsettled">
-            未结算
-          </div>
-          <div v-else-if="detail.status === 'revoked'" class="result-amount result-amount--revoked">
-            已撤销
-          </div>
+          <div v-if="detail.status === 'unsettled'" class="result-amount result-amount--unsettled">{{ $t('未结算') }}</div>
+          <div v-else-if="detail.status === 'revoked'" class="result-amount result-amount--revoked">{{ $t('已撤销') }}</div>
           <div v-else class="result-amount" :class="detail.winLoss >= 0 ? 'positive' : 'negative'">
             <span>{{ detail.winLoss >= 0 ? '' : '-' }}{{ formatMoney(Math.abs(detail.winLoss)) }}</span>
             <img class="amount-currency" :src="iconCny" alt="">
@@ -24,31 +20,31 @@
           <strong>{{ detail.gameName }}</strong>
         </div>
         <div class="row">
-          <span class="row-label">平台：</span>
+          <span class="row-label">{{ $t('平台：') }}</span>
           <span class="row-value">{{ detail.platform }}</span>
         </div>
         <div class="row">
-          <span class="row-label">金额：</span>
+          <span class="row-label">{{ $t('金额：') }}</span>
           <span class="row-value">¥{{ formatMoney(detail.amount) }}</span>
         </div>
         <div class="row">
-          <span class="row-label">时间：</span>
+          <span class="row-label">{{ $t('时间：') }}</span>
           <span class="row-value">{{ detail.orderTime }}</span>
         </div>
         <div class="row">
-          <span class="row-label">局号：</span>
+          <span class="row-label">{{ $t('局号：') }}</span>
           <span class="row-value">{{ detail.roundNo || detail.id }}</span>
           <button type="button" class="copy-btn" @click="copyIssue(detail.roundNo || detail.id)">
             <img :src="iconCopy" alt="copy">
           </button>
         </div>
         <div v-if="detail.orderNo" class="row">
-          <span class="row-label">订单号：</span>
+          <span class="row-label">{{ $t('订单号：') }}</span>
           <span class="row-value">{{ detail.orderNo }}</span>
         </div>
         <div class="bet-box">
           <div class="bet-box-line">
-            <span class="bet-box-label">投注：</span>
+            <span class="bet-box-label">{{ $t('投注：') }}</span>
             <span class="bet-box-value">
               <template v-if="parseBetText(detail.betText).odds">
                 {{ parseBetText(detail.betText).main }}<span class="bet-odds"> @{{ parseBetText(detail.betText).odds }}</span>
@@ -83,12 +79,14 @@
     </section>
 
     <div v-else class="detail-empty">
-      <p>记录不存在或已删除</p>
+      <p>{{ $t('记录不存在或已删除') }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -134,9 +132,9 @@ const goBack = () => router.back()
 const copyIssue = async (issueNo) => {
   const ok = await copyTextToClipboard(String(issueNo))
   if (ok) {
-    toast.success('已复制局号')
+    toast.success(t('已复制局号'))
   } else {
-    toast.error('复制失败')
+    toast.error(t('复制失败'))
   }
 }
 

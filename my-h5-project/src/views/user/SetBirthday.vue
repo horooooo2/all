@@ -2,8 +2,8 @@
   <div class="selection-sheet-page" @click.self="goBack">
     <div class="sheet">
       <div class="sheet-header">
-        <div class="sheet-title">生日选择</div>
-        <button type="button" class="confirm-btn" @click="confirmBirthday">确认</button>
+        <div class="sheet-title">{{ $t('生日选择') }}</div>
+        <button type="button" class="confirm-btn" @click="confirmBirthday">{{ $t('确认') }}</button>
       </div>
 
       <div class="picker-wrap">
@@ -20,6 +20,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -51,7 +53,7 @@ const confirmBirthday = () => {
   const value = `${year}-${month}-${day}`
   const current = userStore.userInfo || {}
   userStore.userInfo = { ...current, birthday: value }
-  toast.success('设置成功')
+  toast.success(t('设置成功'))
   router.back()
 }
 </script>

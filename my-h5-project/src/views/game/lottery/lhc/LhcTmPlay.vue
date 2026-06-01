@@ -1,7 +1,7 @@
 <template>
-  <div class="lhc-tm" aria-label="特码选号">
-    <p class="lhc-tm__hint">点选号码（1-49），可多选</p>
-    <div class="lhc-tm__grid" role="group" aria-label="特码号码">
+  <div class="lhc-tm" :aria-label="$t('特码选号')">
+    <p class="lhc-tm__hint">{{ $t('点选号码（1-49），可多选') }}</p>
+    <div class="lhc-tm__grid" role="group" :aria-label="$t('特码号码')">
       <button
         v-for="n in 49"
         :key="n"
@@ -17,6 +17,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 
 const emit = defineEmits(['update:betCount'])

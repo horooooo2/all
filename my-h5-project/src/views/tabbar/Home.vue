@@ -14,9 +14,7 @@
       </div>
     </div>
 
-    <div v-if="loading.banner" class="banner-wrapper">
-      <div class="skeleton-block banner-skeleton shimmer"></div>
-    </div>
+    <HomeSectionSkeleton v-if="loading.banner" section="banner" />
     <div v-else class="banner-wrapper">
       <van-swipe
         v-if="banners.length"
@@ -46,7 +44,8 @@
     </div>
 
     <div class="fund-card">
-      <div class="announcement">
+      <HomeSectionSkeleton v-if="loading.notice" section="notice" />
+      <div v-else class="announcement">
         <img class="icon-20" src="@/assets/icon_announcement.png" alt="" />
         <div class="announcement-marquee">
           <div class="notice-bar">{{ noticeMarqueeText }}</div>
@@ -85,37 +84,49 @@
       </div>
     </div>
 
-    <div v-if="loading.games" class="game-section">
-      <div class="game-grid">
-        <div v-for="i in 4" :key="i" class="game-card-skeleton shimmer"></div>
-      </div>
-    </div>
+    <HomeSectionSkeleton v-if="loading.games" section="games" />
     <div v-else class="game-section">
       <div class="game-grid">
         <div
           class="game-card"
+          :class="{ 'game-card--maintenance': item.isClosed }"
           v-for="item in gameList"
           :key="item.id"
           role="button"
-          tabindex="0"
+          :tabindex="item.isOpen ? 0 : -1"
           :style="{ backgroundImage: `url(${item.bg})` }"
           @click="goSelfLottery(item)"
           @keydown.enter.prevent="goSelfLottery(item)"
           @keydown.space.prevent="goSelfLottery(item)"
         >
-          <div class="game-name">{{ $t(item.name) }}</div>
-          <div class="game-time" :class="{ waiting: item.status === 'waiting' }">
-            {{ item.status === 'waiting' ? $t('等待开盘') : formatTime(item.remaining) }}
+          <div class="game-card__body">
+            <div class="game-name">{{ $t(item.name) }}</div>
+            <div
+              v-if="!item.isClosed"
+              class="game-time"
+              :class="{ waiting: item.isWaiting }"
+            >
+              {{ item.isWaiting ? $t('等待开盘') : formatTime(item.remaining) }}
+            </div>
+          </div>
+          <div v-if="item.isClosed" class="game-card__maintenance">
+            <div class="game-card__maintenance-title">
+              <img
+                class="game-card__maintenance-icon"
+                :src="iconVenueMaintenance"
+                alt=""
+                aria-hidden="true"
+              />
+              <span>场馆维护中</span>
+            </div>
+            <div class="game-card__maintenance-time">开始：{{ item.maintenanceStart }}</div>
+            <div class="game-card__maintenance-time">结束：{{ item.maintenanceEnd }}</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="loading.category" class="game-category">
-      <div class="category-grid">
-        <div v-for="i in 6" :key="i" class="category-item-skeleton shimmer"></div>
-      </div>
-    </div>
+    <HomeSectionSkeleton v-if="loading.category" section="category" />
     <div v-else class="game-category">
       <div class="category-grid">
         <div
@@ -146,15 +157,7 @@
       </div>
     </div>
 
-    <div v-if="loading.winners" class="recent-winners-section">
-      <div class="section-label">
-        <div class="skeleton-block title-skeleton shimmer"></div>
-      </div>
-      <div class="winners-card">
-        <div class="bonus-header-skeleton shimmer"></div>
-        <div v-for="i in 4" :key="i" class="list-item-skeleton shimmer"></div>
-      </div>
-    </div>
+    <HomeSectionSkeleton v-if="loading.winners" section="winners" />
     <div v-else class="recent-winners-section">
       <div class="section-label">
         <img src="@/assets/icon_winners.png" :alt="$t('近期大奖')" />
@@ -195,7 +198,8 @@
       </div>
     </div>
 
-    <div class="community-section">
+    <HomeSectionSkeleton v-if="loading.siteLinks" section="community" />
+    <div v-else class="community-section">
       <div class="section-label">
         <img src="@/assets/icon_sq.svg" :alt="$t('社区')" />
         <span>{{ $t('社区') }}</span>
@@ -215,7 +219,8 @@
       </div>
     </div>
 
-    <div class="partners-section">
+    <HomeSectionSkeleton v-if="loading.siteLinks" section="partners" />
+    <div v-else class="partners-section">
       <div class="section-label">
         <img src="@/assets/icon_hz.svg" :alt="$t('合作供应商')" />
         <span>{{ $t('合作供应商') }}</span>
@@ -232,7 +237,8 @@
       </div>
     </div>
 
-    <div class="footer-section">
+    <HomeSectionSkeleton v-if="loading.siteLinks" section="footer-links" />
+    <div v-else class="footer-section">
       <div class="service-label">{{ $t('服务中心') }}</div>
       <div class="service-links">
         <template v-for="(item, index) in serviceLinks" :key="item.id">
@@ -242,11 +248,11 @@
             tabindex="0"
             @click="onServiceLinkClick(item)"
             @keydown.enter.prevent="onServiceLinkClick(item)"
-          >{{ item.title }}</span>
+          >{{ $t(getServiceLinkTitle(item)) }}</span>
           <span v-if="index < serviceLinks.length - 1" class="dot">·</span>
         </template>
       </div>
-      <div class="company-name">28娱乐</div>
+      <div class="company-name">{{ $t('28娱乐') }}</div>
       <div class="company-desc">
         {{ $t('company.description') }}
       </div>
@@ -256,14 +262,18 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import LangPopup from '@/components/LangPopup.vue'
+import HomeSectionSkeleton from '@/components/home/HomeSectionSkeleton.vue'
 import { toast } from '@/components/Toast'
 import { useUserStore } from '@/stores/user'
 import { useUserAvatar } from '@/composables/useUserAvatar'
 import { getVipLevelIcon } from '@/utils/vipLevelIcon'
 import { getSiteBanners, getSiteNotices, getNoticeDisplayText, getSiteLinks } from '@/api/site'
 import { getGameAwards, formatPayoutAmount } from '@/api/game'
+import { getLotteryList } from '@/api/lottery'
 import { navigateSiteLink, navigateServiceLink } from '@/utils/siteNavigate'
 import avatarDefault from '@/assets/touxiang2.png'
 import iconTy from '@/assets/icon_ty.png'
@@ -283,7 +293,52 @@ import homeBtcIcon from '@/assets/home_btc_icon.png'
 import homeTw28Icon from '@/assets/home_tw28_icon.png'
 import homeJnd28Icon from '@/assets/home_jnd28_icon.png'
 import homeJndx28Icon from '@/assets/home_jndx28_icon.png'
+import iconVenueMaintenance from '@/assets/icon_venue_under_maintenance.svg'
 import lunbo1 from '@/assets/lunbo1.png'
+
+const LOTTERY_BG_BY_CODE = {
+  btc28: homeBtcIcon,
+  twbg28: homeTw28Icon,
+  jnd28: homeJnd28Icon,
+  jndx28: homeJndx28Icon
+}
+
+const DEFAULT_GAME_LIST = [
+  { id: 'btc28', code: 'btc28', name: '比特币28', key: 'btc', bg: homeBtcIcon, remaining: 0, isWaiting: true, isOpen: false, isClosed: false },
+  { id: 'twbg28', code: 'twbg28', name: '台湾宾果28', key: 'tw28', bg: homeTw28Icon, remaining: 0, isWaiting: true, isOpen: false, isClosed: false },
+  { id: 'jnd28', code: 'jnd28', name: '加拿大28', key: 'jnd28', bg: homeJnd28Icon, remaining: 0, isWaiting: true, isOpen: false, isClosed: false },
+  { id: 'jndx28', code: 'jndx28', name: '加拿大西28', key: 'jndx28', bg: homeJndx28Icon, remaining: 0, isWaiting: true, isOpen: false, isClosed: false }
+]
+
+function formatLotteryDateTime(timestamp) {
+  const n = Number(timestamp)
+  if (!Number.isFinite(n) || n <= 0) return '--'
+  const d = new Date(n * 1000)
+  const pad = (v) => String(v).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+}
+
+function mapLotteryToGameCard(item) {
+  return {
+    id: item.code,
+    code: item.code,
+    name: item.name,
+    key: item.gameKey,
+    bg: LOTTERY_BG_BY_CODE[item.code] || homeBtcIcon,
+    remaining: item.sec,
+    isWaiting: item.isWaiting,
+    isOpen: item.isOpen,
+    isClosed: item.isClosed,
+    status: item.status,
+    maintenanceStart: formatLotteryDateTime(item.openTime),
+    maintenanceEnd: formatLotteryDateTime(item.closeTime),
+    maintenanceEndAt: item.closeTime,
+    issue: item.issue,
+    lastIssue: item.lastIssue,
+    lastResult: item.lastResult,
+    lastSum: item.lastSum
+  }
+}
 
 const current = ref(0)
 const router = useRouter()
@@ -307,7 +362,7 @@ const onWinnerAvatarError = (e) => {
   el.src = avatarDefault
 }
 
-const NOTICE_FALLBACK = '马年迎新春，电子老虎机最高领取888元，更有现金'
+const NOTICE_FALLBACK = t('马年迎新春，电子老虎机最高领取888元，更有现金')
 
 const notices = ref([])
 
@@ -324,9 +379,11 @@ const noticeMarqueeText = computed(() => {
 
 const loading = ref({
   banner: true,
+  notice: true,
   games: true,
   category: true,
-  winners: true
+  winners: true,
+  siteLinks: true
 })
 
 const fetchBanners = async () => {
@@ -345,12 +402,30 @@ const fetchBanners = async () => {
 }
 
 const fetchNotices = async () => {
+  loading.value.notice = true
   try {
     notices.value = await getSiteNotices()
   } catch (error) {
     console.error('加载公告失败:', error)
     notices.value = []
+  } finally {
+    loading.value.notice = false
   }
+}
+
+/** 服务中心链接 code → 中文 i18n key（模板里用 $t 翻译，切换语言会生效） */
+const SERVICE_LINK_TITLE_KEYS = {
+  privacy_policy: '隐私政策',
+  user_agreement: '用户协议',
+  help_center: '帮助中心',
+  about_us: '关于我们'
+}
+
+function getServiceLinkTitle(item) {
+  const code = String(item?.code || '').toLowerCase()
+  if (SERVICE_LINK_TITLE_KEYS[code]) return SERVICE_LINK_TITLE_KEYS[code]
+  const title = String(item?.title || '').trim()
+  return title || code
 }
 
 const DEFAULT_SERVICE_LINKS = [
@@ -362,6 +437,134 @@ const DEFAULT_SERVICE_LINKS = [
 
 const awardTotalAmount = ref(formatPayoutAmount(0))
 const winnerList = ref([])
+
+const LOTTERY_POLL_INTERVAL_MS = 10000
+
+let isLotteryRefreshing = false
+let lotteryPollTimer = null
+/** @type {Map<string, { endAt: number, expiredTriggered: boolean }>} */
+const maintenancePollState = new Map()
+
+function getNowSec() {
+  return Math.floor(Date.now() / 1000)
+}
+
+function isMaintenancePollDue(item, nowSec = getNowSec()) {
+  if (!item.isClosed) return false
+  const endAt = Number(item.maintenanceEndAt) || 0
+  return endAt > 0 && nowSec >= endAt
+}
+
+function needsLotteryPolling(list = gameList.value) {
+  const nowSec = getNowSec()
+  const needsSecPoll = list.some(
+    (item) => (item.isOpen || item.isWaiting) && item.remaining <= 0
+  )
+  const needsMaintenancePoll = list.some((item) => isMaintenancePollDue(item, nowSec))
+  return needsSecPoll || needsMaintenancePoll
+}
+
+function syncMaintenancePollState(list = gameList.value) {
+  list.forEach((item) => {
+    if (!item.isClosed) {
+      maintenancePollState.delete(item.code)
+      return
+    }
+
+    const endAt = Number(item.maintenanceEndAt) || 0
+    const prev = maintenancePollState.get(item.code)
+    if (!prev || prev.endAt !== endAt) {
+      maintenancePollState.set(item.code, {
+        endAt,
+        expiredTriggered: false
+      })
+    }
+  })
+}
+
+function collectMaintenancePollRefresh(list = gameList.value) {
+  const nowSec = getNowSec()
+  let shouldRefresh = false
+
+  list.forEach((item) => {
+    if (!isMaintenancePollDue(item, nowSec)) return
+
+    const endAt = Number(item.maintenanceEndAt) || 0
+    let state = maintenancePollState.get(item.code)
+    if (!state || state.endAt !== endAt) {
+      state = { endAt, expiredTriggered: false }
+      maintenancePollState.set(item.code, state)
+    }
+    if (!state.expiredTriggered) {
+      state.expiredTriggered = true
+      shouldRefresh = true
+    }
+  })
+
+  return shouldRefresh
+}
+
+function stopLotteryPolling() {
+  if (!lotteryPollTimer) return
+  clearInterval(lotteryPollTimer)
+  lotteryPollTimer = null
+}
+
+function startLotteryPolling() {
+  if (lotteryPollTimer) return
+  lotteryPollTimer = setInterval(() => {
+    fetchLotteryGames({ showLoading: false })
+  }, LOTTERY_POLL_INTERVAL_MS)
+}
+
+function syncLotteryPolling() {
+  if (needsLotteryPolling()) {
+    startLotteryPolling()
+  } else {
+    stopLotteryPolling()
+  }
+}
+
+const fetchLotteryGames = async ({ showLoading = true } = {}) => {
+  if (isLotteryRefreshing) return
+  isLotteryRefreshing = true
+  if (showLoading) loading.value.games = true
+  try {
+    const list = await getLotteryList()
+    gameList.value = list.length
+      ? list.map(mapLotteryToGameCard)
+      : DEFAULT_GAME_LIST
+    syncMaintenancePollState(gameList.value)
+  } catch (error) {
+    console.error('加载彩种列表失败:', error)
+    if (showLoading || !gameList.value.length) {
+      gameList.value = DEFAULT_GAME_LIST
+    }
+  } finally {
+    if (showLoading) loading.value.games = false
+    isLotteryRefreshing = false
+    syncLotteryPolling()
+  }
+}
+
+const tickLotteryCountdown = () => {
+  let shouldRefresh = false
+
+  gameList.value.forEach((item) => {
+    if (item.isOpen && item.remaining > 0) {
+      item.remaining--
+      if (item.remaining === 0) shouldRefresh = true
+    }
+  })
+
+  if (collectMaintenancePollRefresh()) {
+    shouldRefresh = true
+  }
+
+  if (shouldRefresh) {
+    fetchLotteryGames({ showLoading: false })
+  }
+}
 
 const fetchGameAwards = async () => {
   loading.value.winners = true
@@ -379,6 +582,7 @@ const fetchGameAwards = async () => {
 }
 
 const fetchSiteLinks = async () => {
+  loading.value.siteLinks = true
   try {
     const data = await getSiteLinks()
     communityList.value = data.communities
@@ -391,39 +595,31 @@ const fetchSiteLinks = async () => {
     communityList.value = []
     partnerList.value = []
     serviceLinks.value = DEFAULT_SERVICE_LINKS
+  } finally {
+    loading.value.siteLinks = false
   }
 }
 
 const fetchData = async () => {
+  loading.value.category = true
   await Promise.all([
     fetchBanners(),
     fetchNotices(),
     fetchSiteLinks(),
     fetchGameAwards(),
-    new Promise((resolve) => setTimeout(resolve, 100))
+    fetchLotteryGames()
   ])
 
-  gameList.value = [
-    { id: 1, name: '比特币28', key: 'btc', bg: homeBtcIcon, remaining: 176, status: 'playing', room: 'pl5' },
-    { id: 2, name: '台湾宾果28', key: 'tw28', bg: homeTw28Icon, remaining: 0, status: 'waiting', room: 'lhc' },
-    { id: 3, name: '加拿大28', key: 'jnd28', bg: homeJnd28Icon, remaining: 122, status: 'playing', room: 'pl5' },
-    { id: 4, name: '加拿大西28', key: 'jndx28', bg: homeJndx28Icon, remaining: 113, status: 'playing', room: 'lhc' }
-  ]
-
   categoryList.value = [
-    { id: 1, name: '体育', key: 'ty', icon: iconTy },
-    { id: 2, name: '视讯', key: 'sx', icon: iconSx },
-    { id: 3, name: '电子', key: 'dz', icon: iconDz },
-    { id: 4, name: '彩票', key: 'cp', icon: iconCp },
-    { id: 5, name: '捕鱼', key: 'by', icon: iconBy },
-    { id: 6, name: '棋牌', key: 'qp', icon: iconQp }
+    { id: 1, name: t('体育'), key: 'ty', icon: iconTy },
+    { id: 2, name: t('视讯'), key: 'sx', icon: iconSx },
+    { id: 3, name: t('电子'), key: 'dz', icon: iconDz },
+    { id: 4, name: t('彩票'), key: 'cp', icon: iconCp },
+    { id: 5, name: t('捕鱼'), key: 'by', icon: iconBy },
+    { id: 6, name: t('棋牌'), key: 'qp', icon: iconQp }
   ]
 
-  loading.value = {
-    ...loading.value,
-    games: false,
-    category: false
-  }
+  loading.value.category = false
 }
 
 const onBannerClick = (item) => {
@@ -441,14 +637,14 @@ const onServiceLinkClick = (item) => {
 const banners = ref([])
 const categoryList = ref([])
 const actions = ref([
-  { name: '存款', icon: iconDeposit },
-  { name: '取款', icon: iconWithdrawal },
-  { name: '代理', icon: iconActing }
+  { name: t('存款'), icon: iconDeposit },
+  { name: t('取款'), icon: iconWithdrawal },
+  { name: t('代理'), icon: iconActing }
 ])
 const gameList = ref([])
 const helpList = ref([
-  { id: 1, name: '在线客服', icon: iconKefu },
-  { id: 2, name: 'USDT教程', icon: iconUsdtjc },
+  { id: 1, name: t('在线客服'), icon: iconKefu },
+  { id: 2, name: t('USDT教程'), icon: iconUsdtjc },
 ])
 const communityList = ref([])
 const partnerList = ref([])
@@ -467,12 +663,14 @@ const goRegister = () => router.push('/register')
 const goGameHall = (key) => router.push({ path: '/game-hall', query: { category: key } })
 
 function goSelfLottery(item) {
-  const query = { gameId: item.key, gameName: item.name }
-  if (item.room === 'lhc') {
-    router.push({ name: 'lhcRoom', query })
-    return
-  }
-  router.push({ name: 'pl5Room', query })
+  if (!item.isOpen) return
+  router.push({
+    name: 'lotteryRoomSelect',
+    query: {
+      gameId: item.key,
+      gameName: item.name
+    }
+  })
 }
 
 let timer
@@ -481,17 +679,16 @@ onMounted(() => {
     refreshProfile().catch(() => {})
   }
   fetchData()
-  timer = setInterval(() => {
-    gameList.value.forEach(item => {
-      if (item.status === 'playing' && item.remaining > 0) item.remaining--
-    })
-  }, 1000)
+  timer = setInterval(tickLotteryCountdown, 1000)
 })
 
-onUnmounted(() => clearInterval(timer))
+onUnmounted(() => {
+  clearInterval(timer)
+  stopLotteryPolling()
+  maintenancePollState.clear()
+})
 </script>
 
 <style lang="less" scoped>
-@import '@/styles/skeleton.less';
 @import '@/styles/pages/home.less';
 </style>

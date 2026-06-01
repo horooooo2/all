@@ -1,6 +1,6 @@
 <template>
   <div class="lhc-hub pl5-smp">
-    <aside class="lhc-hub__tabs" aria-label="玩法分类">
+    <aside class="lhc-hub__tabs" :aria-label="$t('玩法分类')">
       <button
         v-for="t in sideTabs"
         :key="t.key"
@@ -13,7 +13,7 @@
       </button>
     </aside>
 
-    <main class="lhc-hub__content" aria-label="投注选项">
+    <main class="lhc-hub__content" :aria-label="$t('投注选项')">
       <template v-if="activeSide === 'lht'">
         <section v-for="g in groups" :key="g.key" class="pl5-smp__group">
           <div class="pl5-smp__group-title">{{ g.title }}</div>
@@ -41,15 +41,17 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { SMP_DRAGON_TIGER_GROUPS, SMP_DRAGON_TIGER_OPTIONS } from './smp-dragon-tiger.js'
 
 const emit = defineEmits(['update:betCount'])
 
 const sideTabs = [
-  { key: 'lht', label: '龙虎' },
-  { key: 'sm', label: '双面' },
-  { key: 'sz', label: '数字盘' }
+  { key: 'lht', label: t('龙虎') },
+  { key: 'sm', label: t('双面') },
+  { key: 'sz', label: t('数字盘') }
 ]
 
 const activeSide = ref('lht')

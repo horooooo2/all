@@ -60,7 +60,7 @@ export function getWithdrawalAccountById(id) {
 
 export function maskAccountDisplay(method, data = {}) {
   if (method === 'usdt') {
-    const chain = (data.chain || 'TRC-20').toUpperCase()
+    const chain = String(data.chainLabel || data.chain || 'TRC-20')
     const address = String(data.address || '')
     const tail = address.slice(-4) || '3689'
     return {

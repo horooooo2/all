@@ -4,17 +4,17 @@
       <div class="illustration-wrap">
         <img class="not-found-img" src="@/assets/img_500.png" alt="" />
       </div>
-      <p class="not-found-msg">抱歉,服务器出错</p>
-      <button type="button" class="back-home-btn" @click="goHome">返回首页</button>
+      <p class="not-found-msg">{{ $t('抱歉,服务器出错') }}</p>
+      <button type="button" class="back-home-btn" @click="goHome">{{ $t('返回首页') }}</button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
 function goHome() {
   router.replace({ path: '/' })
 }

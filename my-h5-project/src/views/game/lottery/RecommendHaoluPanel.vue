@@ -1,8 +1,8 @@
 <template>
   <div class="reco-panel">
     <div class="reco-scroll">
-      <p class="reco-page-title">推荐好路</p>
-      <ul class="reco-list" aria-label="推荐好路列表（静态示意）">
+      <p class="reco-page-title">{{ $t('推荐好路') }}</p>
+      <ul class="reco-list" :aria-label="$t('推荐好路列表（静态示意）')">
         <li
           v-for="row in staticRecoRows"
           :key="row.id"
@@ -31,10 +31,10 @@
       class="reco-streak-fab"
       aria-haspopup="dialog"
       :aria-expanded="streakPopupOpen ? 'true' : 'false'"
-      aria-label="选择连出期数"
+      :aria-label="$t('选择连出期数')"
       @click="streakPopupOpen = true"
     >
-      <span class="reco-streak-fab__label">连出期数</span>
+      <span class="reco-streak-fab__label">{{ $t('连出期数') }}</span>
       <span class="reco-streak-fab__value">{{ streakFabText }}</span>
     </button>
 
@@ -48,14 +48,14 @@
       teleport="body"
     >
       <div class="reco-streak-popup__head">
-        <span class="reco-streak-popup__title">选择连出期数</span>
+        <span class="reco-streak-popup__title">{{ $t('选择连出期数') }}</span>
         <img
           class="reco-streak-popup__close"
           :src="iconX"
           alt=""
           role="button"
           tabindex="0"
-          aria-label="关闭"
+          :aria-label="$t('关闭')"
           @click="streakPopupOpen = false"
           @keydown.enter.prevent="streakPopupOpen = false"
           @keydown.space.prevent="streakPopupOpen = false"
@@ -63,7 +63,7 @@
       </div>
       <div class="reco-streak-popup__body">
         <div class="reco-streak-popup__rate-row">
-          <span>预出率</span>
+          <span>{{ $t('预出率') }}</span>
           <span>{{ streakRateRight }}</span>
         </div>
         <div class="reco-streak-slider-wrap">
@@ -84,12 +84,8 @@
           </div>
         </div>
         <div class="reco-streak-popup__actions">
-          <button type="button" class="reco-streak-popup__btn reco-streak-popup__btn--ghost" @click="resetTempRangeDefault">
-            恢复默认
-          </button>
-          <button type="button" class="reco-streak-popup__btn reco-streak-popup__btn--primary" @click="confirmStreakRange">
-            确定
-          </button>
+          <button type="button" class="reco-streak-popup__btn reco-streak-popup__btn--ghost" @click="resetTempRangeDefault">{{ $t('恢复默认') }}</button>
+          <button type="button" class="reco-streak-popup__btn reco-streak-popup__btn--primary" @click="confirmStreakRange">{{ $t('确定') }}</button>
         </div>
       </div>
     </van-popup>
@@ -105,6 +101,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import {
   getSessionItem,
@@ -130,11 +128,11 @@ const DEFAULT_STREAK_PAIR = Object.freeze([3, 8])
 const staticRecoRows = [
   {
     id: 's1',
-    gameName: '加拿大28',
+    gameName: t('加拿大28'),
     countdown: '02:15:33',
-    playLine: '大小单双大小 - 大',
-    streakText: '连出5期',
-    betTitle: '大小单双-大小',
+    playLine: t('大小单双大小 - 大'),
+    streakText: t('连出5期'),
+    betTitle: t('大小单双-大小'),
     issue: '43423411',
     options: [
       { playKey: 'big', label: '大', odds: 1.98, accent: 'red' },
@@ -144,25 +142,25 @@ const staticRecoRows = [
   },
   {
     id: 's2',
-    gameName: '台湾宾果28',
+    gameName: t('台湾宾果28'),
     countdown: '00:08:12',
-    playLine: '大小单双大小 - 小单',
-    streakText: '连出3期',
-    betTitle: '大小单双-小单',
+    playLine: t('大小单双大小 - 小单'),
+    streakText: t('连出3期'),
+    betTitle: t('大小单双-小单'),
     issue: '3123111108',
     options: [
-      { playKey: 'small-odd', label: '小单', odds: 1.98, accent: 'red' },
-      { playKey: 'big-odd', label: '大单', odds: 1.98, accent: 'blue' }
+      { playKey: 'small-odd', label: t('小单'), odds: 1.98, accent: 'red' },
+      { playKey: 'big-odd', label: t('大单'), odds: 1.98, accent: 'blue' }
     ],
     defaultPlayKey: 'small-odd'
   },
   {
     id: 's3',
-    gameName: '加拿大28',
+    gameName: t('加拿大28'),
     countdown: '01:42:06',
-    playLine: '大小单双大小 - 双',
-    streakText: '连出4期',
-    betTitle: '大小单双-单双',
+    playLine: t('大小单双大小 - 双'),
+    streakText: t('连出4期'),
+    betTitle: t('大小单双-单双'),
     issue: '3123111107',
     options: [
       { playKey: 'even', label: '双', odds: 1.98, accent: 'red' },
@@ -172,15 +170,15 @@ const staticRecoRows = [
   },
   {
     id: 's4',
-    gameName: '比特币28',
+    gameName: t('比特币28'),
     countdown: '00:59:41',
-    playLine: '大小单双大小 - 大单',
-    streakText: '连出6期',
-    betTitle: '大小单双-大单',
+    playLine: t('大小单双大小 - 大单'),
+    streakText: t('连出6期'),
+    betTitle: t('大小单双-大单'),
     issue: '3123111106',
     options: [
-      { playKey: 'big-odd', label: '大单', odds: 1.98, accent: 'red' },
-      { playKey: 'small-even', label: '小双', odds: 1.98, accent: 'blue' }
+      { playKey: 'big-odd', label: t('大单'), odds: 1.98, accent: 'red' },
+      { playKey: 'small-even', label: t('小双'), odds: 1.98, accent: 'blue' }
     ],
     defaultPlayKey: 'big-odd'
   }

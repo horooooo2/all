@@ -20,7 +20,7 @@
           <p v-if="detail.subtitle" class="activity-detail-subtitle">{{ detail.subtitle }}</p>
 
           <div v-if="detail.content" class="activity-detail-rich" v-html="detail.content" />
-          <div v-else class="activity-detail-empty">暂无活动内容</div>
+          <div v-else class="activity-detail-empty">{{ $t('暂无活动内容') }}</div>
         </div>
       </template>
 
@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'

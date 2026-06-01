@@ -39,6 +39,13 @@
   padding: @spacing-md;
 }
 
+.withdrawal-account-edit-page .options-loading {
+  padding: 48px 0;
+  text-align: center;
+  font-size: @font-size-sm;
+  color: var(--text-color-secondary);
+}
+
 // 与充值页 DepositPage「支付方式」一致的选中样式（pay-grid / pay-card）
 .state-active-pay() {
   border-color: var(--primary-color);
@@ -56,10 +63,21 @@
   margin-bottom: @spacing-sm;
 }
 
-.withdrawal-account-edit-page .pay-grid--cols3 {
+.withdrawal-account-edit-page .pay-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: @spacing-sm;
+}
+
+.withdrawal-account-edit-page .pay-grid--cols1 {
+  grid-template-columns: 1fr;
+}
+
+.withdrawal-account-edit-page .pay-grid--cols2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.withdrawal-account-edit-page .pay-grid--cols3 {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .withdrawal-account-edit-page .pay-card {

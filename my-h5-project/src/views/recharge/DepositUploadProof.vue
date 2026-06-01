@@ -2,14 +2,14 @@
   <div class="deposit-upload-proof-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>上传凭证</h1>
+      <h1>{{ $t('上传凭证') }}</h1>
     </header>
 
     <main class="proof-main">
       <section class="proof-card">
         <p class="proof-tip">
-          <span>1、请您上传这笔存款的完整信息回执单，包含</span>
-          <span class="proof-tip__emph">完整的卡号(卡号不能含*)、金额和银行印章</span>
+          <span>{{ $t('1、请您上传这笔存款的完整信息回执单，包含') }}</span>
+          <span class="proof-tip__emph">{{ $t('完整的卡号(卡号不能含*)、金额和银行印章') }}</span>
         </p>
 
         <button type="button" class="proof-example-btn" @click="onShowExample">
@@ -32,10 +32,10 @@
             @delete="onDelete"
           >
             <div class="proof-upload-slot" role="button" tabindex="0">
-              <img class="proof-upload-slot__img" :src="iconOpinionAdd" alt="上传图片">
+              <img class="proof-upload-slot__img" :src="iconOpinionAdd" :alt="$t('上传图片')">
             </div>
             <template #preview-delete>
-              <img class="proof-upload-del" :src="iconOpinionDel" alt="删除">
+              <img class="proof-upload-del" :src="iconOpinionDel" :alt="$t('删除')">
             </template>
           </van-uploader>
         </div>
@@ -64,6 +64,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -81,11 +83,11 @@ const fileList = ref([])
 const goBack = () => router.back()
 
 const onShowExample = () => {
-  toast.success('回执单示例（待对接）')
+  toast.success(t('回执单示例（待对接）'))
 }
 
 const onOversize = () => {
-  toast.warning('图片大小不能超过 5MB')
+  toast.warning(t('图片大小不能超过 5MB'))
 }
 
 const onDelete = () => {
@@ -94,7 +96,7 @@ const onDelete = () => {
 
 const onSubmit = () => {
   if (!fileList.value.length) {
-    toast.warning('请先上传回执单')
+    toast.warning(t('请先上传回执单'))
     return
   }
   const orderId = route.query.id

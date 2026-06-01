@@ -1,5 +1,5 @@
 <template>
-  <div class="lhc-bb" aria-label="半波">
+  <div class="lhc-bb" :aria-label="$t('半波')">
     <ul class="lhc-bb__list">
       <li v-for="opt in options" :key="opt.key" class="lhc-bb__row">
         <div
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { BANBO_OPTIONS } from './lhc-banbo-data.js'
 

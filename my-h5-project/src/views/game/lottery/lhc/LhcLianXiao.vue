@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-lx" aria-label="连肖">
-    <div class="lhc-lx__mode" role="tablist" aria-label="连肖玩法">
+  <div class="lhc-lx" :aria-label="$t('连肖')">
+    <div class="lhc-lx__mode" role="tablist" :aria-label="$t('连肖玩法')">
       <div class="lhc-lx__mode-grid">
         <button
           v-for="m in PLAY_MODES"
@@ -58,6 +58,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { LHC_ZODIACS, zodiacLabel } from './lhc-zodiac-data.js'
 import { LIANXIAO_MODES, lianxiaoBetCount } from './lhc-lianxiao-config.js'

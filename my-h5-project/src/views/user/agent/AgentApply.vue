@@ -4,34 +4,34 @@
       <button type="button" class="agent-header-back" @click="goBack">
         <img :src="iconBack" alt="back">
       </button>
-      <h1 class="agent-header-title">代理中心</h1>
+      <h1 class="agent-header-title">{{ $t('代理中心') }}</h1>
     </header>
 
     <div class="agent-account-bar">
       <div class="agent-account-row">
-        <span>代理账户</span>
+        <span>{{ $t('代理账户') }}</span>
         <span>{{ accountName }}</span>
       </div>
       <div class="agent-account-row">
-        <span>代理ID</span>
+        <span>{{ $t('代理ID') }}</span>
         <span>{{ agentId }}</span>
       </div>
     </div>
 
     <form class="agent-form" @submit.prevent="onSubmit">
       <div class="agent-field">
-        <label class="agent-field-label" for="realName"><span class="req">*</span>真实姓名</label>
+        <label class="agent-field-label" for="realName"><span class="req">*</span>{{ $t('真实姓名') }}</label>
         <input
           id="realName"
           v-model="form.realName"
           class="agent-input"
           type="text"
           autocomplete="name"
-          placeholder="请输入真实姓名"
+          :placeholder="$t('请输入真实姓名')"
         >
       </div>
       <div class="agent-field">
-        <label class="agent-field-label" for="mobile">手机号码</label>
+        <label class="agent-field-label" for="mobile">{{ $t('手机号码') }}</label>
         <input
           id="mobile"
           v-model="form.mobile"
@@ -39,7 +39,7 @@
           type="tel"
           inputmode="tel"
           autocomplete="tel"
-          placeholder="请输入手机号码"
+          :placeholder="$t('请输入手机号码')"
         >
       </div>
       <div class="agent-field">
@@ -50,7 +50,7 @@
           class="agent-input"
           type="text"
           autocomplete="off"
-          placeholder="请输入telegram账号"
+          :placeholder="$t('请输入telegram账号')"
         >
       </div>
       <div class="agent-field">
@@ -61,7 +61,7 @@
           class="agent-input"
           type="text"
           autocomplete="off"
-          placeholder="请输入WhatsApp账号"
+          :placeholder="$t('请输入WhatsApp账号')"
         >
       </div>
       <div class="agent-field">
@@ -72,25 +72,26 @@
           class="agent-input"
           type="email"
           autocomplete="email"
-          placeholder="请输入email邮箱"
+          :placeholder="$t('请输入email邮箱')"
         >
       </div>
 
       <div class="agent-submit-wrap">
-        <button type="submit" class="agent-submit-btn">提交申请</button>
+        <button type="submit" class="agent-submit-btn">{{ $t('提交申请') }}</button>
       </div>
     </form>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
 import toast from '@/components/Toast'
 
 const router = useRouter()
-
 const accountName = ref('6669_2203456')
 const agentId = ref('10195')
 
@@ -106,7 +107,7 @@ const goBack = () => router.back()
 
 const onSubmit = () => {
   if (!form.realName.trim()) {
-    toast.warning('请输入真实姓名')
+    toast.warning(t('请输入真实姓名'))
     return
   }
   toast.success('已提交（示例）')

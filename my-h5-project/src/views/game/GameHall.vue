@@ -86,6 +86,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { toast } from '@/components/Toast'
+import request from '@/utils/request'
 import iconBack from '@/assets/icon_dack.svg'
 import avatarDefault from '@/assets/touxiang2.png'
 import iconTy from '@/assets/icon_ty.svg'
@@ -129,6 +130,7 @@ const gamesByCategory = {
   cp: [
     { id: 'cp-pl5', name: '排列5', image: imgHomeSportSb, room: 'pl5' },
     { id: 'cp-lhc', name: '六合彩', image: imgHomeSportSb, room: 'lhc' },
+    { id: 'cp-pc28', name: '加拿大PC28', image: imgHomeSportSb, room: 'pc28' },
     { id: 'cp-1', name: '彩票中心', image: imgHomeSportSb, room: 'live' },
     { id: 'cp-2', name: '快三', image: imgHomeSportSb, room: 'live' }
   ],
@@ -158,8 +160,21 @@ function syncTabFromRoute() {
   activeKey.value = resolveCategoryFromRoute()
 }
 
+async function fetchGameCategoryForLog() {
+  try {
+    const res = await request({
+      url: '/game/category',
+      method: 'get'
+    })
+    console.log('[game-hall] /game/category response:', res)
+  } catch (error) {
+    console.error('[game-hall] /game/category failed:', error)
+  }
+}
+
 onMounted(() => {
   syncTabFromRoute()
+  fetchGameCategoryForLog()
 })
 
 watch(
@@ -223,6 +238,10 @@ function onGameClick(item) {
     }
     if (item.room === 'lhc') {
       router.push({ name: 'lhcRoom', query })
+      return
+    }
+    if (item.room === 'pc28') {
+      router.push({ name: 'pc28Room', query })
       return
     }
     router.push({ path: '/game-room', query })

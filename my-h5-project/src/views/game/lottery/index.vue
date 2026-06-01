@@ -8,7 +8,7 @@
       :dropdown-open="false"
       :show-timer-issue="false"
       @back="goBack"
-      @menu="onMenu"
+      @bet-record="onRecent"
     />
 
     <LotteryIssueBar :issue="currentIssue" :status-text="issueStatusText" :countdown-text="countdownText" />
@@ -29,9 +29,10 @@
       />
 
       <div
+        v-show="!(isPc28 && pc28GroupVoteMode)"
         class="pl5-main-tabs"
         role="tablist"
-        :aria-label="isLhc ? '六合彩玩法' : '排列5玩法'"
+        :aria-label="isLhc ? '六合彩玩法' : isPc28 ? 'PC28玩法' : '排列5玩法'"
         :style="{ gridTemplateColumns: `repeat(${mainTabs.length}, minmax(0, 1fr))` }"
       >
         <button
@@ -49,24 +50,45 @@
       </div>
 
       <div class="pl5-play-host">
-        <template v-if="!isLhc">
-          <Pl5SmpPlay v-show="mainTab === 'smp'" ref="smpPlayRef" @update:bet-count="smpBetCount = $event" />
-          <Pl5BzpPlay v-show="mainTab === 'bzp'" ref="bzpPlayRef" @update:bet-count="bzpBetCount = $event" />
-        </template>
+        <Pc28GroupVoteRoom
+          v-if="isPc28 && pc28GroupVoteMode"
+          ref="pc28GroupVoteRoomRef"
+          :balance="balance"
+          :title="pageTitle"
+          :issue="currentIssue"
+          :countdown="countdownText"
+          :last-profit="prevPnl"
+          :amount-ticker-index="amountTickerIndex"
+          @submit="onPc28GroupVoteSubmit"
+          @chase="onChase"
+          @open-recent="onPc28GroupVoteRecent"
+          @mipai="onMiCard"
+          @plus="onPlus"
+          @deposit="depositPopupOpen = true"
+        />
         <template v-else>
-          <LhcSmpPlay v-show="mainTab === 'smp'" ref="lhcSmpPlayRef" @update:bet-count="lhcSmpBetCount = $event" />
+          <template v-if="isLhc">
+            <LhcSmpPlay v-show="mainTab === 'smp'" ref="lhcSmpPlayRef" @update:bet-count="lhcSmpBetCount = $event" />
+          </template>
+          <template v-else-if="isPc28">
+            <Pc28SmpPlay v-show="mainTab === 'smp'" ref="pc28SmpPlayRef" @update:bet-count="pc28SmpBetCount = $event" />
+          </template>
+          <template v-else>
+            <Pl5SmpPlay v-show="mainTab === 'smp'" ref="smpPlayRef" @update:bet-count="smpBetCount = $event" />
+            <Pl5BzpPlay v-show="mainTab === 'bzp'" ref="bzpPlayRef" @update:bet-count="bzpBetCount = $event" />
+          </template>
+          <div v-show="!isLhc && mainTab === 'trend'" class="pl5-play-roadmap" :aria-label="$t('路子图')">
+            <HaoluRoadmap />
+          </div>
+          <div v-show="mainTab === 'long'" class="pl5-play-long" :aria-label="$t('长龙')">
+            <LongDragonPanel
+              page-title="长龙"
+              :streak-storage-key="longDragonStreakKey"
+              :rows="longDragonPanelRows"
+              @select-row="onLongDragonRow"
+            />
+          </div>
         </template>
-        <div v-show="!isLhc && mainTab === 'trend'" class="pl5-play-roadmap" aria-label="路子图">
-          <HaoluRoadmap />
-        </div>
-        <div v-show="mainTab === 'long'" class="pl5-play-long" aria-label="长龙">
-          <LongDragonPanel
-            page-title="长龙"
-            :streak-storage-key="longDragonStreakKey"
-            :rows="longDragonPanelRows"
-            @select-row="onLongDragonRow"
-          />
-        </div>
       </div>
     </main>
 
@@ -101,8 +123,8 @@
     >
       <div class="lottery-prev-table" aria-label="往期开奖">
         <div class="lottery-prev-row lottery-prev-row--head">
-          <div class="lottery-prev-col lottery-prev-col--issue">期号</div>
-          <div class="lottery-prev-col lottery-prev-col--nums">开奖号码</div>
+          <div class="lottery-prev-col lottery-prev-col--issue">{{ $t('期号') }}</div>
+          <div class="lottery-prev-col lottery-prev-col--nums">{{ $t('开奖号码') }}</div>
         </div>
 
         <div v-for="(row, rowIdx) in prevRows" :key="row.issue" class="lottery-prev-row">
@@ -152,10 +174,42 @@
     />
 
     <GameDepositPopup v-model:show="depositPopupOpen" />
+
+    <Pc28FloatSideMenu
+      v-if="isPc28"
+      v-model:anonymous="pc28AnonymousEnabled"
+      :group-vote-mode="pc28GroupVoteMode"
+      :bottom-offset="pc28FloatMenuBottom"
+      @bet-record="onRecent"
+      @haolu="openPc28HaoluPopup"
+      @toggle-group-vote="togglePc28GroupVoteMode"
+    />
+
+    <teleport to="body">
+      <transition name="haolu-popup-dim">
+        <div
+          v-if="isPc28 && pc28HaoluPopupOpen"
+          class="haolu-popup-dim"
+          aria-hidden="true"
+          @click.self="closePc28HaoluPopup"
+        />
+      </transition>
+      <transition name="haolu-popup-slide">
+        <HaoluPopup
+          v-if="isPc28 && pc28HaoluPopupOpen"
+          :top="pc28HaoluPopupTop"
+          role="dialog"
+          aria-modal="true"
+          @close="closePc28HaoluPopup"
+        />
+      </transition>
+    </teleport>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from '@/components/Toast'
@@ -177,26 +231,43 @@ import GameDepositPopup from '@/views/game/components/GameDepositPopup.vue'
 import Pl5SmpPlay from './pl5/smp/Pl5SmpPlay.vue'
 import Pl5BzpPlay from './pl5/bzp/Pl5BzpPlay.vue'
 import LhcSmpPlay from './lhc/LhcSmpPlay.vue'
+import Pc28SmpPlay from './pc28/smp/Pc28SmpPlay.vue'
+import Pc28FloatSideMenu from './components/Pc28FloatSideMenu.vue'
+import Pc28GroupVoteRoom from './pc28/group-vote/Pc28GroupVoteRoom.vue'
+import HaoluPopup from './haolu/HaoluPopup.vue'
+import { getSessionItem, setSessionItem } from '@/utils/sessionCache'
 import { buildBasketItemsFromDraft, parseBetAmount } from './lottery-basket-collect.js'
+
+const PC28_ANON_KEY = 'pc28.anonymousMode.v1'
 
 const route = useRoute()
 const router = useRouter()
 
 const isLhc = computed(() => route.name === 'lhcRoom')
+const isPc28 = computed(() => route.name === 'pc28Room')
 
 const PL5_MAIN_TABS = Object.freeze([
-  { key: 'smp', label: '双面盘' },
-  { key: 'bzp', label: '标准盘' },
-  { key: 'trend', label: '路子图' },
-  { key: 'long', label: '长龙' }
+  { key: 'smp', label: t('双面盘') },
+  { key: 'bzp', label: t('标准盘') },
+  { key: 'trend', label: t('路子图') },
+  { key: 'long', label: t('长龙') }
 ])
 const LHC_MAIN_TABS = Object.freeze([
-  { key: 'smp', label: '双面盘' },
-  { key: 'long', label: '长龙' }
+  { key: 'smp', label: t('双面盘') },
+  { key: 'long', label: t('长龙') }
 ])
-const mainTabs = computed(() => (isLhc.value ? LHC_MAIN_TABS : PL5_MAIN_TABS))
+const PC28_MAIN_TABS = Object.freeze([
+  { key: 'smp', label: t('双面盘') },
+  { key: 'trend', label: t('路子图') },
+  { key: 'long', label: t('长龙') }
+])
+const mainTabs = computed(() => {
+  if (isLhc.value) return LHC_MAIN_TABS
+  if (isPc28.value) return PC28_MAIN_TABS
+  return PL5_MAIN_TABS
+})
 
-const pageTitle = computed(() => String(route.query.gameName || '彩票'))
+const pageTitle = computed(() => String(route.query.gameName || t('彩票')))
 
 const LHC_ISSUE_START = '2025133'
 
@@ -211,13 +282,17 @@ function randomLhcDrawSorted() {
   return [...main, special]
 }
 
+function randomPc28Draw() {
+  return [0, 0, 0].map(() => Math.floor(Math.random() * 10))
+}
+
 // 演示数据：后续接接口统一由入口页控制
 const currentIssue = ref('3123111110')
 const prevIssue = ref('3123111109')
 const prevPnl = ref('188')
 const prevBalls = ref([9, 3, 8, 1, 1])
 const balance = ref(8888.5)
-const issueStatusText = ref('投注中')
+const issueStatusText = ref(t('投注中'))
 const recentIcon = recentIconSrc
 const basketIcon = basketIconSrc
 const addIcon = addIconSrc
@@ -230,17 +305,34 @@ const betBasketItems = ref([])
 const basketOwnerGame = ref(null)
 
 const mainTab = ref('smp')
+
+const pc28AnonymousEnabled = ref(getSessionItem(PC28_ANON_KEY) === '1')
+const pc28GroupVoteMode = ref(false)
+const pc28HaoluPopupOpen = ref(false)
+const pc28HaoluPopupTop = ref(0)
+
+watch(pc28AnonymousEnabled, (v) => {
+  setSessionItem(PC28_ANON_KEY, v ? '1' : '0')
+})
+
+const pc28FloatMenuBottom = computed(() => (pc28GroupVoteMode.value ? 100 : 110))
+
+const pc28GroupVoteRoomRef = ref(null)
+
 /** 路子图、长龙不显示投注底栏；双面盘（及排列5标准盘）显示，六合彩与排列五规则一致 */
 const showBetPanelFoot = computed(() => {
+  if (isPc28.value && pc28GroupVoteMode.value) return false
   if (mainTab.value === 'long' || mainTab.value === 'trend') return false
   return mainTab.value === 'smp' || (!isLhc.value && mainTab.value === 'bzp')
 })
 const smpPlayRef = ref(null)
 const bzpPlayRef = ref(null)
 const lhcSmpPlayRef = ref(null)
+const pc28SmpPlayRef = ref(null)
 const smpBetCount = ref(0)
 const bzpBetCount = ref(0)
 const lhcSmpBetCount = ref(0)
+const pc28SmpBetCount = ref(0)
 
 const betAmount = ref('')
 
@@ -267,7 +359,7 @@ const pl5LongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '万位大小',
-      bottomRight: '连出4期',
+      bottomRight: t('连出4期'),
       streak: 4,
       betPopupRow: {
         betTitle: '万位大小',
@@ -286,7 +378,7 @@ const pl5LongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '千位单双',
-      bottomRight: '连出3期',
+      bottomRight: t('连出3期'),
       streak: 3,
       betPopupRow: {
         betTitle: '千位单双',
@@ -305,7 +397,7 @@ const pl5LongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '百位质合',
-      bottomRight: '连出6期',
+      bottomRight: t('连出6期'),
       streak: 6,
       betPopupRow: {
         betTitle: '百位质合',
@@ -324,7 +416,7 @@ const pl5LongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '十位大小',
-      bottomRight: '连出5期',
+      bottomRight: t('连出5期'),
       streak: 5,
       betPopupRow: {
         betTitle: '十位大小',
@@ -362,7 +454,7 @@ const pl5LongDragonRows = computed(() => {
 })
 
 const lhcLongDragonRows = computed(() => {
-  const name = String(pageTitle.value || '六合彩')
+  const name = String(pageTitle.value || t('六合彩'))
   const cd = countdownText.value
   const issue = String(currentIssue.value || '')
   return [
@@ -371,7 +463,7 @@ const lhcLongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '特码大小',
-      bottomRight: '连出5期',
+      bottomRight: t('连出5期'),
       streak: 5,
       betPopupRow: {
         betTitle: '特码大小',
@@ -390,7 +482,7 @@ const lhcLongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '特码单双',
-      bottomRight: '连出3期',
+      bottomRight: t('连出3期'),
       streak: 3,
       betPopupRow: {
         betTitle: '特码单双',
@@ -409,7 +501,7 @@ const lhcLongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '特码波色 红波',
-      bottomRight: '连出4期',
+      bottomRight: t('连出4期'),
       streak: 4,
       betPopupRow: {
         betTitle: '特码波色',
@@ -429,7 +521,7 @@ const lhcLongDragonRows = computed(() => {
       topLeft: name,
       topRight: cd,
       bottomLeft: '总和大小',
-      bottomRight: '连出6期',
+      bottomRight: t('连出6期'),
       streak: 6,
       betPopupRow: {
         betTitle: '总和大小',
@@ -465,21 +557,29 @@ const lhcLongDragonRows = computed(() => {
   ]
 })
 
-const longDragonPanelRows = computed(() => (isLhc.value ? lhcLongDragonRows.value : pl5LongDragonRows.value))
+const longDragonPanelRows = computed(() => {
+  if (isLhc.value) return lhcLongDragonRows.value
+  return pl5LongDragonRows.value
+})
 
 const longDragonStreakKey = computed(() =>
-  isLhc.value ? 'lhc.longDragon.streakPeriods.v1' : 'pl5.longDragon.streakPeriods.v1'
+  isLhc.value ? 'lhc.longDragon.streakPeriods.v1' : isPc28.value ? 'pc28.longDragon.streakPeriods.v1' : 'pl5.longDragon.streakPeriods.v1'
 )
 
 function routeGameKey(name) {
   if (name === 'lhcRoom') return 'lhc'
   if (name === 'pl5Room') return 'pl5'
+  if (name === 'pc28Room') return 'pc28'
   return null
 }
 
 function activePlayPanelRef() {
   if (isLhc.value) {
     if (mainTab.value === 'smp') return lhcSmpPlayRef.value
+    return null
+  }
+  if (isPc28.value) {
+    if (mainTab.value === 'smp') return pc28SmpPlayRef.value
     return null
   }
   if (mainTab.value === 'smp') return smpPlayRef.value
@@ -490,6 +590,10 @@ function activePlayPanelRef() {
 function syncBetCountFromPlay() {
   if (isLhc.value) {
     if (mainTab.value === 'smp') lhcSmpBetCount.value = 0
+    return
+  }
+  if (isPc28.value) {
+    if (mainTab.value === 'smp') pc28SmpBetCount.value = 0
     return
   }
   if (mainTab.value === 'smp') smpBetCount.value = 0
@@ -509,16 +613,24 @@ watch(
     smpBetCount.value = 0
     bzpBetCount.value = 0
     lhcSmpBetCount.value = 0
+    pc28SmpBetCount.value = 0
     betAmount.value = ''
     nextTick(() => {
       smpPlayRef.value?.resetPicks?.()
       bzpPlayRef.value?.resetPicks?.()
       lhcSmpPlayRef.value?.resetPicks?.()
+      pc28SmpPlayRef.value?.resetPicks?.()
     })
     if (name === 'lhcRoom') {
       currentIssue.value = LHC_ISSUE_START
       prevIssue.value = '2025132'
       prevBalls.value = randomLhcDrawSorted()
+    } else if (name === 'pc28Room') {
+      pc28GroupVoteMode.value = false
+      pc28HaoluPopupOpen.value = false
+      currentIssue.value = '3123111110'
+      prevIssue.value = '3123111109'
+      prevBalls.value = randomPc28Draw()
     } else {
       currentIssue.value = '3123111110'
       prevIssue.value = '3123111109'
@@ -575,6 +687,11 @@ function rollIssueMock() {
     prevBalls.value = randomLhcDrawSorted()
     return
   }
+  if (isPc28.value) {
+    currentIssue.value = String(Number(currentIssue.value) + 1)
+    prevBalls.value = randomPc28Draw()
+    return
+  }
   currentIssue.value = String(Number(currentIssue.value) + 1)
   prevBalls.value = prevBalls.value.map(() => Math.floor(Math.random() * 10))
 }
@@ -583,6 +700,10 @@ function rollIssueMock() {
 const betCount = computed(() => {
   if (isLhc.value) {
     if (mainTab.value === 'smp') return lhcSmpBetCount.value
+    return 0
+  }
+  if (isPc28.value) {
+    if (mainTab.value === 'smp') return pc28SmpBetCount.value
     return 0
   }
   if (mainTab.value === 'smp') return smpBetCount.value
@@ -610,10 +731,6 @@ function goBack() {
   else router.push('/game-hall?category=cp')
 }
 
-function onMenu() {
-  toast('菜单（待接入）')
-}
-
 function onExpandPrev() {
   prevResultPopupOpen.value = true
   nextTick(() => {
@@ -623,7 +740,7 @@ function onExpandPrev() {
 }
 
 function onPlus() {
-  toast('加号（待接入）')
+  toast(t('加号（待接入）'))
 }
 
 function onMiCard() {
@@ -647,9 +764,11 @@ function onBetClear() {
   smpBetCount.value = 0
   bzpBetCount.value = 0
   lhcSmpBetCount.value = 0
+  pc28SmpBetCount.value = 0
   smpPlayRef.value?.resetPicks?.()
   bzpPlayRef.value?.resetPicks?.()
   lhcSmpPlayRef.value?.resetPicks?.()
+  pc28SmpPlayRef.value?.resetPicks?.()
   toast('已清空')
 }
 
@@ -659,6 +778,43 @@ function onChipClick(v) {
 
 function onRecent() {
   recentOpen.value = true
+}
+
+function measurePc28HaoluPopupTop() {
+  const el = prevRef.value?.getEl?.() ?? prevRef.value?.$el
+  const rect = el?.getBoundingClientRect?.()
+  if (!rect) return
+  const bottom = Number(rect.bottom)
+  if (!Number.isFinite(bottom) || bottom <= 0) return
+  pc28HaoluPopupTop.value = bottom
+}
+
+function openPc28HaoluPopup() {
+  measurePc28HaoluPopupTop()
+  pc28HaoluPopupOpen.value = true
+  nextTick(() => {
+    measurePc28HaoluPopupTop()
+    requestAnimationFrame(() => measurePc28HaoluPopupTop())
+  })
+}
+
+function closePc28HaoluPopup() {
+  pc28HaoluPopupOpen.value = false
+}
+
+function togglePc28GroupVoteMode() {
+  pc28GroupVoteMode.value = !pc28GroupVoteMode.value
+  if (pc28GroupVoteMode.value) {
+    pc28HaoluPopupOpen.value = false
+  }
+}
+
+function onPc28GroupVoteSubmit() {
+  toast('群投投注（演示）')
+}
+
+function onPc28GroupVoteRecent() {
+  pc28GroupVoteRoomRef.value?.openRecentBetsPanel?.()
 }
 
 function onBasket() {
@@ -711,7 +867,7 @@ function onBetBasketSubmit({ items }) {
 }
 
 function onBet() {
-  toast('立即投注（待接入）')
+  toast(t('立即投注（待接入）'))
 }
 
 function onChase() {
@@ -753,7 +909,17 @@ const prevRows = computed(() => {
 function onViewFullTrend() {
   prevResultPopupOpen.value = false
   if (isLhc.value) {
-    toast('六合彩完整走势（待接入）')
+    toast(t('六合彩完整走势（待接入）'))
+    return
+  }
+  if (isPc28.value) {
+    router.push({
+      name: 'gameTrend',
+      query: {
+        gameId: 'pc28',
+        gameName: pageTitle.value
+      }
+    })
     return
   }
   router.push({
@@ -938,6 +1104,26 @@ function onMiRefresh() {
 
 .lottery-prev-ball.is-latest {
   border: 1px solid #e89261;
+}
+
+.haolu-popup-dim {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.haolu-popup-dim-enter-active {
+  transition: opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.haolu-popup-dim-leave-active {
+  transition: opacity 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.haolu-popup-dim-enter-from,
+.haolu-popup-dim-leave-to {
+  opacity: 0;
 }
 </style>
 

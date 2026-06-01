@@ -1,16 +1,17 @@
 <template>
   <div v-if="showBar" class="app-download-bar">
-    <p class="app-download-bar__text">下载APP，开启您的财富狂潮</p>
+    <p class="app-download-bar__text">{{ $t('下载APP，开启您的财富狂潮') }}</p>
     <button type="button" class="app-download-bar__btn" @click="onDownload">
-      立即下载
+      {{ $t('立即下载') }}
     </button>
-    <button type="button" class="app-download-bar__close" aria-label="关闭" @click="onClose">
+    <button type="button" class="app-download-bar__close" :aria-label="$t('关闭')" @click="onClose">
       <img src="@/assets/icon_x_circle.svg" alt="" />
     </button>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ref, computed, watch, onMounted } from 'vue'
 import { getSiteApp, isSiteAppEnabled } from '@/api/site'
 import { openSiteAppDownload } from '@/utils/siteAppDownload'

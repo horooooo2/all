@@ -2,7 +2,7 @@
   <div class="password-setting-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>修改登录密码</h1>
+      <h1>{{ $t('修改登录密码') }}</h1>
     </header>
 
     <main class="content">
@@ -10,7 +10,7 @@
         <div class="hero-figure">
           <img :src="heroIcon" alt="password" class="hero-icon">
         </div>
-        <div class="hero-title">修改密码</div>
+        <div class="hero-title">{{ $t('修改密码') }}</div>
       </section>
 
       <div class="field">
@@ -72,6 +72,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'

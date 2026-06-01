@@ -2,7 +2,7 @@
   <div class="transaction-record-detail-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>交易记录</h1>
+      <h1>{{ $t('交易记录') }}</h1>
     </header>
 
     <main v-if="detail" class="detail-main">
@@ -13,15 +13,15 @@
 
         <div class="detail-rows">
           <div class="detail-row">
-            <span class="detail-label">交易类型</span>
+            <span class="detail-label">{{ $t('交易类型') }}</span>
             <span class="detail-value">{{ detail.typeLabel }}</span>
           </div>
           <div v-if="detail.statusName" class="detail-row">
-            <span class="detail-label">状态</span>
+            <span class="detail-label">{{ $t('状态') }}</span>
             <span class="detail-value">{{ detail.statusName }}</span>
           </div>
           <div class="detail-row">
-            <span class="detail-label">订单编号</span>
+            <span class="detail-label">{{ $t('订单编号') }}</span>
             <div class="detail-value-wrap">
               <span class="detail-value detail-value--order">{{ detail.orderNo || '--' }}</span>
               <button
@@ -29,28 +29,26 @@
                 type="button"
                 class="copy-btn"
                 @click="copyOrderNo"
-              >
-                复制
-              </button>
+              >{{ $t('复制') }}</button>
             </div>
           </div>
           <div class="detail-row">
-            <span class="detail-label">金额</span>
+            <span class="detail-label">{{ $t('金额') }}</span>
             <span class="detail-value">¥{{ formatAmount(detail.amount) }}</span>
           </div>
           <div
             v-if="showActualAmount"
             class="detail-row"
           >
-            <span class="detail-label">实际金额</span>
+            <span class="detail-label">{{ $t('实际金额') }}</span>
             <span class="detail-value">¥{{ formatAmount(detail.actualAmount) }}</span>
           </div>
           <div v-if="detail.remark" class="detail-row">
-            <span class="detail-label">备注</span>
+            <span class="detail-label">{{ $t('备注') }}</span>
             <span class="detail-value">{{ detail.remark }}</span>
           </div>
           <div class="detail-row">
-            <span class="detail-label">创建时间</span>
+            <span class="detail-label">{{ $t('创建时间') }}</span>
             <span class="detail-value">{{ detail.createdAt || '--' }}</span>
           </div>
         </div>
@@ -58,12 +56,14 @@
     </main>
 
     <div v-else class="detail-empty">
-      <p>记录不存在或已删除</p>
+      <p>{{ $t('记录不存在或已删除') }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -105,7 +105,7 @@ const copyOrderNo = async () => {
   if (!text) return
   const ok = await copyTextToClipboard(text)
   if (ok) {
-    toast.success('已复制')
+    toast.success(t('已复制'))
   } else {
     toast.warning(text)
   }

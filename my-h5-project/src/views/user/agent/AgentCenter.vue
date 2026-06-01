@@ -2,14 +2,14 @@
   <div class="agent-center-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>代理中心</h1>
+      <h1>{{ $t('代理中心') }}</h1>
     </header>
 
     <!-- 未申请 -->
     <section v-if="agentStatus === 'none'" class="status-card">
       <div class="status-card-text">
-        <p class="status-card-label">您当前还不是代理</p>
-        <p class="status-card-title">加入我们开启您的财富之旅</p>
+        <p class="status-card-label">{{ $t('您当前还不是代理') }}</p>
+        <p class="status-card-title">{{ $t('加入我们开启您的财富之旅') }}</p>
       </div>
       <button type="button" class="status-card-btn" @click="goApply">
         申请成为代理
@@ -19,8 +19,8 @@
     <!-- 申请中（审核中按钮样式） -->
     <section v-else-if="agentStatus === 'pending' && pendingVariant === 'review'" class="status-card">
       <div class="status-card-text">
-        <p class="status-card-label">申请中</p>
-        <p class="status-card-title">您的代理申请正在审核中</p>
+        <p class="status-card-label">{{ $t('申请中') }}</p>
+        <p class="status-card-title">{{ $t('您的代理申请正在审核中') }}</p>
       </div>
       <button type="button" class="status-card-btn" disabled>
         审核中
@@ -33,8 +33,8 @@
       class="status-card status-card--pending-alt"
     >
       <div class="status-card-text">
-        <p class="status-card-label">已提交申请，等待审核通过</p>
-        <p class="status-card-title">加入我们开启您的财富之旅</p>
+        <p class="status-card-label">{{ $t('已提交申请，等待审核通过') }}</p>
+        <p class="status-card-title">{{ $t('加入我们开启您的财富之旅') }}</p>
       </div>
       <button type="button" class="status-card-btn" @click="goService">
         联赛客服咨询
@@ -47,12 +47,12 @@
         <div class="agent-dash-card">
           <div class="agent-dash-account">
             <div class="agent-dash-cell">
-              <span class="agent-dash-label">我的账号</span>
+              <span class="agent-dash-label">{{ $t('我的账号') }}</span>
               <span class="agent-dash-value">{{ myAccount }}</span>
             </div>
             <div class="agent-dash-vline" aria-hidden="true" />
             <div class="agent-dash-cell">
-              <span class="agent-dash-label">上级代理</span>
+              <span class="agent-dash-label">{{ $t('上级代理') }}</span>
               <span class="agent-dash-value">{{ superiorId }}</span>
             </div>
           </div>
@@ -172,6 +172,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -212,25 +214,25 @@ const superiorId = ref('123456')
 const inviteCode = ref('8K2M9')
 
 const primaryActions = [
-  { label: '我的推广', icon: iconPromotion, action: 'promotion' },
-  { label: '我的佣金', icon: iconCommission, action: 'commission' },
-  { label: '我的待遇', icon: iconTreatment, action: 'treatment' }
+  { label: t('我的推广'), icon: iconPromotion, action: 'promotion' },
+  { label: t('我的佣金'), icon: iconCommission, action: 'commission' },
+  { label: t('我的待遇'), icon: iconTreatment, action: 'treatment' }
 ]
 
 const listSections = [
   [
-    { label: '直属成员', icon: iconTeamMembers, action: 'team' },
-    { label: '团队业绩报表', icon: iconPerformance, action: 'performance' },
-    { label: '团队彩票注单记录', icon: iconLotteryRecords, action: 'lotteryRecords' },
-    { label: '团队三方注单记录', icon: iconThreePartyRecords, action: 'threePartyRecords' }
+    { label: t('直属成员'), icon: iconTeamMembers, action: 'team' },
+    { label: t('团队业绩报表'), icon: iconPerformance, action: 'performance' },
+    { label: t('团队彩票注单记录'), icon: iconLotteryRecords, action: 'lotteryRecords' },
+    { label: t('团队三方注单记录'), icon: iconThreePartyRecords, action: 'threePartyRecords' }
   ],
   [
-    { label: '团队账变记录', icon: iconBillingRecords, action: 'billingRecords' },
-    { label: '代理扶持', icon: iconAgentFuchi, action: 'agentSupport' }
+    { label: t('团队账变记录'), icon: iconBillingRecords, action: 'billingRecords' },
+    { label: t('代理扶持'), icon: iconAgentFuchi, action: 'agentSupport' }
   ],
   [
-    { label: '邀请链接', icon: iconInvitationLink, action: 'inviteLink' },
-    { label: '邀请代码', icon: iconInvitationCode, action: 'inviteCode' }
+    { label: t('邀请链接'), icon: iconInvitationLink, action: 'inviteLink' },
+    { label: t('邀请代码'), icon: iconInvitationCode, action: 'inviteCode' }
   ]
 ]
 
@@ -282,9 +284,9 @@ const copyInviteCode = async () => {
       document.execCommand('copy')
       document.body.removeChild(ta)
     }
-    toast.success('已复制邀请代码')
+    toast.success(t('已复制邀请代码'))
   } catch {
-    toast.error('复制失败')
+    toast.error(t('复制失败'))
   }
 }
 </script>

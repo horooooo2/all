@@ -1,6 +1,6 @@
 <template>
-  <div class="lhc-wsl" aria-label="尾数连">
-    <div class="lhc-wsl__mode" role="tablist" aria-label="尾数连玩法">
+  <div class="lhc-wsl" :aria-label="$t('尾数连')">
+    <div class="lhc-wsl__mode" role="tablist" :aria-label="$t('尾数连玩法')">
       <div class="lhc-wsl__mode-grid">
         <button
           v-for="m in PLAY_MODES"
@@ -58,6 +58,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import { WEISHU_TAILS, WEISHULIAN_MODES, tailLabel, weishulianBetCount } from './lhc-weishulian-config.js'
 import { waveKey } from './lhc-ptyx-data.js'

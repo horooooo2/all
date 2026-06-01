@@ -2,7 +2,7 @@
   <div v-if="order" class="agent-subpage atl-detail-page">
     <header class="record-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1>订单详情</h1>
+      <h1>{{ $t('订单详情') }}</h1>
     </header>
 
     <div class="atl-detail-body">
@@ -14,13 +14,13 @@
 
         <div class="atl-detail-summary">
           <div class="atl-detail-col">
-            <p class="atl-detail-kv"><span>倍数:</span> {{ order.multiplier }}</p>
-            <p class="atl-detail-kv"><span>有效投注:</span> ¥{{ fmtMoney(order.validBet) }}</p>
-            <p class="atl-detail-kv"><span>奖金:</span> ¥{{ fmtMoney(order.bonus) }}</p>
+            <p class="atl-detail-kv"><span>{{ $t('倍数:') }}</span> {{ order.multiplier }}</p>
+            <p class="atl-detail-kv"><span>{{ $t('有效投注:') }}</span> ¥{{ fmtMoney(order.validBet) }}</p>
+            <p class="atl-detail-kv"><span>{{ $t('奖金:') }}</span> ¥{{ fmtMoney(order.bonus) }}</p>
           </div>
           <div class="atl-detail-col">
-            <p class="atl-detail-kv"><span>下注:</span> ¥{{ fmtMoney(order.amount) }}</p>
-            <p class="atl-detail-kv"><span>奖金模式:</span> {{ order.prizeMode }}</p>
+            <p class="atl-detail-kv"><span>{{ $t('下注:') }}</span> ¥{{ fmtMoney(order.amount) }}</p>
+            <p class="atl-detail-kv"><span>{{ $t('奖金模式:') }}</span> {{ order.prizeMode }}</p>
           </div>
         </div>
 
@@ -28,28 +28,28 @@
 
         <div class="atl-detail-rows">
           <div class="atl-detail-row">
-            <span class="atl-detail-row__k">开奖号码</span>
+            <span class="atl-detail-row__k">{{ $t('开奖号码') }}</span>
             <span class="atl-detail-row__v">{{ order.drawNumbers }}</span>
           </div>
           <div class="atl-detail-row">
-            <span class="atl-detail-row__k">开奖时间</span>
+            <span class="atl-detail-row__k">{{ $t('开奖时间') }}</span>
             <span class="atl-detail-row__v">{{ order.drawTime || '—' }}</span>
           </div>
           <div class="atl-detail-row">
-            <span class="atl-detail-row__k">下单时间</span>
+            <span class="atl-detail-row__k">{{ $t('下单时间') }}</span>
             <span class="atl-detail-row__v">{{ order.orderTime }}</span>
           </div>
           <div class="atl-detail-row atl-detail-row--copy">
-            <span class="atl-detail-row__k">下单编号</span>
+            <span class="atl-detail-row__k">{{ $t('下单编号') }}</span>
             <span class="atl-detail-row__r">
               <span class="atl-detail-row__v">{{ order.memberAccount }}</span>
-              <button type="button" class="atl-detail-copy" aria-label="复制下单编号" @click="copyText(order.memberAccount)">
+              <button type="button" class="atl-detail-copy" :aria-label="$t('复制下单编号')" @click="copyText(order.memberAccount)">
                 <img :src="iconCopy" alt="">
               </button>
             </span>
           </div>
           <div class="atl-detail-row atl-detail-row--copy">
-            <span class="atl-detail-row__k">订单编号</span>
+            <span class="atl-detail-row__k">{{ $t('订单编号') }}</span>
             <span class="atl-detail-row__r">
               <span class="atl-detail-row__v atl-detail-row__v--mono">{{ order.orderNo }}</span>
               <button type="button" class="atl-detail-copy" aria-label="复制订单编号" @click="copyText(order.orderNo)">
@@ -58,7 +58,7 @@
             </span>
           </div>
           <div class="atl-detail-row atl-detail-row--copy">
-            <span class="atl-detail-row__k">投注期号</span>
+            <span class="atl-detail-row__k">{{ $t('投注期号') }}</span>
             <span class="atl-detail-row__r">
               <span class="atl-detail-row__v">{{ order.issueNo }}</span>
               <button type="button" class="atl-detail-copy" aria-label="复制投注期号" @click="copyText(order.issueNo)">
@@ -67,7 +67,7 @@
             </span>
           </div>
           <div class="atl-detail-row atl-detail-row--last">
-            <span class="atl-detail-row__k">投注内容</span>
+            <span class="atl-detail-row__k">{{ $t('投注内容') }}</span>
             <span class="atl-detail-row__v">{{ order.betPick }}</span>
           </div>
         </div>
@@ -77,6 +77,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import iconBack from '@/assets/icon_dack.svg'
@@ -107,9 +109,9 @@ watch(
 )
 
 const resultLabel = (r) => {
-  if (r === 'pending') return '未开奖'
-  if (r === 'won') return '已中奖'
-  return '未中奖'
+  if (r === 'pending') return t('未开奖')
+  if (r === 'won') return t('已中奖')
+  return t('未中奖')
 }
 
 const resultTagClass = (r) => {
@@ -142,9 +144,9 @@ const copyText = async (text) => {
       document.execCommand('copy')
       document.body.removeChild(input)
     }
-    toast.success('已复制')
+    toast.success(t('已复制'))
   } catch {
-    toast.error('复制失败')
+    toast.error(t('复制失败'))
   }
 }
 </script>

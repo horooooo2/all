@@ -2,7 +2,7 @@
   <div class="wallet-recycle-page">
     <header class="wallet-recycle-header">
       <img :src="iconBack" alt="back" class="back-btn" @click="goBack">
-      <h1 class="header-title">转账至主钱包</h1>
+      <h1 class="header-title">{{ $t('转账至主钱包') }}</h1>
     </header>
 
     <main class="wallet-recycle-content">
@@ -30,18 +30,19 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import iconBack from '@/assets/icon_dack.svg'
 
 const router = useRouter()
-
 const wallets = computed(() => [
-  { id: 1, name: '账户余额', amount: '89,685.50' },
-  { id: 2, name: 'QQ德州扑克', amount: '89,685.50' },
+  { id: 1, name: t('账户余额'), amount: '89,685.50' },
+  { id: 2, name: t('QQ德州扑克'), amount: '89,685.50' },
   { id: 3, name: 'SlotLive', amount: '89,685.50' },
-  { id: 4, name: '区块链百家乐乐', amount: '89,685.50' },
-  { id: 5, name: 'HH电子', amount: '89,685.50' }
+  { id: 4, name: t('区块链百家乐乐'), amount: '89,685.50' },
+  { id: 5, name: t('HH电子'), amount: '89,685.50' }
 ])
 
 const goBack = () => {

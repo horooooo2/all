@@ -9,9 +9,9 @@
     :safe-area-inset-bottom="true"
     :z-index="zIndex"
   >
-    <section class="recent-panel" role="dialog" aria-modal="true" aria-label="近期投注" @click.stop>
+    <section class="recent-panel" role="dialog" aria-modal="true" :aria-label="$t('近期投注')" @click.stop>
       <header class="recent-panel__header">
-        <div class="recent-panel__title">近期投注</div>
+        <div class="recent-panel__title">{{ $t('近期投注') }}</div>
         <van-icon name="arrow-down" class="recent-panel__collapse" @click="show = false" />
       </header>
 
@@ -36,14 +36,14 @@
         </div>
         <div role="button" tabindex="0" class="recent-history-btn" @click="onHistory">
           <img :src="iconBetRecordWhite" alt="" aria-hidden="true" class="recent-history-btn__icon" />
-          <span>投注记录</span>
+          <span>{{ $t('投注记录') }}</span>
         </div>
       </div>
 
       <div v-if="tab === 'settled'" class="recent-empty">
         <img :src="noDataImage" alt="no-data" class="recent-empty__img" />
-        <p class="recent-empty__text">暂无未结算订单</p>
-        <div role="button" tabindex="0" class="recent-empty__retry" @click="emit('reload')">刷新试试</div>
+        <p class="recent-empty__text">{{ $t('暂无未结算订单') }}</p>
+        <div role="button" tabindex="0" class="recent-empty__retry" @click="emit('reload')">{{ $t('刷新试试') }}</div>
       </div>
 
       <div v-else class="recent-list">
@@ -58,7 +58,7 @@
             </div>
             <div class="recent-card__line recent-card__line--bottom">
               <div />
-              <div role="button" tabindex="0" class="recent-card__cancel" @click="emit('cancel', item)">撤单</div>
+              <div role="button" tabindex="0" class="recent-card__cancel" @click="emit('cancel', item)">{{ $t('撤单') }}</div>
             </div>
           </template>
           <template v-else>
@@ -68,14 +68,14 @@
                 <div class="recent-card__issue">{{ item.issue }}</div>
               </div>
               <div class="recent-card__money-line">
-                <span class="recent-card__money-label">奖金:</span>
+                <span class="recent-card__money-label">{{ $t('奖金:') }}</span>
                 <span class="recent-card__money-value">{{ item.bonus ?? '0' }}</span>
               </div>
             </div>
             <div class="recent-card__line recent-card__line--bottom">
               <div class="recent-card__time">{{ item.time }}</div>
               <div class="recent-card__money-line">
-                <span class="recent-card__money-label">返水:</span>
+                <span class="recent-card__money-label">{{ $t('返水:') }}</span>
                 <span class="recent-card__money-value">{{ item.rebate ?? '0.004' }}</span>
               </div>
             </div>
@@ -87,6 +87,8 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n'
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import iconBetRecordWhite from '@/assets/touzhu_icon_white.svg'
 import noDataImage from '@/assets/no_data.svg'
@@ -121,14 +123,14 @@ watch(show, (v) => {
 })
 
 const statusTextMap = {
-  cancelable: '可撤销',
-  loss: '未中奖',
-  win: '已中奖',
-  canceled: '已撤单'
+  cancelable: t('可撤销'),
+  loss: t('未中奖'),
+  win: t('已中奖'),
+  canceled: t('已撤单')
 }
 
 const demoOrders = [
-  { id: 'uo-1', issue: '3123111111', betText: '大,赔率:9.8', status: 'cancelable', cancelable: true },
+  { id: 'uo-1', issue: '3123111111', betText: t('大,赔率:9.8'), status: 'cancelable', cancelable: true },
   { id: 'uo-2', issue: '3123111111', status: 'loss', cancelable: false, time: '2026-04-03 00:24:31', bonus: '0', rebate: '0.004' },
   { id: 'uo-3', issue: '3123111110', status: 'win', cancelable: false, time: '2026-04-03 00:24:31', bonus: '1', rebate: '0.004' },
   { id: 'uo-4', issue: '3123111109', status: 'canceled', cancelable: false, time: '2026-04-03 00:24:31', bonus: '1', rebate: '0.004' }
